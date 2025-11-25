@@ -1,4 +1,12 @@
 {
-  "hello_world": "Ciao Mondo",
-  "count": "Contatore: {{count}}"
+  "count": "Contatore: {{count}}",
+  "welcome_title": "Next.js Starter Template",
+  "welcome_description": "Un template starter completo per progetti Next.js con supporto multi-lingua, TypeScript, Tailwind CSS e best practices configurate.",
+  "welcome_features_title": "Caratteristiche",
+  "github_star_text": "Se trovi utile questo template, considera di mettere una stella su GitHub!",
+  "github_star_button": "⭐ Metti una stella su GitHub",
+  "contribute_title": "Contributi Benvenuti",
+  "contribute_text": "Se pensi che questo template possa essere migliorato o hai idee per nuove funzionalità, sentiti libero di aprire una Pull Request o proporre una feature!",
+  "contribute_pr_button": "🔀 Apri Pull Request",
+  "contribute_issue_button": "💡 Proponi Feature"
 }

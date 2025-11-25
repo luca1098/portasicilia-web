@@ -11,7 +11,6 @@ A complete starter template for Next.js projects with multi-language support, Ty
 - **shadcn/ui** for reusable UI components
 - **ESLint** and **Prettier** configured
 - **Husky** for git hooks
-- **Optimized fonts** (Geist Sans and Geist Mono)
 
 ## 📁 Project Structure
 

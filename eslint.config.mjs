@@ -33,6 +33,8 @@ const eslintConfig = [
       'import/default': 'off',
       'import/no-named-as-default-member': 'off',
       'react/no-children-prop': 'off',
+      'no-unused-expressions': 'off',
+      '@typescript-eslint/no-unused-expressions': 'off',
       '@typescript-eslint/no-non-null-assertion': 'warn',
       '@typescript-eslint/no-unused-vars': ['error', { ignoreRestSiblings: true }],
       'no-restricted-imports': [

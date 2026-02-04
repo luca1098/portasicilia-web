@@ -8,5 +8,17 @@
   "contribute_title": "Contributi Benvenuti",
   "contribute_text": "Se pensi che questo template possa essere migliorato o hai idee per nuove funzionalità, sentiti libero di aprire una Pull Request o proporre una feature!",
   "contribute_pr_button": "🔀 Apri Pull Request",
-  "contribute_issue_button": "💡 Proponi Feature"
+  "contribute_issue_button": "💡 Proponi Feature",
+  "location": "Località",
+  "experiences": "Esperienze",
+  "stays": "Alloggi",
+  "shop": "Shop",
+  "login": "Accedi",
+  "location_page_title": "Località",
+  "location_activities_subtitle": "attività e alloggi",
+  "experiences_page_title": "Esperienze",
+  "experience_price": "A partire da {{price}}",
+  "experience_cat_conferma_immediata": "Conferma immediata",
+  "experience_cat_specialita_culinaria": "Specialità culinaria",
+  "experience_cat_adrenalina_pura": "Adrenalina pura"
 }

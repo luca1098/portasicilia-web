@@ -17,8 +17,16 @@
   "location_page_title": "Locations",
   "location_activities_subtitle": "activities and stays",
   "experiences_page_title": "Experiences",
-  "experience_price": "Starting from {{}}",
+  "experience_price": "Starting from {{price}}",
   "experience_cat_conferma_immediata": "Instant confirmation",
   "experience_cat_specialita_culinaria": "Culinary specialty",
-  "experience_cat_adrenalina_pura": "Pure adrenaline"
+  "experience_cat_adrenalina_pura": "Pure adrenaline",
+  "stays_page_title": "Stays",
+  "stay_price": "From {{price}} per night",
+  "stay_price_from": "Starting from {{price}}",
+  "search_where": "Where?",
+  "search_everywhere": "Everywhere",
+  "search_typology": "Typology",
+  "search_button": "Search",
+  "search_suggested_destinations": "Suggested destinations"
 }

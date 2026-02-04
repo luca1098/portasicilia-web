@@ -20,5 +20,13 @@
   "experience_price": "A partire da {{price}}",
   "experience_cat_conferma_immediata": "Conferma immediata",
   "experience_cat_specialita_culinaria": "Specialità culinaria",
-  "experience_cat_adrenalina_pura": "Adrenalina pura"
+  "experience_cat_adrenalina_pura": "Adrenalina pura",
+  "stays_page_title": "Alloggi",
+  "stay_price": "Da {{price}} a notte",
+  "stay_price_from": "A partire da {{price}}",
+  "search_where": "Dove?",
+  "search_everywhere": "Ovunque",
+  "search_typology": "Tipologia",
+  "search_button": "Cerca",
+  "search_suggested_destinations": "Destinazioni suggerite"
 }

@@ -11,6 +11,7 @@ export type ListingCardProps = {
   priceLabel: string
   categoryLabel?: string
   duration?: string
+  darkBg?: boolean
 }
 
 export default function ListingCard({
@@ -21,6 +22,7 @@ export default function ListingCard({
   priceLabel,
   categoryLabel,
   duration,
+  darkBg,
 }: ListingCardProps) {
   return (
     <Link href={href} className="group w-full shrink-0">
@@ -61,8 +63,10 @@ export default function ListingCard({
       </div>
 
       <div className="mt-2">
-        <p className="line-clamp-2 text-sm font-medium text-foreground">{title}</p>
-        <p className="mt-0.5 text-xs text-muted-foreground">{priceLabel}</p>
+        <p className={`line-clamp-2 text-sm font-medium ${darkBg ? 'text-white' : 'text-foreground'}`}>
+          {title}
+        </p>
+        <p className={`mt-0.5 text-xs ${darkBg ? 'text-white/70' : 'text-muted-foreground'}`}>{priceLabel}</p>
       </div>
     </Link>
   )

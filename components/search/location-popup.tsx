@@ -11,7 +11,7 @@ type LocationPopupProps = {
 }
 
 export default function LocationPopup({ onSelect, onClose }: LocationPopupProps) {
-  const t = useTranslation() as Record<string, string>
+  const t = useTranslation()
 
   return (
     <>

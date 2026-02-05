@@ -1,4 +1,5 @@
 import Navbar from '@/components/navbar/navbar'
+import Footer from '@/components/footer/footer'
 import { PageParamsProps } from '@/lib/types/page.type'
 import { PropsWithChildren } from 'react'
 
@@ -9,6 +10,7 @@ const PublicLayout = ({ children }: PublicLayoutProps) => {
     <>
       <Navbar />
       {children}
+      <Footer />
     </>
   )
 }

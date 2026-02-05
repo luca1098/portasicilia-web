@@ -28,7 +28,7 @@ function getInitialLocation(locationId: string | null): Location | null {
 }
 
 export default function SearchBar({ shadow = true, size = 'default' }: SearchBarProps) {
-  const t = useTranslation() as Record<string, string>
+  const t = useTranslation()
   const router = useRouter()
   const params = useParams()
   const pathname = usePathname()

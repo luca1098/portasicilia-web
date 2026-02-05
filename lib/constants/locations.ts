@@ -32,9 +32,10 @@ export const mockLocations: Location[] = [
     id: 'ortigia',
     name: 'Ortigia',
     province: 'SR',
-    image: 'https://images.unsplash.com/photo-1558271736-cd326457a41e?w=600&h=700&fit=crop',
+    image: 'https://images.unsplash.com/photo-1678051547022-880d8b6fdc56??w=600&h=700&fit=crop',
     activitiesCount: 200,
   },
+
   {
     id: 'palermo',
     name: 'Palermo',

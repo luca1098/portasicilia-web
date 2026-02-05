@@ -10,7 +10,7 @@ type TypologyPopupProps = {
 }
 
 export default function TypologyPopup({ onSelect, onClose }: TypologyPopupProps) {
-  const t = useTranslation() as Record<string, string>
+  const t = useTranslation()
 
   return (
     <>

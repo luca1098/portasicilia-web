@@ -9,9 +9,10 @@ type StayCardProps = {
   stay: Stay
   lang: string
   categoryLabel?: string
+  darkBg?: boolean
 }
 
-export default function StayCard({ stay, lang, categoryLabel }: StayCardProps) {
+export default function StayCard({ stay, lang, categoryLabel, darkBg }: StayCardProps) {
   const t = useTranslation()
   return (
     <ListingCard
@@ -21,6 +22,7 @@ export default function StayCard({ stay, lang, categoryLabel }: StayCardProps) {
       rating={stay.rating}
       priceLabel={interpolate(t.stay_price, { price: formatCurrency(stay.price) })}
       categoryLabel={categoryLabel}
+      darkBg={darkBg}
     />
   )
 }

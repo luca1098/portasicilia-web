@@ -9,9 +9,10 @@ type ExperienceCardProps = {
   experience: Experience
   lang: string
   categoryLabel: string
+  darkBg?: boolean
 }
 
-export default function ExperienceCard({ experience, lang, categoryLabel }: ExperienceCardProps) {
+export default function ExperienceCard({ experience, lang, categoryLabel, darkBg }: ExperienceCardProps) {
   const t = useTranslation()
   return (
     <ListingCard
@@ -22,6 +23,7 @@ export default function ExperienceCard({ experience, lang, categoryLabel }: Expe
       priceLabel={interpolate(t.experience_price, { price: formatCurrency(experience.price) })}
       categoryLabel={categoryLabel}
       duration={experience.duration}
+      darkBg={darkBg}
     />
   )
 }

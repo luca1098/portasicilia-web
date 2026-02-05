@@ -6,9 +6,10 @@ type LocationCardProps = {
   location: Location
   lang: string
   subtitle: string
+  darkBg?: boolean
 }
 
-export default function LocationCard({ location, lang, subtitle }: LocationCardProps) {
+export default function LocationCard({ location, lang, subtitle, darkBg }: LocationCardProps) {
   return (
     <Link href={`/${lang}/location/${location.id}`} className="group shrink-0 w-full">
       <div className="relative aspect-square w-full overflow-hidden rounded-2xl">
@@ -21,10 +22,10 @@ export default function LocationCard({ location, lang, subtitle }: LocationCardP
         />
       </div>
       <div className="mt-2">
-        <p className="text-sm font-bold text-foreground">
+        <p className={`text-sm font-bold ${darkBg ? 'text-white' : 'text-foreground'}`}>
           {location.name}, {location.province}
         </p>
-        <p className="text-xs text-muted-foreground">
+        <p className={`text-xs ${darkBg ? 'text-white/70' : 'text-muted-foreground'}`}>
           {location.activitiesCount}+ {subtitle}
         </p>
       </div>

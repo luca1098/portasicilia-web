@@ -12,13 +12,14 @@ type CategoryCardProps = {
   label: string
   className?: string
   corners?: CornerRadius[]
+  mobileRounded?: boolean
 }
 
 const cornerClasses: Record<CornerRadius, string> = {
-  tl: 'rounded-tl-2xl',
-  tr: 'rounded-tr-2xl',
-  bl: 'rounded-bl-2xl',
-  br: 'rounded-br-2xl',
+  tl: 'md:rounded-tl-2xl',
+  tr: 'md:rounded-tr-2xl',
+  bl: 'md:rounded-bl-2xl',
+  br: 'md:rounded-br-2xl',
 }
 
 export default function CategoryCard({
@@ -27,13 +28,15 @@ export default function CategoryCard({
   label,
   className = '',
   corners = [],
+  mobileRounded,
 }: CategoryCardProps) {
   const radiusClasses = corners.map(c => cornerClasses[c]).join(' ')
+  const mobileRadiusClass = mobileRounded ? 'rounded-xl md:rounded-none' : ''
 
   return (
     <Link
       href={`/${lang}/category/${category.id}`}
-      className={`group relative overflow-hidden ${radiusClasses} ${className}`}
+      className={`group relative block overflow-hidden ${mobileRadiusClass} ${radiusClasses} ${className}`}
     >
       <Image
         src={category.image}

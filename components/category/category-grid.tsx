@@ -1,5 +1,8 @@
+'use client'
+
 import { Category } from '@/lib/constants/categories'
 import CategoryCard from './category-card'
+import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel'
 
 type CategoryGridProps = {
   categories: Category[]
@@ -13,60 +16,82 @@ export default function CategoryGrid({ categories, lang, labels }: CategoryGridP
     categories
 
   return (
-    <div className="grid grid-cols-2 gap-1 md:grid-cols-4 md:grid-rows-2">
-      {/* Fuga romantica - top left, spans 2 columns */}
-      <CategoryCard
-        category={fugaRomantica}
-        lang={lang}
-        label={labels[fugaRomantica.nameKey]}
-        className="col-span-2 aspect-2/1 md:aspect-auto md:row-span-1"
-        corners={['tl']}
-      />
+    <>
+      {/* Mobile carousel */}
+      <div className="md:hidden">
+        <Carousel opts={{ align: 'start', loop: true }}>
+          <CarouselContent className="-ml-4">
+            {categories.map(category => (
+              <CarouselItem key={category.id} className="pl-4 basis-[85%]">
+                <CategoryCard
+                  category={category}
+                  lang={lang}
+                  label={labels[category.nameKey]}
+                  className="aspect-[4/3]"
+                  mobileRounded
+                />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+      </div>
 
-      {/* Profumo di mare - center, spans 2 rows */}
-      <CategoryCard
-        category={profumoDiMare}
-        lang={lang}
-        label={labels[profumoDiMare.nameKey]}
-        className="aspect-square md:row-span-2 md:aspect-auto"
-        corners={[]}
-      />
+      {/* Tablet/Desktop grid */}
+      <div className="hidden md:grid md:grid-cols-4 md:grid-rows-2 gap-1">
+        {/* Fuga romantica - top left, spans 2 columns */}
+        <CategoryCard
+          category={fugaRomantica}
+          lang={lang}
+          label={labels[fugaRomantica.nameKey]}
+          className="col-span-2 row-span-1"
+          corners={['tl']}
+        />
 
-      {/* Madonie segrete - top right */}
-      <CategoryCard
-        category={madonieSegrete}
-        lang={lang}
-        label={labels[madonieSegrete.nameKey]}
-        className="aspect-square"
-        corners={['tr']}
-      />
+        {/* Profumo di mare - center, spans 2 rows */}
+        <CategoryCard
+          category={profumoDiMare}
+          lang={lang}
+          label={labels[profumoDiMare.nameKey]}
+          className="row-span-2"
+          corners={[]}
+        />
 
-      {/* Terra Lavica - bottom left */}
-      <CategoryCard
-        category={terraLavica}
-        lang={lang}
-        label={labels[terraLavica.nameKey]}
-        className="aspect-square"
-        corners={['bl']}
-      />
+        {/* Madonie segrete - top right */}
+        <CategoryCard
+          category={madonieSegrete}
+          lang={lang}
+          label={labels[madonieSegrete.nameKey]}
+          className="aspect-square"
+          corners={['tr']}
+        />
 
-      {/* Immerso nella natura - bottom middle-left */}
-      <CategoryCard
-        category={immersoNellaNatura}
-        lang={lang}
-        label={labels[immersoNellaNatura.nameKey]}
-        className="aspect-square"
-        corners={[]}
-      />
+        {/* Terra Lavica - bottom left */}
+        <CategoryCard
+          category={terraLavica}
+          lang={lang}
+          label={labels[terraLavica.nameKey]}
+          className="aspect-square"
+          corners={['bl']}
+        />
 
-      {/* Nel cuore della città - bottom right */}
-      <CategoryCard
-        category={nelCuoreDellaCitta}
-        lang={lang}
-        label={labels[nelCuoreDellaCitta.nameKey]}
-        className="aspect-square"
-        corners={['br']}
-      />
-    </div>
+        {/* Immerso nella natura - bottom middle-left */}
+        <CategoryCard
+          category={immersoNellaNatura}
+          lang={lang}
+          label={labels[immersoNellaNatura.nameKey]}
+          className="aspect-square"
+          corners={[]}
+        />
+
+        {/* Nel cuore della città - bottom right */}
+        <CategoryCard
+          category={nelCuoreDellaCitta}
+          lang={lang}
+          label={labels[nelCuoreDellaCitta.nameKey]}
+          className="aspect-square"
+          corners={['br']}
+        />
+      </div>
+    </>
   )
 }

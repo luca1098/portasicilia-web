@@ -8,24 +8,10 @@ export type Location = {
 
 export const mockLocations: Location[] = [
   {
-    id: 'cefalu',
-    name: 'Cefalù',
-    province: 'PA',
-    image: 'https://images.unsplash.com/photo-1600429989714-1247f0967087?w=600&h=700&fit=crop',
-    activitiesCount: 200,
-  },
-  {
     id: 'capo-dorlando',
     name: "Capo D'Orlando",
     province: 'ME',
     image: 'https://images.unsplash.com/photo-1523531294919-4bcd7c65e216?w=600&h=700&fit=crop',
-    activitiesCount: 200,
-  },
-  {
-    id: 'noto',
-    name: 'Noto',
-    province: 'SR',
-    image: 'https://images.unsplash.com/photo-1586791965837-a5af13a69857?w=600&h=700&fit=crop',
     activitiesCount: 200,
   },
   {

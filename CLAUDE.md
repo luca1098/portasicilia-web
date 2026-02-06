@@ -58,3 +58,14 @@ npm run format       # Format code with Prettier
 - Trailing commas (es5), 2-space indent
 - `no-console` enforced (only `warn`/`error` allowed)
 - Husky pre-commit runs Prettier + ESLint with zero warnings tolerance
+
+### Icons
+
+- All icons must be exported from a centralized `icons.ts` file
+- Reuse icons across components as much as possible - never import icons directly from icon libraries inside components
+- Import icons only from `icons.ts` (e.g., `import { SearchIcon, HeartIcon } from '@/lib/constants/icons'`)
+
+### Component Structure
+
+- `useEffect` hooks must always be placed **after** all variable declarations, state, and functions, immediately before the component's return/render statement
+- Order within a component: props destructuring → state (`useState`, `useRef`, etc.) → derived variables → functions/handlers → `useEffect` hooks → `return`

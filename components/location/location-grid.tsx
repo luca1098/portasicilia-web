@@ -1,10 +1,10 @@
 'use client'
 
-import { Location } from '@/lib/constants/locations'
+import type { Locality } from '@/lib/schemas/entities/locality.entity.schema'
 import LocationCard from '@/components/location/location-card'
 
 type LocationGridProps = {
-  locations: Location[]
+  locations: Locality[]
   lang: string
   subtitle: string
 }

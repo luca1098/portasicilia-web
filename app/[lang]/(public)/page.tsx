@@ -8,7 +8,7 @@ import ExperienceList from '@/components/experience/experience-list'
 import StayList from '@/components/stay/stay-list'
 import CategoryGrid from '@/components/category/category-grid'
 import ShopCategoryGrid from '@/components/shop/shop-category-grid'
-import { mockLocations } from '@/lib/constants/locations'
+import { getLocalities } from '@/lib/api/localities'
 import { mockExperiences } from '@/lib/constants/experiences'
 import { mockStays } from '@/lib/constants/stays'
 import { mockCategories } from '@/lib/constants/categories'
@@ -17,7 +17,10 @@ import { Button } from '@/components/ui/button'
 
 export default async function Home({ params }: PageParamsProps) {
   const { lang } = await params
-  const t = await getTranslations(lang as SupportedLocale)
+  const [t, locations] = await Promise.all([
+    getTranslations(lang as SupportedLocale),
+    getLocalities({ limit: 6 }),
+  ])
 
   const experienceCategoryLabels: Record<string, string> = {
     conferma_immediata: t.experience_cat_conferma_immediata,
@@ -80,7 +83,7 @@ export default async function Home({ params }: PageParamsProps) {
           <p className="text-sm text-muted-foreground">{t.home_locations_subtitle}</p>
           <h2 className="mt-1 text-3xl font-bold">{t.home_locations_title}</h2>
         </div>
-        <LocationList locations={mockLocations} lang={lang} subtitle={t.location_activities_subtitle} />
+        <LocationList locations={locations} lang={lang} subtitle={t.location_activities_subtitle} />
         <div className="mt-10 flex justify-center">
           <Button asChild>
             <Link href={`/${lang}/location`}>{t.home_cta_explore}</Link>

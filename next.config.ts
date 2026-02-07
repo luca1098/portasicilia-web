@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'lh3.googleusercontent.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'portasicilia.s3.eu-west-2.amazonaws.com',
+      },
     ],
   },
 }

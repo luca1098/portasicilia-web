@@ -9,6 +9,7 @@ const PublicLayout = ({ children }: PublicLayoutProps) => {
   return (
     <>
       <Navbar />
+      <div className="pt-10" aria-hidden={true} />
       {children}
       <Footer />
     </>

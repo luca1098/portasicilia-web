@@ -18,7 +18,7 @@ export default async function UserDashboardPage({ params }: PageParamsProps) {
   const name = session.user.firstName || session.user.email
 
   return (
-    <div>
+    <div className="mx-auto max-w-7xl px-4 py-8">
       <h1 className="text-3xl font-bold">{t.dashboard_user_title}</h1>
       <p className="mt-2 text-muted-foreground">{interpolate(t.dashboard_welcome, { name })}</p>
     </div>

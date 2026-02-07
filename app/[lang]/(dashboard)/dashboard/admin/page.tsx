@@ -5,6 +5,7 @@ import { PageParamsProps } from '@/lib/types/page.type'
 import { interpolate } from '@/lib/utils/i18n.utils'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
+import AdminDashboardContent from '@/components/dashboard/admin-dashboard-content'
 
 export default async function AdminDashboardPage({ params }: PageParamsProps) {
   const { lang } = await params
@@ -18,9 +19,15 @@ export default async function AdminDashboardPage({ params }: PageParamsProps) {
   const name = session.user.firstName || session.user.email
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold">{t.dashboard_admin_title}</h1>
-      <p className="mt-2 text-muted-foreground">{interpolate(t.dashboard_welcome, { name })}</p>
-    </div>
+    <AdminDashboardContent
+      title={t.dashboard_admin_title}
+      welcome={interpolate(t.dashboard_welcome, { name })}
+      stats={{
+        locations: t.admin_stats_locations,
+        experiences: t.admin_stats_experiences,
+        stays: t.admin_stats_stays,
+        users: t.admin_stats_users,
+      }}
+    />
   )
 }

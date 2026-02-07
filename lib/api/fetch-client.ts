@@ -1,16 +1,17 @@
+import type { ApiError as ApiErrorType } from '@/lib/schemas/api-response.schema'
 import type { SupportedLocale } from '@/lib/configs/locales'
 
 const BACKEND_URL = process.env.API_URL || 'http://localhost:7002'
 
 export class ApiError extends Error {
   status: number
-  data: unknown
+  errors: ApiErrorType[]
 
-  constructor(message: string, status: number, data?: unknown) {
+  constructor(message: string, status: number, errors: ApiErrorType[] = []) {
     super(message)
     this.name = 'ApiError'
     this.status = status
-    this.data = data
+    this.errors = errors
   }
 }
 
@@ -49,20 +50,26 @@ async function request<T>(baseUrl: string, endpoint: string, options: FetchOptio
   })
 
   if (!response.ok) {
-    let data: unknown
+    let errors: ApiErrorType[] = []
     try {
-      data = await response.json()
+      const body = await response.json()
+      errors = body?.errors ?? []
     } catch {
-      data = await response.text()
+      // response body is not JSON
     }
-    throw new ApiError(`${response.status} ${response.statusText}`, response.status, data)
+    const message = errors.length > 0 ? errors[0].message : `${response.status} ${response.statusText}`
+    throw new ApiError(message, response.status, errors)
   }
 
   if (response.status === 204) {
     return undefined as T
   }
 
-  return response.json()
+  const json = await response.json()
+  if (json.errors?.length > 0) {
+    throw new ApiError(json.errors[0].message, response.status, json.errors)
+  }
+  return json.data as T
 }
 
 function createApi(baseUrl: string) {

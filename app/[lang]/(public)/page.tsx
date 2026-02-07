@@ -109,6 +109,7 @@ export default async function Home({ params }: PageParamsProps) {
             experiences={mockExperiences}
             lang={lang}
             categoryLabels={experienceCategoryLabels}
+            darkBg
           />
           <div className="mt-10 flex justify-center">
             <Button asChild>
@@ -132,7 +133,7 @@ export default async function Home({ params }: PageParamsProps) {
           <h2 className="mb-10 text-center text-3xl font-bold text-white drop-shadow-lg md:text-4xl">
             {t.home_stays_title}
           </h2>
-          <StayList stays={mockStays} lang={lang} categoryLabels={experienceCategoryLabels} />
+          <StayList stays={mockStays} lang={lang} categoryLabels={experienceCategoryLabels} darkBg />
           <div className="mt-10 flex justify-center">
             <Button asChild>
               <Link href={`/${lang}/stays`}>{t.home_cta_stays}</Link>

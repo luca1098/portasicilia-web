@@ -11,7 +11,7 @@ type LocationCardProps = {
 
 export default function LocationCard({ location, lang, subtitle, darkBg }: LocationCardProps) {
   return (
-    <Link href={`/${lang}/location/${location.id}`} className="group shrink-0 w-full">
+    <Link href={`/${lang}/location/${location.slug}`} className="group shrink-0 w-full">
       <div className="relative aspect-square w-full overflow-hidden rounded-2xl">
         {location.cover ? (
           <Image

@@ -2,16 +2,17 @@
 
 import Image from 'next/image'
 import { Compass } from 'lucide-react'
-import { Location, mockLocations } from '@/lib/constants/locations'
 import { useTranslation } from '@/lib/context/translation.context'
+import { Locality } from '@/lib/schemas/entities/locality.entity.schema'
 
 type LocationPopupProps = {
-  onSelect: (location: Location | null) => void
+  onSelect: (location: Locality | null) => void
   onClose: () => void
 }
 
 export default function LocationPopup({ onSelect, onClose }: LocationPopupProps) {
   const t = useTranslation()
+  const locations: Locality[] = []
 
   return (
     <>
@@ -32,7 +33,7 @@ export default function LocationPopup({ onSelect, onClose }: LocationPopupProps)
           <span className="text-sm font-medium">{t.search_everywhere}</span>
         </button>
 
-        {mockLocations.map(location => (
+        {locations.map(location => (
           <button
             key={location.id}
             type="button"
@@ -40,14 +41,14 @@ export default function LocationPopup({ onSelect, onClose }: LocationPopupProps)
             onClick={() => onSelect(location)}
           >
             <div className="relative size-12 shrink-0 overflow-hidden rounded-xl">
-              <Image src={location.image} alt={location.name} fill className="object-cover" sizes="48px" />
+              {location.cover && (
+                <Image src={location.cover} alt={location.name} fill className="object-cover" sizes="48px" />
+              )}
             </div>
             <div className="text-left">
-              <p className="text-sm font-medium">
-                {location.name}, {location.province}
-              </p>
+              <p className="text-sm font-medium">{location.name}</p>
               <p className="text-xs text-muted-foreground">
-                {location.activitiesCount}+ {t.location_activities_subtitle}
+                {200}+ {t.location_activities_subtitle}
               </p>
             </div>
           </button>

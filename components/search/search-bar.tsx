@@ -3,12 +3,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { useParams, useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { MapPin, Search } from 'lucide-react'
-import { Location, mockLocations } from '@/lib/constants/locations'
 import { useTranslation } from '@/lib/context/translation.context'
 import LocationPopup from '@/components/search/location-popup'
 import TypologyPopup from '@/components/search/typology-popup'
 import { Button } from '../ui/button'
 import { cn } from '@/lib/utils/shadcn.utils'
+import { Locality } from '@/lib/schemas/entities/locality.entity.schema'
 
 type Typology = 'experiences' | 'stays'
 
@@ -22,9 +22,10 @@ function getInitialTypology(pathname: string): Typology {
   return 'experiences'
 }
 
-function getInitialLocation(locationId: string | null): Location | null {
+function getInitialLocation(locationId: string | null): Locality | null {
   if (!locationId) return null
-  return mockLocations.find(l => l.id === locationId) ?? null
+  const locations: Locality[] = []
+  return locations.find(l => l.id === locationId) ?? null
 }
 
 export default function SearchBar({ shadow = true, size = 'default' }: SearchBarProps) {
@@ -35,7 +36,7 @@ export default function SearchBar({ shadow = true, size = 'default' }: SearchBar
   const searchParams = useSearchParams()
   const lang = params.lang as string
 
-  const [selectedLocation, setSelectedLocation] = useState<Location | null>(() =>
+  const [selectedLocation, setSelectedLocation] = useState<Locality | null>(() =>
     getInitialLocation(searchParams.get('location'))
   )
   const [selectedTypology, setSelectedTypology] = useState<Typology>(() => getInitialTypology(pathname))
@@ -80,9 +81,7 @@ export default function SearchBar({ shadow = true, size = 'default' }: SearchBar
           <div className="text-left">
             <p className="text-xs font-semibold text-muted-foreground">{t.search_where}</p>
             <p className="text-sm font-medium">
-              {selectedLocation
-                ? `${selectedLocation.name}, ${selectedLocation.province}`
-                : t.search_everywhere}
+              {selectedLocation ? `${selectedLocation.name}` : t.search_everywhere}
             </p>
           </div>
         </button>

@@ -8,9 +8,10 @@ type StayListProps = {
   stays: Stay[]
   lang: string
   categoryLabels: Record<string, string>
+  darkBg?: boolean
 }
 
-export default function StayList({ stays, lang, categoryLabels }: StayListProps) {
+export default function StayList({ stays, lang, categoryLabels, darkBg = false }: StayListProps) {
   return (
     <>
       {/* Mobile/Tablet carousel */}
@@ -23,7 +24,7 @@ export default function StayList({ stays, lang, categoryLabels }: StayListProps)
                   stay={stay}
                   lang={lang}
                   categoryLabel={stay.category ? categoryLabels[stay.category] : undefined}
-                  darkBg
+                  darkBg={darkBg}
                 />
               </CarouselItem>
             ))}
@@ -38,7 +39,7 @@ export default function StayList({ stays, lang, categoryLabels }: StayListProps)
             stay={stay}
             lang={lang}
             categoryLabel={stay.category ? categoryLabels[stay.category] : undefined}
-            darkBg
+            darkBg={darkBg}
           />
         ))}
       </div>

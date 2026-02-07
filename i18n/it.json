@@ -112,5 +112,8 @@
   "footer_become_partner": "Diventa partner",
   "footer_copyright": "© 2025 SICILY GOOD – SALVATORE GUARNERI P.IVA: 07069930829",
   "footer_email_required": "L'email è obbligatoria",
-  "footer_email_invalid": "Inserisci un indirizzo email valido"
+  "footer_email_invalid": "Inserisci un indirizzo email valido",
+  "location_detail_experiences_title": "Cosa fare a {{name}}",
+  "location_detail_stays_title": "Dove alloggiare a {{name}}",
+  "location_detail_poi_title": "Cosa vedere a {{name}}"
 }

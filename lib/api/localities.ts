@@ -20,3 +20,7 @@ export async function getLocalities(params?: GetLocalitiesParams) {
 export function getLocalityById(id: string) {
   return apiServer.get<Locality>(`/localities/${id}`)
 }
+
+export function getLocalityBySlug(slug: string) {
+  return apiServer.get<Locality>(`/localities/slug/${slug}`)
+}

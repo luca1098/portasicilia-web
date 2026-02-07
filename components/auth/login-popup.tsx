@@ -4,6 +4,7 @@ import { X } from '@/lib/constants/icons'
 import { Button } from '@/components/ui/button'
 import { useTranslation } from '@/lib/context/translation.context'
 import { signIn } from 'next-auth/react'
+import { useParams } from 'next/navigation'
 
 interface LoginPopupProps {
   onClose: () => void
@@ -41,6 +42,7 @@ function AppleIcon({ className }: { className?: string }) {
 }
 
 export default function LoginPopup({ onClose }: LoginPopupProps) {
+  const { lang } = useParams()
   const t = useTranslation()
 
   return (
@@ -72,7 +74,7 @@ export default function LoginPopup({ onClose }: LoginPopupProps) {
               variant="outline"
               size="lg"
               className="w-full justify-center gap-3"
-              onClick={() => signIn('google')}
+              onClick={() => signIn('google', { callbackUrl: `/${lang}/dashboard` })}
             >
               <GoogleIcon className="size-5" />
               {t.login_with_google}

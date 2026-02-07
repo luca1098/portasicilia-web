@@ -1,32 +1,51 @@
-import { match } from '@formatjs/intl-localematcher'
-import Negotiator from 'negotiator'
+import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
-import { defaultLocale, supportedLocales } from './lib/configs/locales'
 
-function getLocale(request: NextRequest) {
-  const languages = new Negotiator({
-    headers: { 'accept-language': request.headers.get('accept-language') || '' },
-  }).languages()
-
-  return match(languages, supportedLocales, defaultLocale)
+const ROLE_PATHS: Record<string, string> = {
+  ADMIN: 'admin',
+  OWNER: 'owner',
+  USER: 'user',
 }
 
-export function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl
-  const pathnameHasLocale = supportedLocales.some(
-    locale => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
-  )
+export async function proxy(req: NextRequest) {
+  const { pathname } = req.nextUrl
 
-  if (pathnameHasLocale) return
+  // Extract lang segment (first path segment)
+  const segments = pathname.split('/')
+  const lang = segments[1] || 'it'
 
-  const locale = getLocale(request)
-  request.nextUrl.pathname = `/${locale}`
-  return NextResponse.redirect(request.nextUrl)
+  const token = await getToken({ req })
+
+  // Unauthenticated → redirect to homepage
+  if (!token?.user) {
+    const url = req.nextUrl.clone()
+    url.pathname = `/${lang}`
+    return NextResponse.redirect(url)
+  }
+
+  const role = token.user.role
+  const rolePath = ROLE_PATHS[role] || 'user'
+
+  // Check if the user is at exactly /{lang}/dashboard (no sub-path)
+  const dashboardBase = `/${lang}/dashboard`
+  if (pathname === dashboardBase || pathname === `${dashboardBase}/`) {
+    const url = req.nextUrl.clone()
+    url.pathname = `${dashboardBase}/${rolePath}`
+    return NextResponse.redirect(url)
+  }
+
+  // Check if user is trying to access a different role's dashboard
+  const currentRoleSeg = segments[3] // /{lang}/dashboard/{roleSeg}
+  const validRolePaths = Object.values(ROLE_PATHS)
+  if (currentRoleSeg && validRolePaths.includes(currentRoleSeg) && currentRoleSeg !== rolePath) {
+    const url = req.nextUrl.clone()
+    url.pathname = `${dashboardBase}/${rolePath}`
+    return NextResponse.redirect(url)
+  }
+
+  return NextResponse.next()
 }
 
 export const config = {
-  matcher: [
-    // Skip internal paths (_next) and static files
-    '/((?!_next|api|images|favicon.ico).*)',
-  ],
+  matcher: ['/:lang/dashboard/:path*'],
 }

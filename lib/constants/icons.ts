@@ -10,6 +10,8 @@ export {
   Facebook,
   HeartIcon,
   Instagram,
+  LayoutDashboardIcon,
+  LogOutIcon,
   MapPin,
   MenuIcon,
   Search,

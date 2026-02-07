@@ -1,8 +1,9 @@
 import { apiServer } from '@/lib/api/fetch-client'
 import { AuthResponse } from '@/lib/schemas/auth.schemas'
-import NextAuth from 'next-auth'
+import NextAuth, { NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
-const handler = NextAuth({
+
+export const authOptions: NextAuthOptions = {
   session: {
     maxAge: 6 * 24 * 60 * 60, // 6 giorni
   },
@@ -40,6 +41,8 @@ const handler = NextAuth({
       return session
     },
   },
-})
+}
 
-export { handler as GET, handler as POST, handler }
+const handler = NextAuth(authOptions)
+
+export { handler as GET, handler as POST }

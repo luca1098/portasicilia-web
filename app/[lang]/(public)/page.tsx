@@ -9,7 +9,7 @@ import StayList from '@/components/stay/stay-list'
 import CategoryGrid from '@/components/category/category-grid'
 import ShopCategoryGrid from '@/components/shop/shop-category-grid'
 import { getLocalities } from '@/lib/api/localities'
-import { mockExperiences } from '@/lib/constants/experiences'
+import { getExperiences } from '@/lib/api/experiences'
 import { mockStays } from '@/lib/constants/stays'
 import { mockCategories } from '@/lib/constants/categories'
 import { mockShopCategories } from '@/lib/constants/shop-categories'
@@ -17,9 +17,10 @@ import { Button } from '@/components/ui/button'
 
 export default async function Home({ params }: PageParamsProps) {
   const { lang } = await params
-  const [t, locations] = await Promise.all([
+  const [t, locations, { data: experiences }] = await Promise.all([
     getTranslations(lang as SupportedLocale),
     getLocalities({ limit: 6 }),
+    getExperiences({ limit: 6 }),
   ])
 
   const experienceCategoryLabels: Record<string, string> = {
@@ -105,12 +106,7 @@ export default async function Home({ params }: PageParamsProps) {
           <h2 className="mb-10 text-center text-3xl font-bold text-white drop-shadow-lg md:text-4xl">
             {t.home_experiences_title}
           </h2>
-          <ExperienceList
-            experiences={mockExperiences}
-            lang={lang}
-            categoryLabels={experienceCategoryLabels}
-            darkBg
-          />
+          <ExperienceList experiences={experiences} lang={lang} darkBg />
           <div className="mt-10 flex justify-center">
             <Button asChild>
               <Link href={`/${lang}/experiences`}>{t.home_cta_explore}</Link>

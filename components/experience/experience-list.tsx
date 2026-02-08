@@ -1,22 +1,16 @@
 'use client'
 
-import { Experience } from '@/lib/constants/experiences'
+import type { Experience } from '@/lib/schemas/entities/experience.entity.schema'
 import ExperienceCard from '@/components/experience/experience-card'
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel'
 
 type ExperienceListProps = {
   experiences: Experience[]
   lang: string
-  categoryLabels: Record<string, string>
   darkBg?: boolean
 }
 
-export default function ExperienceList({
-  experiences,
-  lang,
-  categoryLabels,
-  darkBg = false,
-}: ExperienceListProps) {
+export default function ExperienceList({ experiences, lang, darkBg = false }: ExperienceListProps) {
   return (
     <>
       {/* Mobile/Tablet carousel */}
@@ -25,12 +19,7 @@ export default function ExperienceList({
           <CarouselContent className="-ml-2">
             {experiences.map(experience => (
               <CarouselItem key={experience.id} className="pl-2 basis-[45%] md:basis-[30%]">
-                <ExperienceCard
-                  experience={experience}
-                  lang={lang}
-                  categoryLabel={categoryLabels[experience.category] ?? experience.category}
-                  darkBg={darkBg}
-                />
+                <ExperienceCard experience={experience} lang={lang} darkBg={darkBg} />
               </CarouselItem>
             ))}
           </CarouselContent>
@@ -39,13 +28,7 @@ export default function ExperienceList({
       {/* Desktop grid */}
       <div className="hidden lg:grid lg:grid-cols-6 gap-4">
         {experiences.map(experience => (
-          <ExperienceCard
-            key={experience.id}
-            experience={experience}
-            lang={lang}
-            categoryLabel={categoryLabels[experience.category] ?? experience.category}
-            darkBg={darkBg}
-          />
+          <ExperienceCard key={experience.id} experience={experience} lang={lang} darkBg={darkBg} />
         ))}
       </div>
     </>

@@ -1,5 +1,5 @@
 'use client'
-import { Experience } from '@/lib/constants/experiences'
+import type { Experience } from '@/lib/schemas/entities/experience.entity.schema'
 import { formatCurrency } from '@/core/utils/currency.utils'
 import { useTranslation } from '@/lib/context/translation.context'
 import { interpolate } from '@/lib/utils/i18n.utils'
@@ -8,21 +8,27 @@ import ListingCard from '@/components/shared/listing-card'
 type ExperienceCardProps = {
   experience: Experience
   lang: string
-  categoryLabel: string
   darkBg?: boolean
 }
 
-export default function ExperienceCard({ experience, lang, categoryLabel, darkBg }: ExperienceCardProps) {
+export default function ExperienceCard({ experience, lang, darkBg }: ExperienceCardProps) {
   const t = useTranslation()
+  const lowestPrice = experience.timeSlots
+    ?.flatMap(slot => slot.prices ?? [])
+    .reduce((min, p) => (p.price < min ? p.price : min), Infinity)
+  const price = lowestPrice && lowestPrice !== Infinity ? lowestPrice : 0
+  const avgRating =
+    experience.reviews && experience.reviews.length > 0
+      ? experience.reviews.reduce((sum, r) => sum + r.rating, 0) / experience.reviews.length
+      : 0
+
   return (
     <ListingCard
-      title={experience.title}
-      image={experience.image}
-      href={`/${lang}/experiences/${experience.id}`}
-      rating={experience.rating}
-      priceLabel={interpolate(t.experience_price, { price: formatCurrency(experience.price) })}
-      categoryLabel={categoryLabel}
-      duration={experience.duration}
+      title={experience.name}
+      image={experience.cover ?? ''}
+      href={`/${lang}/experiences/${experience.slug}`}
+      rating={avgRating}
+      priceLabel={price > 0 ? interpolate(t.experience_price, { price: formatCurrency(price) }) : ''}
       darkBg={darkBg}
     />
   )

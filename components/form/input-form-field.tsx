@@ -22,7 +22,7 @@ function InputFormField<TFieldValues extends FieldValues>({
   label,
   description,
   required,
-
+  maxLength,
   className,
   ...inputProps
 }: InputFormFieldProps<TFieldValues>) {
@@ -38,6 +38,8 @@ function InputFormField<TFieldValues extends FieldValues>({
           className={className}
           hasValue={!!field.value}
           required={required}
+          maxLength={maxLength}
+          currentLength={typeof field.value === 'string' ? field.value.length : 0}
         >
           <Input
             id={name}

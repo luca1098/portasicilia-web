@@ -24,3 +24,15 @@ export function getLocalityById(id: string) {
 export function getLocalityBySlug(slug: string) {
   return apiServer.get<Locality>(`/localities/slug/${slug}`)
 }
+
+export function createLocality(data: FormData, headers: HeadersInit) {
+  return apiServer.post<Locality>('/localities', data, { headers })
+}
+
+export function updateLocality(id: string, data: FormData, headers: HeadersInit) {
+  return apiServer.patch<Locality>(`/localities/${id}`, data, { headers })
+}
+
+export function deleteLocality(id: string, headers: HeadersInit) {
+  return apiServer.delete<void>(`/localities/${id}`, { headers })
+}

@@ -34,8 +34,9 @@ async function request<T>(baseUrl: string, endpoint: string, options: FetchOptio
   }
 
   const headers = new Headers(customHeaders)
+  const isFormData = body instanceof FormData
 
-  if (body && !headers.has('Content-Type')) {
+  if (body && !isFormData && !headers.has('Content-Type')) {
     headers.set('Content-Type', 'application/json')
   }
 
@@ -46,7 +47,7 @@ async function request<T>(baseUrl: string, endpoint: string, options: FetchOptio
   const response = await fetch(url, {
     ...init,
     headers,
-    body: body ? JSON.stringify(body) : undefined,
+    body: body ? (isFormData ? (body as BodyInit) : JSON.stringify(body)) : undefined,
   })
 
   if (!response.ok) {

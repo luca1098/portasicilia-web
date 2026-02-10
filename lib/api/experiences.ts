@@ -21,6 +21,22 @@ export async function getExperiences(params?: GetExperiencesParams) {
   return apiServer.get<PaginatedExperiences>('/experiences', { params: queryParams })
 }
 
+export function getExperienceById(id: string) {
+  return apiServer.get<Experience>(`/experiences/${id}`)
+}
+
 export function getExperienceBySlug(slug: string) {
   return apiServer.get<Experience>(`/experiences/slug/${slug}`)
+}
+
+export function createExperience(data: FormData, headers: HeadersInit) {
+  return apiServer.post<Experience>('/experiences', data, { headers })
+}
+
+export function updateExperience(id: string, data: FormData, headers: HeadersInit) {
+  return apiServer.patch<Experience>(`/experiences/${id}`, data, { headers })
+}
+
+export function deleteExperience(id: string, headers: HeadersInit) {
+  return apiServer.delete<void>(`/experiences/${id}`, { headers })
 }

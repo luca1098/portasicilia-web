@@ -19,10 +19,7 @@ export default function ExperienceBookingCard({ experience }: ExperienceBookingC
   const [children, setChildren] = useState(0)
   const [infants, setInfants] = useState(0)
 
-  const lowestPrice = experience.timeSlots
-    ?.flatMap(slot => slot.prices ?? [])
-    .reduce((min, p) => (p.price < min ? p.price : min), Infinity)
-  const price = lowestPrice && lowestPrice !== Infinity ? lowestPrice : 0
+  const price = 0
   const avgRating =
     experience.reviews && experience.reviews.length > 0
       ? experience.reviews.reduce((sum, r) => sum + r.rating, 0) / experience.reviews.length

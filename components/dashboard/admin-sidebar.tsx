@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils/shadcn.utils'
 import {
   LayoutDashboardIcon,
   MapPinnedIcon,
+  Compass,
   ChevronLeftIcon,
   ExternalLinkIcon,
   PanelLeftIcon,
@@ -24,6 +25,7 @@ type SidebarItem = {
 const sidebarItems: SidebarItem[] = [
   { key: 'admin_sidebar_dashboard', icon: LayoutDashboardIcon, href: '' },
   { key: 'admin_sidebar_locations', icon: MapPinnedIcon, href: '/locations' },
+  { key: 'admin_sidebar_experiences', icon: Compass, href: '/experiences' },
 ]
 
 export default function AdminSidebar() {

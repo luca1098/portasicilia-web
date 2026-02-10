@@ -1,6 +1,11 @@
 import { z } from 'zod'
+import { OwnerSchema } from './owner.entity.schema'
 
 // ==================== ENUMS ====================
+
+export const CommissionTypeSchema = z.union([z.literal('PERCENTAGE'), z.literal('FLAT')])
+
+export type CommissionType = z.infer<typeof CommissionTypeSchema>
 
 export const ListingStatusSchema = z.union([
   z.literal('DRAFT'),
@@ -11,14 +16,6 @@ export const ListingStatusSchema = z.union([
 ])
 
 export type ListingStatus = z.infer<typeof ListingStatusSchema>
-
-export const PriceTypeSchema = z.union([z.literal('PER_PERSON'), z.literal('PER_EXPERIENCE')])
-
-export type PriceType = z.infer<typeof PriceTypeSchema>
-
-export const PersonTypeSchema = z.union([z.literal('ADULT'), z.literal('CHILD'), z.literal('INFANT')])
-
-export type PersonType = z.infer<typeof PersonTypeSchema>
 
 export const DayOfWeekSchema = z.union([
   z.literal('MONDAY'),
@@ -54,49 +51,15 @@ export const ExperienceItinerarySchema = z.object({
 
 export type ExperienceItinerary = z.infer<typeof ExperienceItinerarySchema>
 
-export const TimeSlotPriceSchema = z.object({
-  id: z.string(),
-  price: z.number(),
-  personType: PersonTypeSchema.nullable(),
-  createdAt: z.string(),
-})
-
-export type TimeSlotPrice = z.infer<typeof TimeSlotPriceSchema>
-
 export const ExperienceTimeSlotSchema = z.object({
   id: z.string(),
   dayOfWeek: DayOfWeekSchema,
   startTime: z.string(),
   endTime: z.string(),
-  capacity: z.number(),
-  prices: z.array(TimeSlotPriceSchema).nullish(),
   createdAt: z.string(),
 })
 
 export type ExperienceTimeSlot = z.infer<typeof ExperienceTimeSlotSchema>
-
-export const ExperienceAvailabilitySchema = z.object({
-  id: z.string(),
-  date: z.string(),
-  startTime: z.string(),
-  endTime: z.string(),
-  capacity: z.number(),
-  isAvailable: z.boolean(),
-  createdAt: z.string(),
-})
-
-export type ExperienceAvailability = z.infer<typeof ExperienceAvailabilitySchema>
-
-export const ExperienceCustomPriceSchema = z.object({
-  id: z.string(),
-  startDate: z.string(),
-  endDate: z.string(),
-  price: z.number(),
-  personType: PersonTypeSchema.nullable(),
-  createdAt: z.string(),
-})
-
-export type ExperienceCustomPrice = z.infer<typeof ExperienceCustomPriceSchema>
 
 export const ReviewSchema = z.object({
   id: z.string(),
@@ -120,26 +83,28 @@ export const ExperienceSchema = z.object({
   slug: z.string(),
   description: z.string(),
   cover: z.string().nullable(),
-  priceType: PriceTypeSchema,
   street: z.string(),
   city: z.string(),
   zipCode: z.string(),
-  latitude: z.number(),
-  longitude: z.number(),
+  latitude: z.coerce.number(),
+  longitude: z.coerce.number(),
   included: z.array(z.string()),
   notIncluded: z.array(z.string()),
   policy: z.array(z.string()),
   cancellationTerms: z.array(z.string()),
+  maxCapacity: z.number().int(),
   languages: z.array(z.string()),
   status: ListingStatusSchema,
   isActive: z.boolean(),
   ownerId: z.string(),
+  owner: OwnerSchema.nullish(),
   localityId: z.string(),
+  categoryId: z.string().nullable(),
+  commissionType: CommissionTypeSchema.nullable(),
+  commissionValue: z.number().nullable(),
   images: z.array(ExperienceImageSchema).nullish(),
   itinerary: z.array(ExperienceItinerarySchema).nullish(),
   timeSlots: z.array(ExperienceTimeSlotSchema).nullish(),
-  availabilities: z.array(ExperienceAvailabilitySchema).nullish(),
-  customPrices: z.array(ExperienceCustomPriceSchema).nullish(),
   reviews: z.array(ReviewSchema).nullish(),
   createdAt: z.string(),
   updatedAt: z.string(),

@@ -12,10 +12,7 @@ type ExperienceDetailContentProps = {
 
 export default function ExperienceDetailContent({ experience }: ExperienceDetailContentProps) {
   const galleryImages = experience.images?.map(img => img.url) ?? []
-  const lowestPrice = experience.timeSlots
-    ?.flatMap(slot => slot.prices ?? [])
-    .reduce((min, p) => (p.price < min ? p.price : min), Infinity)
-  const price = lowestPrice && lowestPrice !== Infinity ? lowestPrice : 0
+  const price = 0
 
   return (
     <main className="min-h-screen pb-20 lg:pb-0">

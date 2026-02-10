@@ -83,7 +83,7 @@ export default function DashboardHeader() {
 
         {/* Dropdown */}
         {open && (
-          <div className="absolute right-0 mt-2 w-48 rounded-xl border border-border bg-background p-1.5 shadow-lg">
+          <div className="absolute right-0 z-50 mt-2 w-48 rounded-xl border border-border bg-background p-1.5 shadow-lg">
             <Button
               variant="ghost"
               size="sm"

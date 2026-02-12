@@ -8,7 +8,7 @@ export default function AdminLayout({ children }: PropsWithChildren) {
       <AdminSidebar />
       <div className="flex flex-1 flex-col overflow-hidden">
         <DashboardHeader />
-        <main className="flex-1 overflow-y-auto px-6 py-8 lg:px-10">{children}</main>
+        <main className="overflow-y-auto flex-1 px-6 py-8 lg:px-10">{children}</main>
       </div>
     </div>
   )

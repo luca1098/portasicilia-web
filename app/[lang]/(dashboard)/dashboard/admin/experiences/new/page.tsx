@@ -5,7 +5,8 @@ import { PageParamsProps } from '@/lib/types/page.type'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
 import { getLocalities } from '@/lib/api/localities'
-import ExperienceForm from '@/components/dashboard/experiences/experience-form'
+import { getCategories } from '@/lib/api/categories'
+import ExperienceWizard from '@/components/dashboard/experiences/wizard/experience-wizard'
 import Link from 'next/link'
 import { ArrowLeft } from '@/lib/constants/icons'
 
@@ -17,11 +18,14 @@ export default async function NewExperiencePage({ params }: PageParamsProps) {
     redirect(`/${lang}`)
   }
 
-  const t = await getTranslations(lang as SupportedLocale)
-  const localities = await getLocalities()
+  const [t, localities, categories] = await Promise.all([
+    getTranslations(lang as SupportedLocale),
+    getLocalities(),
+    getCategories('EXPERIENCE'),
+  ])
 
   return (
-    <div className="mx-auto max-w-2xl space-y-8">
+    <div className="mx-auto max-w-5xl space-y-8">
       <div className="flex items-center gap-4">
         <Link
           href={`/${lang}/dashboard/admin/experiences`}
@@ -34,7 +38,7 @@ export default async function NewExperiencePage({ params }: PageParamsProps) {
         </div>
       </div>
 
-      <ExperienceForm mode="create" localities={localities} />
+      <ExperienceWizard mode="create" localities={localities} categories={categories} />
     </div>
   )
 }

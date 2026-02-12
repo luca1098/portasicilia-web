@@ -1,10 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { StarIcon, CheckIcon } from '@/lib/constants/icons'
+import { StarIcon, CheckIcon, ClockIcon } from '@/lib/constants/icons'
 import { useTranslation } from '@/lib/context/translation.context'
 import { interpolate } from '@/lib/utils/i18n.utils'
 import { formatCurrency } from '@/core/utils/currency.utils'
+import { cn } from '@/lib/utils/shadcn.utils'
 import type { Experience } from '@/lib/schemas/entities/experience.entity.schema'
 import { Button } from '@/components/ui/button'
 import ParticipantCounter from '@/components/experience/detail/participant-counter'
@@ -18,6 +19,11 @@ export default function ExperienceBookingCard({ experience }: ExperienceBookingC
   const [adults, setAdults] = useState(1)
   const [children, setChildren] = useState(0)
   const [infants, setInfants] = useState(0)
+
+  const timeSlots = experience.timeSlots ?? []
+  const [selectedSlotId, setSelectedSlotId] = useState<string | null>(
+    timeSlots.length === 1 ? timeSlots[0].id : null
+  )
 
   const price = 0
   const avgRating =
@@ -40,6 +46,58 @@ export default function ExperienceBookingCard({ experience }: ExperienceBookingC
 
       {/* Separator */}
       <hr className="mb-4 border-border" />
+
+      {/* Time Slot Selection */}
+      {timeSlots.length > 1 && (
+        <>
+          <h3 className="mb-2 text-sm font-semibold">{t.exp_detail_select_time}</h3>
+          <div className="mb-4 grid grid-cols-2 gap-2">
+            {timeSlots.map(slot => {
+              const isSelected = selectedSlotId === slot.id
+              const hours = Math.floor(slot.durationInMinutes / 60)
+              const mins = slot.durationInMinutes % 60
+              const durationLabel =
+                hours > 0 && mins > 0
+                  ? `${hours}h ${mins}min`
+                  : hours > 0
+                    ? `${hours}h`
+                    : `${slot.durationInMinutes}min`
+              return (
+                <button
+                  key={slot.id}
+                  type="button"
+                  onClick={() => setSelectedSlotId(slot.id)}
+                  className={cn(
+                    'flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-center transition-colors',
+                    isSelected
+                      ? 'border-primary bg-primary/5'
+                      : 'border-border hover:border-muted-foreground/50'
+                  )}
+                >
+                  <span className="text-sm font-medium">
+                    {slot.startTime} - {slot.endTime}
+                  </span>
+                  <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <ClockIcon className="size-3" />
+                    {durationLabel}
+                  </span>
+                </button>
+              )
+            })}
+          </div>
+          <hr className="mb-4 border-border" />
+        </>
+      )}
+
+      {/* Single time slot display */}
+      {timeSlots.length === 1 && (
+        <div className="mb-4 flex items-center gap-2 text-sm text-muted-foreground">
+          <ClockIcon className="size-4" />
+          <span>
+            {timeSlots[0].startTime} - {timeSlots[0].endTime} ({timeSlots[0].durationInMinutes}min)
+          </span>
+        </div>
+      )}
 
       {/* Participants */}
       <h3 className="mb-1 text-sm font-semibold">{t.exp_detail_participants}</h3>

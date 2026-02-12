@@ -10,10 +10,6 @@ export const PricingModeSchema = z.union([
 
 export type PricingMode = z.infer<typeof PricingModeSchema>
 
-export const PriceListStatusSchema = z.union([z.literal('DRAFT'), z.literal('ACTIVE'), z.literal('ARCHIVED')])
-
-export type PriceListStatus = z.infer<typeof PriceListStatusSchema>
-
 export const ModifierTypeSchema = z.union([
   z.literal('SEASONAL'),
   z.literal('DAY_OF_WEEK'),
@@ -86,9 +82,6 @@ export const PriceListSchema = z.object({
   id: z.string(),
   currency: z.string(),
   pricingMode: PricingModeSchema,
-  validFrom: z.string(),
-  validTo: z.string(),
-  status: PriceListStatusSchema,
   experienceId: z.string(),
   tiers: z.array(PriceTierSchema).nullish(),
   modifiers: z.array(PriceModifierSchema).nullish(),

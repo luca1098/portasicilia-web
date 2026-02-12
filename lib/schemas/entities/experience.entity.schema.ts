@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { OwnerSchema } from './owner.entity.schema'
+import { PriceListSchema } from './pricing.entity.schema'
 
 // ==================== ENUMS ====================
 
@@ -51,11 +52,23 @@ export const ExperienceItinerarySchema = z.object({
 
 export type ExperienceItinerary = z.infer<typeof ExperienceItinerarySchema>
 
+export const CapacityModeSchema = z.union([z.literal('PER_PERSON'), z.literal('PER_ASSET')])
+
+export type CapacityMode = z.infer<typeof CapacityModeSchema>
+
+export const PricingModeSchema = z.union([
+  z.literal('PER_PERSON'),
+  z.literal('PER_EXPERIENCE'),
+  z.literal('PER_ASSET'),
+])
+
+export type PricingMode = z.infer<typeof PricingModeSchema>
+
 export const ExperienceTimeSlotSchema = z.object({
   id: z.string(),
-  dayOfWeek: DayOfWeekSchema,
   startTime: z.string(),
   endTime: z.string(),
+  durationInMinutes: z.number().int(),
   createdAt: z.string(),
 })
 
@@ -93,18 +106,22 @@ export const ExperienceSchema = z.object({
   policy: z.array(z.string()),
   cancellationTerms: z.array(z.string()),
   maxCapacity: z.number().int(),
+  capacityMode: CapacityModeSchema.optional(),
+  assetLabel: z.string().nullable().optional(),
+  pricingMode: PricingModeSchema.optional(),
   languages: z.array(z.string()),
   status: ListingStatusSchema,
-  isActive: z.boolean(),
   ownerId: z.string(),
   owner: OwnerSchema.nullish(),
   localityId: z.string(),
-  categoryId: z.string().nullable(),
+  categories: z.array(z.object({ category: z.object({ id: z.string(), name: z.string() }) })).nullish(),
+  daysOfWeek: z.array(DayOfWeekSchema).nullish(),
   commissionType: CommissionTypeSchema.nullable(),
   commissionValue: z.number().nullable(),
   images: z.array(ExperienceImageSchema).nullish(),
   itinerary: z.array(ExperienceItinerarySchema).nullish(),
   timeSlots: z.array(ExperienceTimeSlotSchema).nullish(),
+  priceLists: z.array(PriceListSchema).nullish(),
   reviews: z.array(ReviewSchema).nullish(),
   createdAt: z.string(),
   updatedAt: z.string(),

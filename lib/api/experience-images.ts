@@ -8,3 +8,15 @@ export function createImage(experienceId: string, data: FormData, headers: Heade
 export function deleteImage(experienceId: string, imageId: string, headers: HeadersInit) {
   return apiServer.delete<void>(`/experiences/${experienceId}/images/${imageId}`, { headers })
 }
+
+export function reorderImages(
+  experienceId: string,
+  items: { id: string; order: number }[],
+  headers: HeadersInit
+) {
+  return apiServer.put<ExperienceImage[]>(
+    `/experiences/${experienceId}/images/reorder`,
+    { items },
+    { headers }
+  )
+}

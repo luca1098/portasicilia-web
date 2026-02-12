@@ -17,7 +17,7 @@ export function getPriceListById(id: string) {
 }
 
 export function getPriceListsByExperienceId(experienceId: string) {
-  return apiServer.get<PriceList[]>(`/pricing/price-lists`, {
+  return apiServer.get<PriceList[]>('/pricing/price-lists', {
     params: { experienceId },
   })
 }
@@ -33,50 +33,63 @@ export function deletePriceList(id: string, headers: HeadersInit) {
 // ==================== PRICE TIER ====================
 
 export function createPriceTier(priceListId: string, data: unknown, headers: HeadersInit) {
-  return apiServer.post<PriceTier>(`/pricing/price-lists/${priceListId}/tiers`, data, { headers })
+  return apiServer.post<PriceTier>(
+    '/pricing/tiers',
+    { ...(data as Record<string, unknown>), priceListId },
+    { headers }
+  )
 }
 
-export function updatePriceTier(priceListId: string, tierId: string, data: unknown, headers: HeadersInit) {
-  return apiServer.patch<PriceTier>(`/pricing/price-lists/${priceListId}/tiers/${tierId}`, data, { headers })
+export function updatePriceTier(_priceListId: string, tierId: string, data: unknown, headers: HeadersInit) {
+  return apiServer.patch<PriceTier>(`/pricing/tiers/${tierId}`, data, { headers })
 }
 
-export function deletePriceTier(priceListId: string, tierId: string, headers: HeadersInit) {
-  return apiServer.delete<void>(`/pricing/price-lists/${priceListId}/tiers/${tierId}`, { headers })
+export function deletePriceTier(_priceListId: string, tierId: string, headers: HeadersInit) {
+  return apiServer.delete<void>(`/pricing/tiers/${tierId}`, { headers })
 }
 
 // ==================== PRICE MODIFIER ====================
 
 export function createPriceModifier(priceListId: string, data: unknown, headers: HeadersInit) {
-  return apiServer.post<PriceModifier>(`/pricing/price-lists/${priceListId}/modifiers`, data, { headers })
+  return apiServer.post<PriceModifier>(
+    '/pricing/modifiers',
+    { ...(data as Record<string, unknown>), priceListId },
+    { headers }
+  )
 }
 
 export function updatePriceModifier(
-  priceListId: string,
+  _priceListId: string,
   modifierId: string,
   data: unknown,
   headers: HeadersInit
 ) {
-  return apiServer.patch<PriceModifier>(`/pricing/price-lists/${priceListId}/modifiers/${modifierId}`, data, {
-    headers,
-  })
+  return apiServer.patch<PriceModifier>(`/pricing/modifiers/${modifierId}`, data, { headers })
 }
 
-export function deletePriceModifier(priceListId: string, modifierId: string, headers: HeadersInit) {
-  return apiServer.delete<void>(`/pricing/price-lists/${priceListId}/modifiers/${modifierId}`, { headers })
+export function deletePriceModifier(_priceListId: string, modifierId: string, headers: HeadersInit) {
+  return apiServer.delete<void>(`/pricing/modifiers/${modifierId}`, { headers })
 }
 
 // ==================== PRICE OVERRIDE ====================
 
-export function createPriceOverride(tierId: string, data: unknown, headers: HeadersInit) {
-  return apiServer.post<PriceOverride>(`/pricing/tiers/${tierId}/overrides`, data, { headers })
+export function createPriceOverride(priceTierId: string, data: unknown, headers: HeadersInit) {
+  return apiServer.post<PriceOverride>(
+    '/pricing/overrides',
+    { ...(data as Record<string, unknown>), priceTierId },
+    { headers }
+  )
 }
 
-export function updatePriceOverride(tierId: string, overrideId: string, data: unknown, headers: HeadersInit) {
-  return apiServer.patch<PriceOverride>(`/pricing/tiers/${tierId}/overrides/${overrideId}`, data, {
-    headers,
-  })
+export function updatePriceOverride(
+  _tierId: string,
+  overrideId: string,
+  data: unknown,
+  headers: HeadersInit
+) {
+  return apiServer.patch<PriceOverride>(`/pricing/overrides/${overrideId}`, data, { headers })
 }
 
-export function deletePriceOverride(tierId: string, overrideId: string, headers: HeadersInit) {
-  return apiServer.delete<void>(`/pricing/tiers/${tierId}/overrides/${overrideId}`, { headers })
+export function deletePriceOverride(_tierId: string, overrideId: string, headers: HeadersInit) {
+  return apiServer.delete<void>(`/pricing/overrides/${overrideId}`, { headers })
 }

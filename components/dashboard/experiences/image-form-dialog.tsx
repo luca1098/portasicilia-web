@@ -1,6 +1,5 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
@@ -21,10 +20,15 @@ type ImageFormDialogProps = {
   experienceId: string
   open: boolean
   onOpenChange: (open: boolean) => void
+  onSuccess?: (image: ExperienceImage) => void
 }
 
-export default function ImageFormDialog({ experienceId, open, onOpenChange }: ImageFormDialogProps) {
-  const router = useRouter()
+export default function ImageFormDialog({
+  experienceId,
+  open,
+  onOpenChange,
+  onSuccess,
+}: ImageFormDialogProps) {
   const t = useTranslation()
 
   const form = useForm<ExperienceImageFormValues>({
@@ -37,16 +41,16 @@ export default function ImageFormDialog({ experienceId, open, onOpenChange }: Im
 
   const { loading, execute } = useAction<ExperienceImage>({
     successMessage: t.admin_image_create_success,
-    onSuccess: () => {
+    onSuccess: data => {
       onOpenChange(false)
       form.reset()
-      router.refresh()
+      if (data) onSuccess?.(data)
     },
   })
 
   const onSubmit = async (data: ExperienceImageFormValues) => {
     const fd = new FormData()
-    fd.append('image', data.image)
+    fd.append('file', data.image)
     fd.append('order', String(data.order))
     await execute(() => createImageAction(experienceId, fd))
   }

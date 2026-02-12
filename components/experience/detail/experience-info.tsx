@@ -1,6 +1,6 @@
 'use client'
 
-import { MapPin } from '@/lib/constants/icons'
+import { MapPin, ClockIcon, TagIcon } from '@/lib/constants/icons'
 import { useTranslation } from '@/lib/context/translation.context'
 import { interpolate } from '@/lib/utils/i18n.utils'
 import type { Experience } from '@/lib/schemas/entities/experience.entity.schema'
@@ -19,18 +19,52 @@ export default function ExperienceInfo({ experience }: ExperienceInfoProps) {
 
   const itinerary = experience.itinerary ?? []
   const reviews = experience.reviews ?? []
+  const categories = experience.categories ?? []
+  const timeSlots = experience.timeSlots ?? []
   const hasItinerary = itinerary.length > 0
   const hasIncluded = experience.included.length > 0 || experience.notIncluded.length > 0
   const hasReviews = reviews.length > 0
 
+  // Derive duration range from time slots
+  const durations = timeSlots.map(s => s.durationInMinutes).filter(d => d > 0)
+  const minDuration = durations.length > 0 ? Math.min(...durations) : null
+  const maxDuration = durations.length > 0 ? Math.max(...durations) : null
+
+  const formatDurationLabel = (mins: number) => {
+    const h = Math.floor(mins / 60)
+    const m = mins % 60
+    if (h > 0 && m > 0) return `${h}h ${m}min`
+    if (h > 0) return `${h}h`
+    return `${mins}min`
+  }
+
+  const durationLabel =
+    minDuration !== null && maxDuration !== null
+      ? minDuration === maxDuration
+        ? formatDurationLabel(minDuration)
+        : `${formatDurationLabel(minDuration)} - ${formatDurationLabel(maxDuration)}`
+      : null
+
   return (
     <div className="space-y-8">
-      {/* Location */}
+      {/* Location + Duration + Categories metadata */}
       <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
         <span className="flex items-center gap-1">
           <MapPin className="size-4" />
           {experience.city}
         </span>
+        {durationLabel && (
+          <span className="flex items-center gap-1">
+            <ClockIcon className="size-4" />
+            {durationLabel}
+          </span>
+        )}
+        {categories.length > 0 && (
+          <span className="flex items-center gap-1">
+            <TagIcon className="size-4" />
+            {categories.map(c => c.category.name).join(', ')}
+          </span>
+        )}
         <button type="button" className="text-sm font-semibold text-primary underline">
           {t.exp_detail_show_map}
         </button>

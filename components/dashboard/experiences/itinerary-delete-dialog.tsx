@@ -21,6 +21,7 @@ type ItineraryDeleteDialogProps = {
   itemTitle: string
   open: boolean
   onOpenChange: (open: boolean) => void
+  onSuccess?: () => void
 }
 
 export default function ItineraryDeleteDialog({
@@ -29,12 +30,16 @@ export default function ItineraryDeleteDialog({
   itemTitle,
   open,
   onOpenChange,
+  onSuccess,
 }: ItineraryDeleteDialogProps) {
   const t = useTranslation()
 
   const { loading, execute } = useAction({
     successMessage: t.admin_itinerary_delete_success,
-    onSuccess: () => onOpenChange(false),
+    onSuccess: () => {
+      onOpenChange(false)
+      onSuccess?.()
+    },
   })
 
   const handleDelete = () => execute(() => deleteItineraryAction(experienceId, itemId))

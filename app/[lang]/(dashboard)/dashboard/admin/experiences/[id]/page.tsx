@@ -4,9 +4,9 @@ import { getTranslations } from '@/lib/configs/locales/i18n'
 import { getServerSession } from 'next-auth'
 import { redirect, notFound } from 'next/navigation'
 import { getExperienceById } from '@/lib/api/experiences'
-import { getPriceListsByExperienceId } from '@/lib/api/pricing'
 import { getLocalities } from '@/lib/api/localities'
-import ExperienceTabs from '@/components/dashboard/experiences/experience-tabs'
+import { getCategories } from '@/lib/api/categories'
+import ExperienceWizard from '@/components/dashboard/experiences/wizard/experience-wizard'
 import Link from 'next/link'
 import { ArrowLeft } from '@/lib/constants/icons'
 
@@ -22,22 +22,15 @@ export default async function EditExperiencePage({ params }: EditExperiencePageP
     redirect(`/${lang}`)
   }
 
-  const t = await getTranslations(lang as SupportedLocale)
+  const [t, experience, localities, categories] = await Promise.all([
+    getTranslations(lang as SupportedLocale),
+    getExperienceById(id).catch(() => null),
+    getLocalities(),
+    getCategories('EXPERIENCE'),
+  ])
 
-  let experience
-  try {
-    experience = await getExperienceById(id)
-  } catch {
+  if (!experience) {
     notFound()
-  }
-
-  const localities = await getLocalities()
-
-  let priceLists: Awaited<ReturnType<typeof getPriceListsByExperienceId>>
-  try {
-    priceLists = await getPriceListsByExperienceId(id)
-  } catch {
-    priceLists = []
   }
 
   return (
@@ -54,7 +47,7 @@ export default async function EditExperiencePage({ params }: EditExperiencePageP
         </div>
       </div>
 
-      <ExperienceTabs experience={experience} localities={localities} priceLists={priceLists} />
+      <ExperienceWizard mode="edit" experience={experience} localities={localities} categories={categories} />
     </div>
   )
 }

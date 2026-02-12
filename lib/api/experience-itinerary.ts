@@ -14,3 +14,15 @@ export function updateItinerary(experienceId: string, itemId: string, data: Form
 export function deleteItinerary(experienceId: string, itemId: string, headers: HeadersInit) {
   return apiServer.delete<void>(`/experiences/${experienceId}/itinerary/${itemId}`, { headers })
 }
+
+export function reorderItinerary(
+  experienceId: string,
+  items: { id: string; order: number }[],
+  headers: HeadersInit
+) {
+  return apiServer.put<ExperienceItinerary[]>(
+    `/experiences/${experienceId}/itinerary/reorder`,
+    { items },
+    { headers }
+  )
+}

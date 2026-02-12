@@ -19,6 +19,7 @@ type ImageDeleteDialogProps = {
   imageId: string
   open: boolean
   onOpenChange: (open: boolean) => void
+  onSuccess?: () => void
 }
 
 export default function ImageDeleteDialog({
@@ -26,12 +27,16 @@ export default function ImageDeleteDialog({
   imageId,
   open,
   onOpenChange,
+  onSuccess,
 }: ImageDeleteDialogProps) {
   const t = useTranslation()
 
   const { loading, execute } = useAction({
     successMessage: t.admin_image_delete_success,
-    onSuccess: () => onOpenChange(false),
+    onSuccess: () => {
+      onOpenChange(false)
+      onSuccess?.()
+    },
   })
 
   const handleDelete = () => execute(() => deleteImageAction(experienceId, imageId))

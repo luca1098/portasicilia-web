@@ -1,6 +1,5 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
@@ -26,6 +25,7 @@ type ItineraryFormDialogProps = {
   item?: ExperienceItinerary
   open: boolean
   onOpenChange: (open: boolean) => void
+  onSuccess?: (item: ExperienceItinerary) => void
 }
 
 export default function ItineraryFormDialog({
@@ -34,8 +34,8 @@ export default function ItineraryFormDialog({
   item,
   open,
   onOpenChange,
+  onSuccess,
 }: ItineraryFormDialogProps) {
-  const router = useRouter()
   const t = useTranslation()
 
   const form = useForm<ExperienceItineraryFormValues>({
@@ -50,10 +50,10 @@ export default function ItineraryFormDialog({
 
   const { loading, execute } = useAction<ExperienceItinerary>({
     successMessage: mode === 'create' ? t.admin_itinerary_create_success : t.admin_itinerary_update_success,
-    onSuccess: () => {
+    onSuccess: data => {
       onOpenChange(false)
       form.reset()
-      router.refresh()
+      if (data) onSuccess?.(data)
     },
   })
 

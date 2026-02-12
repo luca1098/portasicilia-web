@@ -1,26 +1,28 @@
 'use client'
+
 import { type FieldValues, type Path } from 'react-hook-form'
 
 import { Input } from '@/components/ui/input'
 import { InputWrapper } from '@/components/form/input-wrapper'
 import { FormField } from './form-field'
-import { isNil } from 'lodash'
 
-interface NumberFormFieldProps<TFieldValues extends FieldValues>
-  extends Omit<React.ComponentProps<'input'>, 'name' | 'onChange' | 'value' | 'type'> {
+interface TimeFormFieldProps<TFieldValues extends FieldValues> {
   name: Path<TFieldValues>
   label: string
   description?: string
+  className?: string
+  disabled?: boolean
+  required?: boolean
 }
 
-function NumberFormField<TFieldValues extends FieldValues>({
+function TimeFormField<TFieldValues extends FieldValues>({
   name,
   label,
   description,
-  required,
   className,
-  ...inputProps
-}: NumberFormFieldProps<TFieldValues>) {
+  disabled,
+  required,
+}: TimeFormFieldProps<TFieldValues>) {
   return (
     <FormField
       name={name}
@@ -31,24 +33,16 @@ function NumberFormField<TFieldValues extends FieldValues>({
           description={description}
           error={error}
           className={className}
-          hasValue={!isNil(field.value)}
+          hasValue={true}
           required={required}
         >
           <Input
             id={name}
-            type="number"
+            type="time"
             aria-invalid={!!error}
-            {...inputProps}
+            disabled={disabled}
             {...field}
             value={field.value ?? ''}
-            onBlur={e => {
-              field.onBlur()
-              inputProps.onBlur && inputProps.onBlur(e)
-            }}
-            onChange={event => {
-              const raw = event.target.value
-              field.onChange(raw === '' ? null : Number(raw))
-            }}
           />
         </InputWrapper>
       )}
@@ -56,4 +50,4 @@ function NumberFormField<TFieldValues extends FieldValues>({
   )
 }
 
-export { NumberFormField, type NumberFormFieldProps }
+export { TimeFormField, type TimeFormFieldProps }

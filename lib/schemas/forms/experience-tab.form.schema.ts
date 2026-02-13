@@ -32,6 +32,9 @@ export const ExperienceTabSchema = z.object({
 
   // Status
   status: z.enum(['DRAFT', 'PENDING_REVIEW', 'ACTIVE', 'PAUSED', 'ARCHIVED']),
+
+  // Highlighted
+  highlighted: z.boolean(),
 })
 
 export type ExperienceTabValues = z.infer<typeof ExperienceTabSchema>

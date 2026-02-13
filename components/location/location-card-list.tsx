@@ -1,16 +1,16 @@
 'use client'
 
+import type { LocalityCard } from '@/lib/api/localities'
 import LocationCard from '@/components/location/location-card'
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel'
-import { LocalityCard } from '@/lib/api/localities'
 
-type LocationListProps = {
+type LocationCardListProps = {
   locations: LocalityCard[]
   lang: string
   darkBg?: boolean
 }
 
-export default function LocationList({ locations, lang, darkBg }: LocationListProps) {
+export default function LocationCardList({ locations, lang, darkBg }: LocationCardListProps) {
   return (
     <>
       {/* Mobile/Tablet carousel */}

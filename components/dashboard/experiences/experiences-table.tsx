@@ -68,7 +68,14 @@ export default function ExperiencesTable({ experiences }: ExperiencesTableProps)
                     </div>
                   )}
                 </TableCell>
-                <TableCell className="font-medium">{experience.name}</TableCell>
+                <TableCell className="font-medium">
+                  <span>{experience.name}</span>
+                  {experience.highlighted && (
+                    <span className="ml-2 rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
+                      {t.admin_exp_highlighted}
+                    </span>
+                  )}
+                </TableCell>
                 <TableCell>
                   <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium">
                     {t[`admin_exp_status_${experience.status.toLowerCase()}`] ?? experience.status}

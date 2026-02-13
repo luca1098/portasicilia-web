@@ -6,6 +6,7 @@ export const LocalitySchema = z.object({
   name: z.string(),
   cover: z.string().nullish(),
   slug: z.string(),
+  highlighted: z.boolean().optional(),
   createdAt: z.string(),
   updatedAt: z.string(),
   tips: z.array(TipSchema).nullish(),

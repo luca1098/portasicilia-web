@@ -6,6 +6,24 @@ type PaginatedExperiences = {
   nextCursor: string | null
 }
 
+export type ExperienceCard = {
+  id: string
+  name: string
+  slug: string
+  cover: string | null
+  avgRating: number | null
+  reviewCount: number
+  durationInMinutes: number | null
+  price: number | null
+  pricingMode: string | null
+  assetLabel: string | null
+}
+
+type PaginatedExperienceCards = {
+  data: ExperienceCard[]
+  nextCursor: string | null
+}
+
 type GetExperiencesParams = {
   localityId?: string
   limit?: number
@@ -19,6 +37,23 @@ export async function getExperiences(params?: GetExperiencesParams) {
   if (limit) queryParams.limit = limit.toString()
   if (cursor) queryParams.cursor = cursor
   return apiServer.get<PaginatedExperiences>('/experiences', { params: queryParams })
+}
+
+type GetExperienceCardsParams = {
+  localityId?: string
+  highlighted?: boolean
+  limit?: number
+  cursor?: string
+}
+
+export async function getExperienceCards(params?: GetExperienceCardsParams) {
+  const { localityId, highlighted, limit, cursor } = params || {}
+  const queryParams: Record<string, string> = {}
+  if (localityId) queryParams.localityId = localityId
+  if (highlighted !== undefined) queryParams.highlighted = highlighted.toString()
+  if (limit) queryParams.limit = limit.toString()
+  if (cursor) queryParams.cursor = cursor
+  return apiServer.get<PaginatedExperienceCards>('/experiences/cards', { params: queryParams })
 }
 
 type GetExperiencesAdminParams = {

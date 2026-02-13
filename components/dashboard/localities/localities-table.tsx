@@ -68,7 +68,14 @@ export default function LocalitiesTable({ localities }: LocalitiesTableProps) {
                     </div>
                   )}
                 </TableCell>
-                <TableCell className="font-medium">{locality.name}</TableCell>
+                <TableCell className="font-medium">
+                  <span>{locality.name}</span>
+                  {locality.highlighted && (
+                    <span className="ml-2 rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
+                      {t.admin_loc_highlighted}
+                    </span>
+                  )}
+                </TableCell>
                 <TableCell className="text-muted-foreground">{locality.slug}</TableCell>
                 <TableCell className="text-center">{locality.tips?.length ?? 0}</TableCell>
                 <TableCell>

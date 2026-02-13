@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { Compass } from 'lucide-react'
 import { useTranslation } from '@/lib/context/translation.context'
 import { Locality } from '@/lib/schemas/entities/locality.entity.schema'
+import { interpolate } from '@/lib/utils/i18n.utils'
 
 type LocationPopupProps = {
   onSelect: (location: Locality | null) => void
@@ -48,7 +49,7 @@ export default function LocationPopup({ onSelect, onClose }: LocationPopupProps)
             <div className="text-left">
               <p className="text-sm font-medium">{location.name}</p>
               <p className="text-xs text-muted-foreground">
-                {200}+ {t.location_activities_subtitle}
+                {interpolate(t.location_card_count, { count: 200 })}
               </p>
             </div>
           </button>

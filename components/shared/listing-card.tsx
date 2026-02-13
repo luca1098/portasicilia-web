@@ -2,12 +2,14 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { HeartIcon, StarIcon } from 'lucide-react'
+import { Button } from '../ui/button'
 
 export type ListingCardProps = {
   title: string
   image: string
   href: string
   rating: number
+  reviewCount?: number
   priceLabel: string
   categoryLabel?: string
   duration?: string
@@ -19,6 +21,7 @@ export default function ListingCard({
   image,
   href,
   rating,
+  reviewCount,
   priceLabel,
   categoryLabel,
   duration,
@@ -41,14 +44,16 @@ export default function ListingCard({
           </span>
         )}
 
-        <button
+        <Button
           type="button"
-          className="absolute right-2 top-2 rounded-full p-1 text-white transition-colors hover:text-red-400"
+          className="absolute right-2 top-2 rounded-full p-1 text-white transition-colors hover:text-primary"
           onClick={e => e.preventDefault()}
           aria-label="Save"
+          size={'icon'}
+          variant={'ghost'}
         >
           <HeartIcon className="size-5" />
-        </button>
+        </Button>
 
         {duration && (
           <span className="absolute bottom-2 left-2 rounded-md bg-black/60 px-1.5 py-0.5 text-[11px] font-medium text-white">
@@ -59,6 +64,7 @@ export default function ListingCard({
         <span className="absolute bottom-2 right-2 flex items-center gap-0.5 rounded-md bg-black/60 px-1.5 py-0.5 text-[11px] font-medium text-white">
           <StarIcon className="size-3 fill-white" />
           {rating}
+          {reviewCount !== undefined && ` (${reviewCount})`}
         </span>
       </div>
 

@@ -1,6 +1,20 @@
 import type { Locality } from '@/lib/schemas/entities/locality.entity.schema'
 import { apiServer } from './fetch-client'
 
+export type LocalityCard = {
+  id: string
+  name: string
+  slug: string
+  cover: string | null
+  totalActivities: number
+  totalStays: number
+}
+
+type PaginatedLocalityCards = {
+  data: LocalityCard[]
+  nextCursor: string | null
+}
+
 type GetLocalitiesParams = {
   limit?: number
 }
@@ -10,11 +24,22 @@ export async function getLocalities(params?: GetLocalitiesParams) {
   if (limit) {
     queryParams.limit = limit.toString()
   }
-  const data = await apiServer.get<Locality[]>('/localities', { params: queryParams })
-  setTimeout(() => {
-    return data
-  }, 10000)
-  return data
+  return apiServer.get<Locality[]>('/localities', { params: queryParams })
+}
+
+type GetLocalityCardsParams = {
+  highlighted?: boolean
+  limit?: number
+  cursor?: string
+}
+
+export async function getLocalityCards(params?: GetLocalityCardsParams) {
+  const { highlighted, limit, cursor } = params || {}
+  const queryParams: Record<string, string> = {}
+  if (highlighted !== undefined) queryParams.highlighted = highlighted.toString()
+  if (limit) queryParams.limit = limit.toString()
+  if (cursor) queryParams.cursor = cursor
+  return apiServer.get<PaginatedLocalityCards>('/localities/cards', { params: queryParams })
 }
 
 export function getLocalityById(id: string) {

@@ -3,13 +3,13 @@ import { getTranslations } from '@/lib/configs/locales/i18n'
 import { PageParamsProps } from '@/lib/types/page.type'
 import { SupportedLocale } from '@/lib/configs/locales'
 import SearchBar from '@/components/search/search-bar'
-import LocationList from '@/components/location/location-list'
-import ExperienceList from '@/components/experience/experience-list'
+import LocationCardList from '@/components/location/location-card-list'
+import ExperienceCardList from '@/components/experience/experience-card-list'
 import StayList from '@/components/stay/stay-list'
 import CategoryGrid from '@/components/category/category-grid'
 import ShopCategoryGrid from '@/components/shop/shop-category-grid'
-import { getLocalities } from '@/lib/api/localities'
-import { getExperiences } from '@/lib/api/experiences'
+import { getLocalityCards } from '@/lib/api/localities'
+import { getExperienceCards } from '@/lib/api/experiences'
 import { mockStays } from '@/lib/constants/stays'
 import { mockCategories } from '@/lib/constants/categories'
 import { mockShopCategories } from '@/lib/constants/shop-categories'
@@ -17,10 +17,10 @@ import { Button } from '@/components/ui/button'
 
 export default async function Home({ params }: PageParamsProps) {
   const { lang } = await params
-  const [t, locations, { data: experiences }] = await Promise.all([
+  const [t, { data: locationCards }, { data: experienceCards }] = await Promise.all([
     getTranslations(lang as SupportedLocale),
-    getLocalities({ limit: 6 }),
-    getExperiences({ limit: 6 }),
+    getLocalityCards({ limit: 6, highlighted: true }),
+    getExperienceCards({ limit: 6, highlighted: true }),
   ])
 
   const experienceCategoryLabels: Record<string, string> = {
@@ -84,7 +84,7 @@ export default async function Home({ params }: PageParamsProps) {
           <p className="text-sm text-muted-foreground">{t.home_locations_subtitle}</p>
           <h2 className="mt-1 text-3xl font-bold">{t.home_locations_title}</h2>
         </div>
-        <LocationList locations={locations} lang={lang} subtitle={t.location_activities_subtitle} />
+        <LocationCardList locations={locationCards} lang={lang} />
         <div className="mt-10 flex justify-center">
           <Button asChild>
             <Link href={`/${lang}/location`}>{t.home_cta_explore}</Link>
@@ -106,7 +106,7 @@ export default async function Home({ params }: PageParamsProps) {
           <h2 className="mb-10 text-center text-3xl font-bold text-white drop-shadow-lg md:text-4xl">
             {t.home_experiences_title}
           </h2>
-          <ExperienceList experiences={experiences} lang={lang} darkBg />
+          <ExperienceCardList experiences={experienceCards} lang={lang} darkBg />
           <div className="mt-10 flex justify-center">
             <Button asChild>
               <Link href={`/${lang}/experiences`}>{t.home_cta_explore}</Link>

@@ -1,15 +1,20 @@
+import { LocalityCard } from '@/lib/api/localities'
+import { useTranslation } from '@/lib/context/translation.context'
+import { interpolate } from '@/lib/utils/i18n.utils'
+import { sum } from 'lodash'
 import Image from 'next/image'
 import Link from 'next/link'
-import type { Locality } from '@/lib/schemas/entities/locality.entity.schema'
 
 type LocationCardProps = {
-  location: Locality
+  location: LocalityCard
   lang: string
-  subtitle: string
   darkBg?: boolean
 }
 
-export default function LocationCard({ location, lang, subtitle, darkBg }: LocationCardProps) {
+export default function LocationCard({ location, lang, darkBg }: LocationCardProps) {
+  const t = useTranslation()
+
+  const totalStaysAndExperiences = sum([location.totalStays, location.totalActivities])
   return (
     <Link href={`/${lang}/location/${location.slug}`} className="group shrink-0 w-full">
       <div className="relative aspect-square w-full overflow-hidden rounded-2xl">
@@ -29,7 +34,9 @@ export default function LocationCard({ location, lang, subtitle, darkBg }: Locat
       </div>
       <div className="mt-2">
         <p className={`text-sm font-bold ${darkBg ? 'text-white' : 'text-foreground'}`}>{location.name}</p>
-        <p className={`text-xs ${darkBg ? 'text-white/70' : 'text-muted-foreground'}`}>{subtitle}</p>
+        <p className={`text-xs ${darkBg ? 'text-white/70' : 'text-muted-foreground'}`}>
+          {interpolate(t.location_card_count, { count: totalStaysAndExperiences })}
+        </p>
       </div>
     </Link>
   )

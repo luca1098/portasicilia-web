@@ -5,6 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { InputFormField } from '@/components/form/input-form-field'
 import { FileUploaderFormField } from '@/components/form/file-uploader-form-field'
+import { CheckboxFormField } from '@/components/form/checkbox-form-field'
 import { Button } from '@/components/ui/button'
 import { useTranslation } from '@/lib/context/translation.context'
 import { LocalityFormSchema, type LocalityFormValues } from '@/lib/schemas/forms/locality.form.schema'
@@ -35,6 +36,7 @@ export default function LocalityForm({ mode, locality }: LocalityFormProps) {
     defaultValues: {
       name: locality?.name ?? '',
       cover: locality?.cover ?? null,
+      highlighted: locality?.highlighted ?? false,
     },
   })
 
@@ -52,6 +54,11 @@ export default function LocalityForm({ mode, locality }: LocalityFormProps) {
           <InputFormField<LocalityFormValues> name="name" label={t.admin_loc_name} required />
 
           <FileUploaderFormField<LocalityFormValues> name="cover" label={t.admin_loc_cover} />
+          <CheckboxFormField<LocalityFormValues>
+            name="highlighted"
+            label={t.admin_loc_highlighted}
+            description={t.admin_loc_highlighted_hint}
+          />
         </div>
 
         <div className="flex justify-end">

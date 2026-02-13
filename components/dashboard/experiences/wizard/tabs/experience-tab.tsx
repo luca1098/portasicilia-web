@@ -13,6 +13,7 @@ import { SelectFormField } from '@/components/form/select-form-field'
 import { ComboboxFormField } from '@/components/form/combobox-form-field'
 import { NumberFormField } from '@/components/form/number-form-field'
 import { RadioFormField } from '@/components/form/radio-form-field'
+import { CheckboxFormField } from '@/components/form/checkbox-form-field'
 import { AddressAutocompleteFormField } from '@/components/form/address-autocomplete-form-field'
 import { useTranslation } from '@/lib/context/translation.context'
 import { useAction } from '@/lib/hooks/use-action'
@@ -132,6 +133,7 @@ export default function ExperienceTab({
       maxCapacity: experience?.maxCapacity ?? 1,
       assetLabel: experience?.assetLabel ?? '',
       status: experience?.status ?? 'DRAFT',
+      highlighted: experience?.highlighted ?? false,
     },
   })
   const categoriesSelectedIds = useWatch({ control: form.control, name: 'categoryIds' })
@@ -193,6 +195,11 @@ export default function ExperienceTab({
             required
           />
           <FileUploaderFormField<ExperienceTabValues> name="cover" label={t.admin_exp_cover} />
+          <CheckboxFormField<ExperienceTabValues>
+            name="highlighted"
+            label={t.admin_exp_highlighted}
+            description={t.admin_exp_highlighted_hint}
+          />
         </div>
 
         <div className="rounded-xl border border-border bg-card p-6 space-y-4">

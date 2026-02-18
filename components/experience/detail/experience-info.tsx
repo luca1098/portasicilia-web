@@ -1,6 +1,6 @@
 'use client'
 
-import { MapPin, ClockIcon, TagIcon } from '@/lib/constants/icons'
+import { MapPin, ClockIcon, TagIcon, InfoIcon } from '@/lib/constants/icons'
 import { useTranslation } from '@/lib/context/translation.context'
 import { interpolate } from '@/lib/utils/i18n.utils'
 import type { Experience } from '@/lib/schemas/entities/experience.entity.schema'
@@ -9,6 +9,7 @@ import ExperienceItinerary from '@/components/experience/detail/experience-itine
 import ExperienceIncluded from '@/components/experience/detail/experience-included'
 import ExperienceReviews from '@/components/experience/detail/experience-reviews'
 import ExperienceMeetingPoint from '@/components/experience/detail/experience-meeting-point'
+import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover'
 
 type ExperienceInfoProps = {
   experience: Experience
@@ -81,6 +82,25 @@ export default function ExperienceInfo({ experience }: ExperienceInfoProps) {
 
       {/* Itinerary */}
       {hasItinerary && <ExperienceItinerary title={t.exp_detail_what_you_will_do} steps={itinerary} />}
+
+      {/* Bad weather policy */}
+      {experience.policy.length > 0 && (
+        <Popover>
+          <PopoverTrigger asChild>
+            <button type="button" className="flex items-center gap-2 text-base font-medium">
+              <InfoIcon className="size-5" />
+              <span className="underline">{t.exp_detail_bad_weather_policy}</span>
+            </button>
+          </PopoverTrigger>
+          <PopoverContent align="start" className="w-80">
+            <ul className="space-y-1 text-sm">
+              {experience.policy.map((item, i) => (
+                <li key={i}>{item}</li>
+              ))}
+            </ul>
+          </PopoverContent>
+        </Popover>
+      )}
 
       {hasItinerary && <hr className="border-border" />}
 

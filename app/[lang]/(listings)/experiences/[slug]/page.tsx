@@ -1,6 +1,4 @@
 import { notFound } from 'next/navigation'
-import { getTranslations } from '@/lib/configs/locales/i18n'
-import { SupportedLocale } from '@/lib/configs/locales'
 import { getExperienceBySlug } from '@/lib/api/experiences'
 import { ApiError } from '@/lib/api/fetch-client'
 import ExperienceDetailContent from '@/components/experience/detail/experience-detail-content'
@@ -11,7 +9,6 @@ type ExperienceDetailPageProps = {
 
 export default async function ExperienceDetailPage({ params }: ExperienceDetailPageProps) {
   const { lang, slug } = await params
-  await getTranslations(lang as SupportedLocale)
 
   let experience
   try {
@@ -23,5 +20,5 @@ export default async function ExperienceDetailPage({ params }: ExperienceDetailP
     throw error
   }
 
-  return <ExperienceDetailContent experience={experience} />
+  return <ExperienceDetailContent experience={experience} lang={lang} />
 }

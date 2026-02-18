@@ -6,7 +6,7 @@ export const ExperienceTabSchema = z.object({
   // Basics
   name: z.string().min(1, 'Name is required'),
   description: z.string().min(1, 'Description is required'),
-  cover: z.union([z.instanceof(File), z.string().url(), z.null()]),
+  cover: z.union([z.instanceof(File), z.string(), z.null()]),
   localityId: z.string().min(1, 'Locality is required'),
   ownerId: z.string().min(1, 'Owner is required'),
   categoryIds: z.array(z.string()).optional(),
@@ -31,7 +31,7 @@ export const ExperienceTabSchema = z.object({
   assetLabel: z.string().optional(),
 
   // Status
-  status: z.enum(['DRAFT', 'PENDING_REVIEW', 'ACTIVE', 'PAUSED', 'ARCHIVED']),
+  status: z.enum(['DRAFT', 'PENDING_REVIEW', 'ACTIVE', 'PAUSED', 'ARCHIVED']).nullish(),
 
   // Highlighted
   highlighted: z.boolean(),

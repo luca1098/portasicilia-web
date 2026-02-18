@@ -2,14 +2,14 @@ import { notFound } from 'next/navigation'
 import { getTranslations } from '@/lib/configs/locales/i18n'
 import { SupportedLocale } from '@/lib/configs/locales'
 import { getLocalityBySlug } from '@/lib/api/localities'
-import { getExperiences } from '@/lib/api/experiences'
+import { getExperienceCards } from '@/lib/api/experiences'
 import { interpolate } from '@/lib/utils/i18n.utils'
 import { mockStays } from '@/lib/constants/stays'
 import { ApiError } from '@/lib/api/fetch-client'
 import LocationDetailHero from '@/components/location/location-detail-hero'
-import ExperienceList from '@/components/experience/experience-list'
 import StayList from '@/components/stay/stay-list'
 import LocationTipsSection from '@/components/location/location-poi-section'
+import ExperienceCardList from '@/components/experience/experience-card-list'
 
 type LocationDetailPageProps = {
   params: Promise<{ lang: string; slug: string }>
@@ -29,7 +29,7 @@ export default async function LocationDetailPage({ params }: LocationDetailPageP
     throw error
   }
 
-  const { data: experiences } = await getExperiences({ localityId: locality.id })
+  const { data: experienceCards } = await getExperienceCards({ localityId: locality.id })
 
   const stayCategoryLabels: Record<string, string> = {
     conferma_immediata: t.experience_cat_conferma_immediata,
@@ -45,7 +45,7 @@ export default async function LocationDetailPage({ params }: LocationDetailPageP
         <h2 className="mb-6 text-2xl font-bold md:text-3xl">
           {interpolate(t.location_detail_experiences_title, { name: locality.name })}
         </h2>
-        <ExperienceList experiences={experiences} lang={lang} />
+        <ExperienceCardList experiences={experienceCards} lang={lang} />
       </section>
 
       <section className="mx-auto max-w-7xl px-4 py-16 md:px-8">

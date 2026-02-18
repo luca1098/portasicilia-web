@@ -132,7 +132,7 @@ export default function ExperienceTab({
       capacityMode: experience?.capacityMode ?? 'PER_PERSON',
       maxCapacity: experience?.maxCapacity ?? 1,
       assetLabel: experience?.assetLabel ?? '',
-      status: experience?.status ?? 'DRAFT',
+      status: experience?.status || null,
       highlighted: experience?.highlighted ?? false,
     },
   })
@@ -185,15 +185,17 @@ export default function ExperienceTab({
             required
             rows={4}
           />
-          <SelectFormField<ExperienceTabValues, { value: ListingStatus; labelKey: string }>
-            name="status"
-            label={t.admin_exp_status}
-            options={STATUS_OPTIONS}
-            getValue={o => o.value}
-            getLabel={o => t[o.labelKey]}
-            getKey={o => o.value}
-            required
-          />
+          {mode === 'edit' ? (
+            <SelectFormField<ExperienceTabValues, { value: ListingStatus; labelKey: string }>
+              name="status"
+              label={t.admin_exp_status}
+              options={STATUS_OPTIONS}
+              getValue={o => o.value}
+              getLabel={o => t[o.labelKey]}
+              getKey={o => o.value}
+              required
+            />
+          ) : null}
           <FileUploaderFormField<ExperienceTabValues> name="cover" label={t.admin_exp_cover} />
           <CheckboxFormField<ExperienceTabValues>
             name="highlighted"

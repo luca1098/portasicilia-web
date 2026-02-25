@@ -125,6 +125,11 @@ export default async function CheckoutPage({ searchParams, params }: CheckoutPag
       totalPrice={totalPrice}
       depositAmount={depositAmount}
       priceTiers={priceTiers}
+      experienceId={experienceId}
+      slotId={slotId}
+      assetCount={assetCountNum}
+      pricingMode={pricingMode}
+      assetTierType={tiers[0]?.tierType ?? 'DEFAULT'}
     />
   )
 }

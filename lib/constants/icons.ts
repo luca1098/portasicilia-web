@@ -6,6 +6,7 @@ export {
   CalendarIcon,
   CheckCircle2Icon,
   CheckIcon,
+  ChevronsUpDownIcon,
   ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,

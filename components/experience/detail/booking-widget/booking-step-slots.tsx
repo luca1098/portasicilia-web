@@ -51,7 +51,7 @@ export default function BookingStepSlots({
   return (
     <>
       {/* Participant summary row */}
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4 flex items-center justify-between px-4">
         <div>
           <p className="text-xs text-muted-foreground">{t.exp_detail_participants}</p>
           <p className="text-sm font-medium">{participantSummary}</p>
@@ -67,42 +67,47 @@ export default function BookingStepSlots({
       {loadingSlots ? (
         <BookingSlotsSkeleton />
       ) : hasNoSlots ? (
-        <p className="py-4 text-center text-sm text-muted-foreground">{t.exp_booking_no_available_slots}</p>
+        <p className="p-4 text-center text-sm text-muted-foreground">{t.exp_booking_no_available_slots}</p>
       ) : availabilityData !== null ? (
         <>
-          <h3 className="text-base font-bold">{visibleMonth}</h3>
-          <p className="mb-4 text-xs text-muted-foreground">{t.exp_booking_timezone}</p>
+          <div className="px-4">
+            <h3 className="text-base font-bold">{visibleMonth}</h3>
+            <p className="mb-4 text-xs text-muted-foreground">{t.exp_booking_timezone}</p>
+          </div>
+          <hr className="border-border" />
 
-          <div className="max-h-[400px] overflow-y-auto border-t pt-4">
-            {availabilityData.map(entry => (
-              <BookingDaySlotGroup
-                key={entry.date}
-                entry={entry}
-                pricingMode={pricingMode}
-                assetLabel={assetLabel}
-                onSlotSelect={onSlotSelect}
-              />
-            ))}
+          <div className="">
+            <div className="max-h-[400px] overflow-y-auto p-4">
+              {availabilityData.map(entry => (
+                <BookingDaySlotGroup
+                  key={entry.date}
+                  entry={entry}
+                  pricingMode={pricingMode}
+                  assetLabel={assetLabel}
+                  onSlotSelect={onSlotSelect}
+                />
+              ))}
 
-            {/* Date picker button */}
-            {daysOfWeek.length > 0 && (
-              <Popover open={calendarOpen} onOpenChange={onCalendarOpenChange}>
-                <PopoverTrigger asChild>
-                  <Button variant="outline" className="h-12 w-full rounded-xl text-sm font-semibold">
-                    <CalendarIcon className="size-4" />
-                    {t.exp_booking_select_date}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="center">
-                  <Calendar
-                    mode="single"
-                    selected={selectedDate}
-                    onSelect={onDateSelect}
-                    disabled={disabledCalendarDays}
-                  />
-                </PopoverContent>
-              </Popover>
-            )}
+              {/* Date picker button */}
+              {daysOfWeek.length > 0 && (
+                <Popover open={calendarOpen} onOpenChange={onCalendarOpenChange}>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" className="h-12 w-full rounded-xl text-sm font-semibold">
+                      <CalendarIcon className="size-4" />
+                      {t.exp_booking_select_date}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="center">
+                    <Calendar
+                      mode="single"
+                      selected={selectedDate}
+                      onSelect={onDateSelect}
+                      disabled={disabledCalendarDays}
+                    />
+                  </PopoverContent>
+                </Popover>
+              )}
+            </div>
           </div>
         </>
       ) : null}

@@ -14,7 +14,7 @@ export default function ExperienceBookingCard({ experience }: ExperienceBookingC
   const booking = useBooking(experience)
 
   return (
-    <div className="rounded-2xl border bg-background p-6 shadow-lg">
+    <div className="rounded-xl border bg-background shadow-sm">
       <BookingCardHeader
         name={experience.name}
         cover={experience.cover}
@@ -35,7 +35,7 @@ export default function ExperienceBookingCard({ experience }: ExperienceBookingC
           onChildrenChange={booking.setChildren}
           onInfantsChange={booking.setInfants}
           onAssetCountChange={booking.setAssetCount}
-          minPrice={booking.minPrice}
+          basePrice={booking.basePrice}
           pricingMode={booking.pricingMode}
           onChooseDate={booking.handleChooseDate}
         />

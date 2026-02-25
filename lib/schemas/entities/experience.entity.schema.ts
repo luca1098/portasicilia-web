@@ -119,6 +119,7 @@ export const ExperienceSchema = z.object({
   daysOfWeek: z.array(DayOfWeekSchema).nullish(),
   commissionType: CommissionTypeSchema.nullable(),
   commissionValue: z.number().nullable(),
+  depositValue: z.number().nullable().optional(),
   images: z.array(ExperienceImageSchema).nullish(),
   itinerary: z.array(ExperienceItinerarySchema).nullish(),
   timeSlots: z.array(ExperienceTimeSlotSchema).nullish(),

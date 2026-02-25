@@ -2,8 +2,8 @@ import { Skeleton } from '@/components/ui/skeleton'
 
 export default function BookingSlotsSkeleton() {
   return (
-    <div className="space-y-6">
-      {[0, 1].map(group => (
+    <div className="space-y-6 p-4">
+      {[0].map(group => (
         <div key={group}>
           <Skeleton className="mb-1 h-5 w-32" />
           <Skeleton className="mb-4 h-3 w-24" />

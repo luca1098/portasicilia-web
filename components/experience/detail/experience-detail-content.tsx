@@ -3,8 +3,10 @@ import ExperienceGallery from '@/components/experience/detail/experience-gallery
 import ExperienceInfo from '@/components/experience/detail/experience-info'
 import ExperienceBookingCard from '@/components/experience/detail/experience-booking-card'
 import ExperienceMobileBookingBar from '@/components/experience/detail/experience-mobile-booking-bar'
-import { CheckIcon } from 'lucide-react'
+import { CheckIcon } from '@/lib/constants/icons'
 import { getTranslations } from '@/lib/configs/locales/i18n'
+import { interpolate } from '@/lib/utils/i18n.utils'
+import { formatCurrency } from '@/core/utils/currency.utils'
 import { SupportedLocale } from '@/lib/configs/locales'
 
 type ExperienceDetailContentProps = {
@@ -15,8 +17,6 @@ type ExperienceDetailContentProps = {
 export default async function ExperienceDetailContent({ experience, lang }: ExperienceDetailContentProps) {
   const t = await getTranslations(lang as SupportedLocale)
   const galleryImages = experience.images?.map(img => img.url) ?? []
-  const tiers = experience.priceLists?.[0]?.tiers
-  const price = tiers && tiers.length > 0 ? Math.min(...tiers.map(t => t.baseAmount)) : 0
 
   return (
     <main className="min-h-screen pb-20 lg:pb-0">
@@ -45,7 +45,11 @@ export default async function ExperienceDetailContent({ experience, lang }: Expe
                 ))}
                 <li className="flex items-start gap-2 text-xs text-muted-foreground">
                   <CheckIcon className="mt-0.5 size-3 shrink-0" />
-                  {t.secure_with_a_small_deposit}
+                  {experience.depositValue
+                    ? interpolate(t.secure_with_deposit_amount, {
+                        amount: formatCurrency(experience.depositValue),
+                      })
+                    : t.secure_with_a_small_deposit}
                 </li>
               </ul>
             ) : null}
@@ -54,7 +58,7 @@ export default async function ExperienceDetailContent({ experience, lang }: Expe
       </section>
 
       {/* Mobile booking bar */}
-      <ExperienceMobileBookingBar price={price} />
+      <ExperienceMobileBookingBar experience={experience} />
     </main>
   )
 }

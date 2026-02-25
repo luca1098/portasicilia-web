@@ -33,11 +33,15 @@ export function useBooking(experience: Experience) {
     experience.pricingMode ?? experience.priceLists?.[0]?.pricingMode ?? 'PER_PERSON'
   const totalParticipants = isPerAsset ? assetCount : adults + children + infants
 
-  const minPrice = useMemo(() => {
+  const basePrice = useMemo(() => {
     const tiers = experience.priceLists?.[0]?.tiers
     if (!tiers || tiers.length === 0) return 0
+    if (pricingMode === 'PER_PERSON') {
+      const adultTier = tiers.find(tier => tier.tierType === 'ADULT')
+      return adultTier?.baseAmount ?? 0
+    }
     return Math.min(...tiers.map(tier => tier.baseAmount))
-  }, [experience.priceLists])
+  }, [experience.priceLists, pricingMode])
 
   const avgRating = useMemo(() => {
     if (!experience.reviews || experience.reviews.length === 0) return 0
@@ -186,7 +190,7 @@ export function useBooking(experience: Experience) {
     maxCapacity,
     daysOfWeek,
     pricingMode,
-    minPrice,
+    basePrice,
     avgRating,
     participantSummary,
 

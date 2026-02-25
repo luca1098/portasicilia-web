@@ -1,7 +1,6 @@
 'use client'
 
-import { MinusIcon, PlusIcon } from '@/lib/constants/icons'
-import { Button } from '@/components/ui/button'
+import { useCallback } from 'react'
 
 type ParticipantCounterProps = {
   label: string
@@ -20,32 +19,33 @@ export default function ParticipantCounter({
   max = 10,
   onChange,
 }: ParticipantCounterProps) {
+  const decrement = useCallback(() => onChange(count - 1), [onChange, count])
+  const increment = useCallback(() => onChange(count + 1), [onChange, count])
+
   return (
     <div className="flex items-center justify-between py-3">
       <div>
-        <p className="text-sm font-medium">{label}</p>
-        <p className="text-xs text-muted-foreground">{ageRange}</p>
+        <p className="text-sm font-semibold">{label}</p>
+        {ageRange ? <p className="text-xs text-muted-foreground">{ageRange}</p> : null}
       </div>
-      <div className="flex items-center gap-3">
-        <Button
-          variant="outline"
-          size="icon-sm"
-          className="rounded-full"
+      <div className="flex items-center gap-4">
+        <button
+          type="button"
+          className="text-lg font-medium text-muted-foreground transition-colors disabled:opacity-30"
           disabled={count <= min}
-          onClick={() => onChange(count - 1)}
+          onClick={decrement}
         >
-          <MinusIcon className="size-4" />
-        </Button>
-        <span className="w-5 text-center text-sm font-medium">{count}</span>
-        <Button
-          variant="outline"
-          size="icon-sm"
-          className="rounded-full"
+          -
+        </button>
+        <span className="w-4 text-center text-sm font-medium">{count}</span>
+        <button
+          type="button"
+          className="text-lg font-medium text-muted-foreground transition-colors disabled:opacity-30"
           disabled={count >= max}
-          onClick={() => onChange(count + 1)}
+          onClick={increment}
         >
-          <PlusIcon className="size-4" />
-        </Button>
+          +
+        </button>
       </div>
     </div>
   )

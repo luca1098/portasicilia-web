@@ -8,6 +8,13 @@ import CheckoutSteps from '@/components/checkout/checkout-steps'
 import BookingRecap from '@/components/checkout/booking-recap'
 import type { Experience } from '@/lib/schemas/entities/experience.entity.schema'
 
+type PriceTier = {
+  tierType: string
+  baseAmount: number
+  quantity: number
+  subtotal: number
+}
+
 type CheckoutContentProps = {
   experience: Experience
   date: string
@@ -18,6 +25,7 @@ type CheckoutContentProps = {
   infants: number
   totalPrice: number | null
   depositAmount: number | null
+  priceTiers: PriceTier[]
 }
 
 export default function CheckoutContent({
@@ -30,6 +38,7 @@ export default function CheckoutContent({
   infants,
   totalPrice,
   depositAmount,
+  priceTiers,
 }: CheckoutContentProps) {
   const t = useTranslation()
   const { lang } = useParams<{ lang: string }>()
@@ -52,7 +61,7 @@ export default function CheckoutContent({
       <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_380px]">
         {/* Left: steps */}
         <div className="order-2 lg:order-1">
-          <CheckoutSteps />
+          <CheckoutSteps depositAmount={depositAmount} />
         </div>
 
         {/* Right: recap */}
@@ -67,6 +76,7 @@ export default function CheckoutContent({
             infants={infants}
             totalPrice={totalPrice}
             depositAmount={depositAmount}
+            priceTiers={priceTiers}
           />
         </div>
       </div>

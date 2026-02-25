@@ -4,12 +4,17 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { signOut, useSession } from 'next-auth/react'
 import { useTranslation } from '@/lib/context/translation.context'
+import { interpolate } from '@/lib/utils/i18n.utils'
 import { UserIcon } from '@/lib/constants/icons'
 import { Button } from '@/components/ui/button'
 import LoginStep from '@/components/checkout/login-step'
 import { cn } from '@/lib/utils/shadcn.utils'
 
-export default function CheckoutSteps() {
+type CheckoutStepsProps = {
+  depositAmount: number | null
+}
+
+export default function CheckoutSteps({ depositAmount }: CheckoutStepsProps) {
   const t = useTranslation()
   const { data: session } = useSession()
 
@@ -118,6 +123,25 @@ export default function CheckoutSteps() {
           </div>
         )}
       </section>
+
+      {isStep2Active && (
+        <div className="mt-2">
+          <p className="text-xs leading-relaxed text-muted-foreground">
+            {t.checkout_policy_text}{' '}
+            <button type="button" className="underline underline-offset-2 hover:text-foreground">
+              {t.checkout_policy_learn_more}
+            </button>
+          </p>
+
+          {depositAmount !== null && depositAmount > 0 && (
+            <Button className="mt-4 h-12 w-full rounded-xl text-base font-semibold" size="lg">
+              {interpolate(t.checkout_pay_with_deposit, {
+                amount: Math.round(depositAmount),
+              })}
+            </Button>
+          )}
+        </div>
+      )}
     </div>
   )
 }

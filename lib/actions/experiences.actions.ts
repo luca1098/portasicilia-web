@@ -7,6 +7,8 @@ import {
   setExperienceSchedule,
   setExperiencePricing,
   getExperienceById,
+  getExperienceAvailability,
+  type AvailableDateSlots,
 } from '@/lib/api/experiences'
 import type { Experience } from '@/lib/schemas/entities/experience.entity.schema'
 import { revalidatePath } from 'next/cache'
@@ -57,6 +59,18 @@ export async function setScheduleAction(
     const result = await setExperienceSchedule(experienceId, data, headers)
     revalidatePath('/[lang]/(dashboard)/dashboard/admin/experiences/[id]', 'page')
     return { success: true, data: result }
+  } catch (e) {
+    return { success: false, error: (e as Error).message }
+  }
+}
+
+export async function getAvailabilityAction(
+  experienceId: string,
+  params: { totalPax: number; date?: string; count?: number }
+): Promise<ActionResult<AvailableDateSlots[]>> {
+  try {
+    const data = await getExperienceAvailability(experienceId, params)
+    return { success: true, data }
   } catch (e) {
     return { success: false, error: (e as Error).message }
   }

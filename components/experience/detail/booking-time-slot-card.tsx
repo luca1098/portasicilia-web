@@ -9,7 +9,7 @@ import type { ExperienceTimeSlot } from '@/lib/schemas/entities/experience.entit
 import type { PricingMode } from '@/lib/schemas/entities/pricing.entity.schema'
 
 type BookingTimeSlotCardProps = {
-  slot: ExperienceTimeSlot
+  slot: Pick<ExperienceTimeSlot, 'id' | 'startTime' | 'endTime' | 'durationInMinutes'>
   price: number
   pricingMode: PricingMode
   assetLabel?: string | null
@@ -46,9 +46,13 @@ export default function BookingTimeSlotCard({
         : interpolate(t.exp_booking_per_experience, { price: formatCurrency(price) })
 
   const spotsLabel =
-    availableSpots === 1
-      ? interpolate(t.exp_booking_available_spot, { count: availableSpots })
-      : interpolate(t.exp_booking_available_spots, { count: availableSpots })
+    pricingMode === 'PER_ASSET'
+      ? availableSpots === 1
+        ? interpolate(t.exp_booking_available_asset, { count: availableSpots })
+        : interpolate(t.exp_booking_available_assets, { count: availableSpots })
+      : availableSpots === 1
+        ? interpolate(t.exp_booking_available_spot, { count: availableSpots })
+        : interpolate(t.exp_booking_available_spots, { count: availableSpots })
 
   const spotsColor = availableSpots <= 3 ? 'text-amber-600' : 'text-teal-600'
 
@@ -57,10 +61,10 @@ export default function BookingTimeSlotCard({
       type="button"
       onClick={() => onSelect(slot.id)}
       className={cn(
-        'w-full rounded-xl border border-border p-4',
+        'w-full rounded-xl border border-border p-4 cursor-pointer',
         'flex items-center justify-between gap-4',
         'text-left transition-colors',
-        'hover:border-teal-600/40 hover:bg-teal-50/30'
+        'hover:border-primary/70 hover:bg-primary/10'
       )}
     >
       <div className="min-w-0">

@@ -32,6 +32,7 @@ npm run format       # Format code with Prettier
 - Add keys to `i18n/it.json` and `i18n/en.json`
 - Server components: `const t = await getTranslations(lang as SupportedLocale)`
 - Client components: `const t = useTranslation()`
+- **NEVER use `??` fallback strings** (e.g., `t.key ?? 'Fallback'`). Always add the translation key to both `i18n/it.json` and `i18n/en.json` instead
 
 ### Component Organization
 

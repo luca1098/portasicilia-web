@@ -81,6 +81,32 @@ export function getExperienceBySlug(slug: string) {
   return apiServer.get<Experience>(`/experiences/slug/${slug}`)
 }
 
+export type AvailableSlot = {
+  id: string
+  startTime: string
+  endTime: string
+  durationInMinutes: number
+  remainingCapacity: number
+  startingPrice: number | null
+}
+
+export type AvailableDateSlots = {
+  date: string
+  slots: AvailableSlot[]
+}
+
+export function getExperienceAvailability(
+  experienceId: string,
+  params: { totalPax: number; date?: string; count?: number }
+) {
+  const queryParams: Record<string, string> = { totalPax: params.totalPax.toString() }
+  if (params.date) queryParams.date = params.date
+  if (params.count) queryParams.count = params.count.toString()
+  return apiServer.get<AvailableDateSlots[]>(`/experiences/${experienceId}/availability`, {
+    params: queryParams,
+  })
+}
+
 export function createExperience(data: FormData, headers: HeadersInit) {
   return apiServer.post<Experience>('/experiences', data, { headers })
 }

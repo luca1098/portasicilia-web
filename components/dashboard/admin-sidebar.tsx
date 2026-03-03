@@ -13,6 +13,8 @@ import {
   ExternalLinkIcon,
   PanelLeftIcon,
   XIcon,
+  ClipboardListIcon,
+  CalendarCheck2Icon,
 } from '@/lib/constants/icons'
 import { Button } from '@/components/ui/button'
 
@@ -26,6 +28,8 @@ const sidebarItems: SidebarItem[] = [
   { key: 'admin_sidebar_dashboard', icon: LayoutDashboardIcon, href: '' },
   { key: 'admin_sidebar_locations', icon: MapPinnedIcon, href: '/locations' },
   { key: 'admin_sidebar_experiences', icon: Compass, href: '/experiences' },
+  { key: 'admin_sidebar_requests', icon: ClipboardListIcon, href: '/requests' },
+  { key: 'admin_sidebar_bookings', icon: CalendarCheck2Icon, href: '/bookings' },
 ]
 
 export default function AdminSidebar() {
@@ -152,7 +156,7 @@ export default function AdminSidebar() {
                   )}
                 />
                 <span className={cn('transition-opacity duration-200', collapsed && 'lg:hidden')}>
-                  {t[item.key] ?? item.key}
+                  {t[item.key]}
                 </span>
               </Link>
             )

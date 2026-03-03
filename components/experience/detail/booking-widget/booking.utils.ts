@@ -14,14 +14,16 @@ function capitalizeFirst(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
-export function formatDayHeader(dateStr: string): string {
+export function formatDayHeader(dateStr: string, locale: string = 'it'): string {
   const date = new Date(dateStr + 'T00:00:00')
-  return capitalizeFirst(date.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' }))
+  const tag = locale === 'en' ? 'en-GB' : 'it-IT'
+  return capitalizeFirst(date.toLocaleDateString(tag, { weekday: 'long', day: 'numeric', month: 'long' }))
 }
 
-export function formatMonthYear(dateStr: string): string {
+export function formatMonthYear(dateStr: string, locale: string = 'it'): string {
   const date = new Date(dateStr + 'T00:00:00')
-  return capitalizeFirst(date.toLocaleDateString('it-IT', { month: 'long', year: 'numeric' }))
+  const tag = locale === 'en' ? 'en-GB' : 'it-IT'
+  return capitalizeFirst(date.toLocaleDateString(tag, { month: 'long', year: 'numeric' }))
 }
 
 export function groupByMonth(entries: AvailableDateSlots[]): Map<string, AvailableDateSlots[]> {

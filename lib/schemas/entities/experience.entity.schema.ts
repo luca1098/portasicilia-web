@@ -117,6 +117,7 @@ export const ExperienceSchema = z.object({
   localityId: z.string(),
   categories: z.array(z.object({ category: z.object({ id: z.string(), name: z.string() }) })).nullish(),
   daysOfWeek: z.array(DayOfWeekSchema).nullish(),
+  minAdvanceNoticeDays: z.number().int().optional(),
   commissionType: CommissionTypeSchema.nullable(),
   commissionValue: z.number().nullable(),
   depositValue: z.number().nullable().optional(),

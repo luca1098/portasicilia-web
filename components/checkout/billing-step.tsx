@@ -1,12 +1,15 @@
 'use client'
 
+import * as React from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 
+import { ComboboxFormField } from '@/components/form/combobox-form-field'
 import { InputFormField } from '@/components/form/input-form-field'
 import { PhoneFormField } from '@/components/form/phone-form-field'
 import { RadioFormField } from '@/components/form/radio-form-field'
-import { SelectFormField } from '@/components/form/select-form-field'
 import { useTranslation } from '@/lib/context/translation.context'
+import { getCountryOptions, CountryFlag, type CountryOption } from '@/lib/constants/countries'
+import useLocaleStore from '@/core/store/locale.store'
 import { cn } from '@/lib/utils/shadcn.utils'
 import type { BillingFormValues } from '@/lib/schemas/forms/billing.form.schema'
 
@@ -20,23 +23,14 @@ const billingTypeOptions: {
   { value: 'COMPANY', labelKey: 'checkout_billing_company' },
 ]
 
-const COUNTRY_OPTIONS = [
-  { value: 'IT', label: 'Italia' },
-  { value: 'DE', label: 'Deutschland' },
-  { value: 'FR', label: 'France' },
-  { value: 'ES', label: 'Espana' },
-  { value: 'AT', label: 'Osterreich' },
-  { value: 'CH', label: 'Schweiz / Suisse' },
-  { value: 'GB', label: 'United Kingdom' },
-  { value: 'US', label: 'United States' },
-]
-
 export type { BillingFormValues } from '@/lib/schemas/forms/billing.form.schema'
 
 function BillingStep() {
   const t = useTranslation()
   const { control } = useFormContext<BillingFormValues>()
   const billingType = useWatch({ control, name: 'billingType' })
+  const lang = useLocaleStore(s => s.lang)
+  const countryOptions = React.useMemo(() => getCountryOptions(lang), [lang])
   const isCompany = billingType === 'COMPANY'
 
   return (
@@ -172,12 +166,13 @@ function BillingStep() {
             }
             autoComplete="address-level1"
           />
-          <SelectFormField<BillingFormValues, (typeof COUNTRY_OPTIONS)[number]>
+          <ComboboxFormField<BillingFormValues, CountryOption>
             name="country"
             label={t.checkout_billing_country}
-            options={COUNTRY_OPTIONS}
+            options={countryOptions}
             getValue={o => o.value}
             getLabel={o => o.label}
+            renderOption={o => <CountryFlag country={o.value} />}
             required
           />
         </div>

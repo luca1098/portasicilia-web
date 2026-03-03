@@ -52,6 +52,18 @@ export type BookingPriceSnapshot = {
   currency: string
 }
 
+export type CheckoutResponse = {
+  clientSecret: string
+  depositAmount: string
+  breakdown: {
+    lineItems: BookingLineItem[]
+    subtotal: string
+    total: string
+    commissionAmount: string
+    currency: string
+  }
+}
+
 export type BookingResponse = {
   id: string
   status: string
@@ -59,12 +71,81 @@ export type BookingResponse = {
   timeSlotId?: string
   participants: CreateBookingParticipant[]
   totalPax: number
+  totalAmount: string
+  depositAmount: string
   contactEmail: string
   contactPhone: string
   experience: { id: string; name: string; slug: string }
   priceSnapshot: BookingPriceSnapshot
 }
 
-export function createBooking(data: CreateBookingDto, headers: HeadersInit) {
-  return apiServer.post<BookingResponse>('/bookings', data, { headers })
+export function checkoutBooking(data: CreateBookingDto, headers: HeadersInit) {
+  return apiServer.post<CheckoutResponse>('/bookings/checkout', data, { headers })
+}
+
+export function confirmBooking(paymentIntentId: string, headers: HeadersInit) {
+  return apiServer.post<BookingResponse>('/bookings/confirm', { paymentIntentId }, { headers })
+}
+
+// Admin types and functions
+
+export type AdminBookingUser = {
+  id: string
+  firstName: string | null
+  lastName: string | null
+  email: string
+  avatar: string | null
+}
+
+export type AdminBookingExperience = {
+  id: string
+  name: string
+  slug: string
+  cover: string | null
+  owner: { id: string; firstName: string | null; lastName: string | null }
+}
+
+export type AdminBooking = {
+  id: string
+  status: string
+  date: string
+  totalPax: number
+  totalAmount: string
+  depositAmount: string
+  participants: CreateBookingParticipant[]
+  contactEmail: string
+  contactPhone: string
+  paymentStatus: string
+  createdAt: string
+  user: AdminBookingUser
+  experience: AdminBookingExperience
+  timeSlot: { id: string; startTime: string; endTime: string } | null
+  priceSnapshot: BookingPriceSnapshot | null
+}
+
+type PaginatedAdminBookings = {
+  data: AdminBooking[]
+  nextCursor: string | null
+}
+
+export type GetAdminBookingsParams = {
+  status?: string
+  type?: string
+  dateFrom?: string
+  dateTo?: string
+  search?: string
+  limit?: number
+  cursor?: string
+}
+
+export function getAdminBookings(headers: HeadersInit, params?: GetAdminBookingsParams) {
+  const queryParams: Record<string, string> = {}
+  if (params?.status) queryParams.status = params.status
+  if (params?.type) queryParams.type = params.type
+  if (params?.dateFrom) queryParams.dateFrom = params.dateFrom
+  if (params?.dateTo) queryParams.dateTo = params.dateTo
+  if (params?.search) queryParams.search = params.search
+  if (params?.limit) queryParams.limit = params.limit.toString()
+  if (params?.cursor) queryParams.cursor = params.cursor
+  return apiServer.get<PaginatedAdminBookings>('/bookings/admin', { params: queryParams, headers })
 }

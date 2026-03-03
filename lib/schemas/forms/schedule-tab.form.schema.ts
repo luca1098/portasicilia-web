@@ -23,6 +23,7 @@ const TimeSlotSchema = z
 export const ScheduleTabSchema = z.object({
   operatingDays: z.record(z.enum(DAYS_OF_WEEK), z.boolean()),
   timeSlots: z.array(TimeSlotSchema).min(1, 'At least one time slot is required'),
+  minAdvanceNoticeDays: z.number().int().min(0).max(90),
 })
 
 export type ScheduleTabValues = z.infer<typeof ScheduleTabSchema>

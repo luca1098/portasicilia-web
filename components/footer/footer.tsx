@@ -161,9 +161,8 @@ export default function Footer() {
     },
   })
 
-  const onSubmit = (data: NewsletterFormValues) => {
-    // eslint-disable-next-line no-console
-    console.log('Newsletter subscription:', data.email)
+  const onSubmit = (_data: NewsletterFormValues) => {
+    // TODO: implement newsletter subscription
   }
 
   const destinazioniLinks = [

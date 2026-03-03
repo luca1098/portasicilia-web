@@ -4,42 +4,27 @@ import Image from 'next/image'
 import { StarIcon } from '@/lib/constants/icons'
 import { useTranslation } from '@/lib/context/translation.context'
 import { interpolate } from '@/lib/utils/i18n.utils'
+import useCheckoutStore from '@/core/store/checkout.store'
+import type { PriceTier } from '@/core/store/checkout.store'
 
-import type { Experience } from '@/lib/schemas/entities/experience.entity.schema'
-
-type PriceTier = {
-  tierType: string
-  baseAmount: number
-  quantity: number
-  subtotal: number
-}
-
-type BookingRecapProps = {
-  experience: Experience
-  date: string
-  startTime: string
-  endTime: string
-  adults: number
-  children: number
-  infants: number
-  totalPrice: number | null
-  depositAmount: number | null
-  priceTiers: PriceTier[]
-}
-
-export default function BookingRecap({
-  experience,
-  date,
-  startTime,
-  endTime,
-  adults,
-  children,
-  infants,
-  totalPrice,
-  depositAmount,
-  priceTiers,
-}: BookingRecapProps) {
+export default function BookingRecap() {
   const t = useTranslation()
+  const bookingContext = useCheckoutStore(s => s.bookingContext)
+
+  if (!bookingContext) return null
+
+  const {
+    experience,
+    date,
+    startTime,
+    endTime,
+    adults,
+    children,
+    infants,
+    totalPrice,
+    depositAmount,
+    priceTiers,
+  } = bookingContext
 
   const avgRating =
     experience.reviews && experience.reviews.length > 0
@@ -195,15 +180,27 @@ export default function BookingRecap({
         </>
       )}
 
-      {/* Deposit note */}
-      {depositStr !== null && depositParts !== null && (
+      {/* Deposit and remaining breakdown */}
+      {depositStr !== null && totalPrice !== null && depositAmount !== null && depositAmount > 0 && (
         <>
           <hr className="border-border" />
-          <div className="px-5 py-4">
+          <div className="space-y-3 px-5 py-4">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-semibold text-primary">{t.checkout_deposit_label}</span>
+              <span className="text-sm font-semibold text-primary">{depositStr}</span>
+            </div>
+            {totalPrice - depositAmount > 0 && (
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-muted-foreground">{t.checkout_remaining_on_site}</span>
+                <span className="text-xs text-muted-foreground">
+                  {`€ ${Math.round(totalPrice - depositAmount)}`}
+                </span>
+              </div>
+            )}
             <p className="text-center text-xs text-muted-foreground">
-              {depositParts[0]}
+              {depositParts?.[0]}
               <span className="font-semibold">{depositStr}</span>
-              {depositParts[1]}
+              {depositParts?.[1]}
             </p>
           </div>
         </>

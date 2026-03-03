@@ -52,4 +52,8 @@ export {
   UsersIcon,
   X,
   XIcon,
+  ClipboardListIcon,
+  CalendarCheck2Icon,
+  ShieldCheckIcon,
+  AlertTriangleIcon,
 } from 'lucide-react'

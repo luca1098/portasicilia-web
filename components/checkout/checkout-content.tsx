@@ -1,21 +1,15 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { ArrowLeft } from '@/lib/constants/icons'
 import { useTranslation } from '@/lib/context/translation.context'
+import { useCheckoutActions } from '@/core/store/checkout.store'
 import CheckoutSteps from '@/components/checkout/checkout-steps'
 import BookingRecap from '@/components/checkout/booking-recap'
-import BookingSuccess from '@/components/checkout/booking-success'
 import type { Experience } from '@/lib/schemas/entities/experience.entity.schema'
-
-type PriceTier = {
-  tierType: string
-  baseAmount: number
-  quantity: number
-  subtotal: number
-}
+import type { PriceTier } from '@/core/store/checkout.store'
 
 type CheckoutContentProps = {
   experience: Experience
@@ -33,6 +27,7 @@ type CheckoutContentProps = {
   assetCount: number
   pricingMode: string
   assetTierType: string
+  paymentError?: boolean
 }
 
 export default function CheckoutContent({
@@ -51,28 +46,50 @@ export default function CheckoutContent({
   assetCount,
   pricingMode,
   assetTierType,
+  paymentError,
 }: CheckoutContentProps) {
   const t = useTranslation()
   const { lang } = useParams<{ lang: string }>()
+  const { setBookingContext } = useCheckoutActions()
 
-  const [bookingComplete, setBookingComplete] = useState(false)
-
-  if (bookingComplete) {
-    return (
-      <BookingSuccess
-        experience={experience}
-        date={date}
-        startTime={startTime}
-        endTime={endTime}
-        adults={adults}
-        children={children}
-        infants={infants}
-        totalPrice={totalPrice ?? 0}
-        depositAmount={depositAmount}
-        priceTiers={priceTiers}
-      />
-    )
-  }
+  useEffect(() => {
+    setBookingContext({
+      experience,
+      date,
+      startTime,
+      endTime,
+      adults,
+      children,
+      infants,
+      totalPrice: totalPrice ?? 0,
+      depositAmount,
+      priceTiers,
+      experienceId,
+      slotId,
+      assetCount,
+      pricingMode,
+      assetTierType,
+      paymentError: paymentError ?? false,
+    })
+  }, [
+    experience,
+    date,
+    startTime,
+    endTime,
+    adults,
+    children,
+    infants,
+    totalPrice,
+    depositAmount,
+    priceTiers,
+    experienceId,
+    slotId,
+    assetCount,
+    pricingMode,
+    assetTierType,
+    paymentError,
+    setBookingContext,
+  ])
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8">
@@ -92,35 +109,12 @@ export default function CheckoutContent({
       <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_380px]">
         {/* Left: steps */}
         <div className="order-2 lg:order-1">
-          <CheckoutSteps
-            depositAmount={depositAmount}
-            experienceId={experienceId}
-            slotId={slotId}
-            date={date}
-            adults={adults}
-            children={children}
-            infants={infants}
-            assetCount={assetCount}
-            pricingMode={pricingMode}
-            assetTierType={assetTierType}
-            onBookingSuccess={() => setBookingComplete(true)}
-          />
+          <CheckoutSteps />
         </div>
 
         {/* Right: recap */}
         <div className="order-1 lg:sticky lg:top-24 lg:order-2 lg:self-start">
-          <BookingRecap
-            experience={experience}
-            date={date}
-            startTime={startTime}
-            endTime={endTime}
-            adults={adults}
-            children={children}
-            infants={infants}
-            totalPrice={totalPrice}
-            depositAmount={depositAmount}
-            priceTiers={priceTiers}
-          />
+          <BookingRecap />
         </div>
       </div>
     </div>

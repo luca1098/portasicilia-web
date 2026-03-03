@@ -1,6 +1,7 @@
 'use client'
 
 import { memo, useCallback, useState } from 'react'
+import { useParams } from 'next/navigation'
 import { useTranslation } from '@/lib/context/translation.context'
 import { cn } from '@/lib/utils/shadcn.utils'
 import { Button } from '@/components/ui/button'
@@ -20,6 +21,7 @@ type BookingDaySlotGroupProps = {
 
 function BookingDaySlotGroup({ entry, pricingMode, assetLabel, onSlotSelect }: BookingDaySlotGroupProps) {
   const t = useTranslation()
+  const { lang } = useParams<{ lang: string }>()
 
   const [isExpanded, setIsExpanded] = useState(false)
 
@@ -32,7 +34,7 @@ function BookingDaySlotGroup({ entry, pricingMode, assetLabel, onSlotSelect }: B
 
   return (
     <div className="mb-5">
-      <h4 className="mb-2.5 text-sm font-semibold">{formatDayHeader(entry.date)}</h4>
+      <h4 className="mb-2.5 text-sm font-semibold">{formatDayHeader(entry.date, lang)}</h4>
       {entry.slots.length === 0 ? (
         <p className="text-xs text-muted-foreground">{t.exp_booking_no_available_slots}</p>
       ) : (

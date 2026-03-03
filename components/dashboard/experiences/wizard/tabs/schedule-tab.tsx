@@ -3,11 +3,12 @@
 import { FormProvider, useFieldArray, useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { TimeFormField } from '@/components/form/time-form-field'
 import { useTranslation } from '@/lib/context/translation.context'
 import { useAction } from '@/lib/hooks/use-action'
 import { setScheduleAction } from '@/lib/actions/experiences.actions'
-import { LoaderIcon, PlusIcon, Trash2Icon, ClockIcon } from '@/lib/constants/icons'
+import { LoaderIcon, PlusIcon, Trash2Icon, ClockIcon, InfoIcon } from '@/lib/constants/icons'
 import { cn } from '@/lib/utils/shadcn.utils'
 import { ScheduleTabSchema, DAYS_OF_WEEK } from '@/lib/schemas/forms/schedule-tab.form.schema'
 import type { ScheduleTabValues } from '@/lib/schemas/forms/schedule-tab.form.schema'
@@ -53,12 +54,14 @@ export default function ScheduleTab({ experienceId, experience, onSaved }: Sched
     defaultValues: {
       operatingDays: defaultOperatingDays as ScheduleTabValues['operatingDays'],
       timeSlots: existingDefaultSlots.length > 0 ? existingDefaultSlots : [{ startTime: '', endTime: '' }],
+      minAdvanceNoticeDays: experience?.minAdvanceNoticeDays ?? 1,
     },
   })
 
   const { control, setValue, formState } = form
   const operatingDays = useWatch({ control: form.control, name: 'operatingDays' })
   const watchedSlots = useWatch({ control: form.control, name: 'timeSlots' })
+  const watchedAdvanceNotice = useWatch({ control: form.control, name: 'minAdvanceNoticeDays' })
 
   const {
     fields: timeSlotFields,
@@ -102,6 +105,7 @@ export default function ScheduleTab({ experienceId, experience, onSaved }: Sched
       setScheduleAction(experienceId, {
         daysOfWeek,
         timeSlots: data.timeSlots.filter(s => s.startTime),
+        minAdvanceNoticeDays: data.minAdvanceNoticeDays,
       })
     )
   }
@@ -218,6 +222,34 @@ export default function ScheduleTab({ experienceId, experience, onSaved }: Sched
                 </p>
               </div>
             )}
+          </div>
+          {/* Advance Notice */}
+          <div className="rounded-xl border border-border bg-card p-6 space-y-4">
+            <div>
+              <h3 className="text-sm font-semibold">{t.admin_wizard_advance_notice}</h3>
+              <p className="text-xs text-muted-foreground">{t.admin_wizard_advance_notice_hint}</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <Input
+                type="number"
+                min={0}
+                max={90}
+                className="w-24"
+                {...form.register('minAdvanceNoticeDays', { valueAsNumber: true })}
+              />
+              <span className="text-sm text-muted-foreground">{t.admin_wizard_advance_notice_days}</span>
+            </div>
+            {formState.errors.minAdvanceNoticeDays?.message && (
+              <p className="text-sm text-destructive">{formState.errors.minAdvanceNoticeDays.message}</p>
+            )}
+            <div className="flex items-start gap-2 rounded-lg bg-muted/50 p-3">
+              <InfoIcon className="mt-0.5 size-3.5 shrink-0 text-muted-foreground" />
+              <p className="text-xs text-muted-foreground">
+                {watchedAdvanceNotice === 0
+                  ? t.admin_wizard_advance_notice_zero
+                  : t.admin_wizard_advance_notice_info}
+              </p>
+            </div>
           </div>
         </div>
 

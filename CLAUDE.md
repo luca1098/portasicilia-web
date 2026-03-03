@@ -53,6 +53,14 @@ npm run format       # Format code with Prettier
 - Zustand for global state
 - react-hook-form + zod for forms
 
+### Zustand Store Conventions
+
+- Stores live in `core/store/` with `*.store.ts` naming
+- Use `persist` middleware with `partialize` for localStorage persistence; storage keys prefixed `ps-`
+- Nest mutations in an `actions` object, export a `useXxxActions` selector hook alongside `default` store export
+- Access state outside React with `useXxxStore.getState()`
+- Never use raw `sessionStorage`/`localStorage` — always use a Zustand store with `persist`
+
 ## Code Style
 
 - No semicolons, single quotes, 110 char print width

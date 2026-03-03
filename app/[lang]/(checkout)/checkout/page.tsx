@@ -11,14 +11,14 @@ type CheckoutPageProps = {
     children?: string
     infants?: string
     assetCount?: string
+    payment_error?: string
   }>
   params: Promise<{ lang: string }>
 }
 
 export default async function CheckoutPage({ searchParams, params }: CheckoutPageProps) {
-  const [{ lang }, { experienceId, slotId, date, adults, children, infants, assetCount }] = await Promise.all(
-    [params, searchParams]
-  )
+  const [{ lang }, { experienceId, slotId, date, adults, children, infants, assetCount, payment_error }] =
+    await Promise.all([params, searchParams])
 
   if (!experienceId || !slotId || !date) {
     redirect(`/${lang}`)
@@ -130,6 +130,7 @@ export default async function CheckoutPage({ searchParams, params }: CheckoutPag
       assetCount={assetCountNum}
       pricingMode={pricingMode}
       assetTierType={tiers[0]?.tierType ?? 'DEFAULT'}
+      paymentError={payment_error === '1'}
     />
   )
 }

@@ -1,3 +1,4 @@
+import { useParams } from 'next/navigation'
 import { CalendarIcon } from '@/lib/constants/icons'
 import { useTranslation } from '@/lib/context/translation.context'
 import { Button } from '@/components/ui/button'
@@ -6,8 +7,11 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import BookingDaySlotGroup from './booking-day-slot-group'
 import BookingSlotsSkeleton from './booking-slots-skeleton'
 import { formatMonthYear } from './booking.utils'
+import { it, enUS } from 'react-day-picker/locale'
 import type { AvailableDateSlots } from '@/lib/api/experiences'
 import type { PricingMode } from '@/lib/schemas/entities/pricing.entity.schema'
+
+const calendarLocales = { it, en: enUS } as const
 
 type BookingStepSlotsProps = {
   participantSummary: string
@@ -42,9 +46,10 @@ export default function BookingStepSlots({
   disabledCalendarDays,
 }: BookingStepSlotsProps) {
   const t = useTranslation()
+  const { lang } = useParams<{ lang: string }>()
 
   const visibleMonth =
-    availabilityData && availabilityData.length > 0 ? formatMonthYear(availabilityData[0].date) : ''
+    availabilityData && availabilityData.length > 0 ? formatMonthYear(availabilityData[0].date, lang) : ''
 
   const hasNoSlots = availabilityData !== null && availabilityData.every(d => d.slots.length === 0)
 
@@ -103,6 +108,7 @@ export default function BookingStepSlots({
                       selected={selectedDate}
                       onSelect={onDateSelect}
                       disabled={disabledCalendarDays}
+                      locale={calendarLocales[lang as keyof typeof calendarLocales] ?? it}
                     />
                   </PopoverContent>
                 </Popover>

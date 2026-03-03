@@ -642,6 +642,8 @@
   "checkout_billing_phone": "Numero di telefono",
   "booking_success_title": "Tutto pronto! Prepara lo zaino e goditi questa esperienza!",
   "booking_success_subtitle": "La tua prenotazione e' stata confermata. Riceverai una email con tutti i dettagli.",
+  "booking_success_deposit_paid": "Anticipo pagato",
+  "booking_success_remaining_on_site": "Da pagare in loco",
   "booking_success_add_calendar": "Aggiungi al calendario",
   "booking_success_back_home": "Torna alla Home",
   "checkout_payment_error": "Pagamento rifiutato. Prova con un altro metodo.",

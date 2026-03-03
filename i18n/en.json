@@ -642,6 +642,8 @@
   "checkout_billing_phone": "Phone number",
   "booking_success_title": "All set! Pack your bags and enjoy this experience!",
   "booking_success_subtitle": "Your booking has been confirmed. You will receive an email with all the details.",
+  "booking_success_deposit_paid": "Deposit paid",
+  "booking_success_remaining_on_site": "To pay on-site",
   "booking_success_add_calendar": "Add to calendar",
   "booking_success_back_home": "Back to Home",
   "checkout_payment_error": "Payment declined. Please try a different payment method.",

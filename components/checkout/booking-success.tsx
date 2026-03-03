@@ -73,8 +73,8 @@ export default function BookingSuccess({
   children,
   infants,
   totalPrice,
-  depositAmount,
   priceTiers,
+  depositAmount,
 }: BookingSuccessProps) {
   const t = useTranslation()
   const { lang } = useParams<{ lang: string }>()
@@ -140,13 +140,6 @@ export default function BookingSuccess({
 
   const coverUrl = experience.images?.[0]?.url ?? experience.cover
 
-  const depositStr = depositAmount !== null && depositAmount > 0 ? `€ ${Math.round(depositAmount)}` : null
-  const depositParts = (() => {
-    if (depositStr === null) return null
-    const fullText = interpolate(t.checkout_deposit_note, { amount: depositStr })
-    return fullText.split(depositStr)
-  })()
-
   const handleAddToCalendar = () => {
     generateIcsFile(experience, date, startTime, endTime)
   }
@@ -167,14 +160,14 @@ export default function BookingSuccess({
       {/* Booking recap card */}
       <div className="mt-8 rounded-xl border bg-background">
         {/* Experience header */}
-        <div className="flex gap-4 p-5">
+        <div className="flex gap-4 p-5 items-start">
           {coverUrl && (
-            <div className="relative h-20 w-24 shrink-0 overflow-hidden rounded-lg">
-              <Image src={coverUrl} alt={experience.name} fill className="object-cover" sizes="96px" />
+            <div className="relative h-25 aspect-square shrink-0 overflow-hidden rounded-lg">
+              <Image src={coverUrl} alt={experience.name} fill className="object-cover" />
             </div>
           )}
-          <div className="flex min-w-0 flex-col justify-center">
-            <h2 className="text-sm font-semibold leading-snug">{experience.name}</h2>
+          <div className="flex min-w-0 flex-col justify-center pt-4">
+            <h2 className="text-md font-semibold leading-snug">{experience.name}</h2>
             {avgRating !== null && (
               <div className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
                 <StarIcon className="size-3.5 fill-yellow-400 text-yellow-400" aria-hidden="true" />
@@ -241,18 +234,28 @@ export default function BookingSuccess({
           <span className="text-sm font-bold">{`€ ${Math.round(totalPrice)}`}</span>
         </div>
 
-        {/* Deposit note */}
-        {depositStr !== null && depositParts !== null && (
-          <>
-            <hr className="border-border" />
-            <div className="px-5 py-4">
-              <p className="text-center text-xs text-muted-foreground">
-                {depositParts[0]}
-                <span className="font-semibold">{depositStr}</span>
-                {depositParts[1]}
-              </p>
+        {/* Deposit paid evidence */}
+        {depositAmount !== null && depositAmount > 0 && (
+          <div className="mx-5 mb-5 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 dark:border-emerald-800 dark:bg-emerald-950/40">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-semibold text-emerald-700 dark:text-emerald-400">
+                {t.booking_success_deposit_paid}
+              </span>
+              <span className="text-sm font-semibold text-emerald-700 dark:text-emerald-400">
+                {`€ ${Math.round(depositAmount)}`}
+              </span>
             </div>
-          </>
+            {totalPrice - depositAmount > 0 && (
+              <div className="mt-1.5 flex items-center justify-between">
+                <span className="text-xs text-emerald-600/70 dark:text-emerald-500/70">
+                  {t.booking_success_remaining_on_site}
+                </span>
+                <span className="text-xs text-emerald-600/70 dark:text-emerald-500/70">
+                  {`€ ${Math.round(totalPrice - depositAmount)}`}
+                </span>
+              </div>
+            )}
+          </div>
         )}
       </div>
 

@@ -107,8 +107,8 @@ export default function BookingRecap() {
       {/* Experience header */}
       <div className="flex gap-4 p-5">
         {coverUrl && (
-          <div className="relative h-20 w-24 shrink-0 overflow-hidden rounded-lg">
-            <Image src={coverUrl} alt={experience.name} fill className="object-cover" sizes="14px" />
+          <div className="relative h-15 aspect-square shrink-0 overflow-hidden rounded-lg">
+            <Image src={coverUrl} alt={experience.name} fill className="object-cover" />
           </div>
         )}
         <div className="flex min-w-0 flex-col justify-center">
@@ -180,23 +180,11 @@ export default function BookingRecap() {
         </>
       )}
 
-      {/* Deposit and remaining breakdown */}
-      {depositStr !== null && totalPrice !== null && depositAmount !== null && depositAmount > 0 && (
+      {/* Deposit note */}
+      {depositStr !== null && (
         <>
           <hr className="border-border" />
-          <div className="space-y-3 px-5 py-4">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold text-primary">{t.checkout_deposit_label}</span>
-              <span className="text-sm font-semibold text-primary">{depositStr}</span>
-            </div>
-            {totalPrice - depositAmount > 0 && (
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-muted-foreground">{t.checkout_remaining_on_site}</span>
-                <span className="text-xs text-muted-foreground">
-                  {`€ ${Math.round(totalPrice - depositAmount)}`}
-                </span>
-              </div>
-            )}
+          <div className="px-5 py-4">
             <p className="text-center text-xs text-muted-foreground">
               {depositParts?.[0]}
               <span className="font-semibold">{depositStr}</span>

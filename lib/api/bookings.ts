@@ -1,4 +1,4 @@
-import { apiServer } from './fetch-client'
+import { api, apiServer } from './fetch-client'
 
 export type CreateBookingParticipant = {
   type: 'ADULT' | 'CHILD' | 'INFANT' | 'SENIOR' | 'STUDENT' | 'GROUP'
@@ -123,13 +123,14 @@ export type AdminBooking = {
   priceSnapshot: BookingPriceSnapshot | null
 }
 
-type PaginatedAdminBookings = {
+export type PaginatedAdminBookings = {
   data: AdminBooking[]
   nextCursor: string | null
 }
 
 export type GetAdminBookingsParams = {
   status?: string
+  statusIn?: string
   type?: string
   dateFrom?: string
   dateTo?: string
@@ -141,6 +142,7 @@ export type GetAdminBookingsParams = {
 export function getAdminBookings(headers: HeadersInit, params?: GetAdminBookingsParams) {
   const queryParams: Record<string, string> = {}
   if (params?.status) queryParams.status = params.status
+  if (params?.statusIn) queryParams.statusIn = params.statusIn
   if (params?.type) queryParams.type = params.type
   if (params?.dateFrom) queryParams.dateFrom = params.dateFrom
   if (params?.dateTo) queryParams.dateTo = params.dateTo
@@ -148,4 +150,8 @@ export function getAdminBookings(headers: HeadersInit, params?: GetAdminBookings
   if (params?.limit) queryParams.limit = params.limit.toString()
   if (params?.cursor) queryParams.cursor = params.cursor
   return apiServer.get<PaginatedAdminBookings>('/bookings/admin', { params: queryParams, headers })
+}
+
+export function refundBooking(bookingId: string) {
+  return api.post<AdminBooking>(`/bookings/${bookingId}/refund`)
 }

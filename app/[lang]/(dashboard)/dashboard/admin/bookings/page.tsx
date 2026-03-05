@@ -17,7 +17,8 @@ export default async function BookingsPage({ params }: PageParamsProps) {
 
   const t = await getTranslations(lang as SupportedLocale)
   const headers = { Authorization: `Bearer ${session.accessToken}` }
-  const result = await getAdminBookings(headers, { status: 'CONFIRMED' })
+  const fetchParams = { status: 'CONFIRMED', limit: 20 }
+  const result = await getAdminBookings(headers, fetchParams)
 
   return (
     <div className="mx-auto max-w-5xl space-y-8">
@@ -26,7 +27,11 @@ export default async function BookingsPage({ params }: PageParamsProps) {
         <p className="mt-1 text-sm text-muted-foreground">{t.admin_bookings_subtitle}</p>
       </div>
 
-      <BookingsTable bookings={result.data} />
+      <BookingsTable
+        initialBookings={result.data}
+        initialNextCursor={result.nextCursor}
+        fetchParams={fetchParams}
+      />
     </div>
   )
 }

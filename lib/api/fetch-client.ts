@@ -25,7 +25,12 @@ async function request<T>(baseUrl: string, endpoint: string, options: FetchOptio
   const { body, lang, params, headers: customHeaders, ...init } = options
 
   const raw = endpoint.startsWith('http') ? endpoint : `${baseUrl}${endpoint}`
-  const url = new URL(raw, baseUrl.startsWith('http') ? baseUrl : undefined)
+  const base = baseUrl.startsWith('http')
+    ? baseUrl
+    : typeof window !== 'undefined'
+      ? window.location.origin
+      : undefined
+  const url = new URL(raw, base)
 
   if (params) {
     for (const [key, value] of Object.entries(params)) {

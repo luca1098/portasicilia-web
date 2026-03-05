@@ -3,9 +3,12 @@
 import {
   checkoutBooking,
   confirmBooking,
+  getAdminBookings,
   type CreateBookingDto,
   type CheckoutResponse,
   type BookingResponse,
+  type PaginatedAdminBookings,
+  type GetAdminBookingsParams,
 } from '@/lib/api/bookings'
 import { type ActionResult, getAuthHeaders } from './action.types'
 
@@ -13,6 +16,18 @@ export async function checkoutAction(data: CreateBookingDto): Promise<ActionResu
   try {
     const headers = await getAuthHeaders()
     const result = await checkoutBooking(data, headers)
+    return { success: true, data: result }
+  } catch (e) {
+    return { success: false, error: (e as Error).message }
+  }
+}
+
+export async function getAdminBookingsAction(
+  params: GetAdminBookingsParams
+): Promise<ActionResult<PaginatedAdminBookings>> {
+  try {
+    const headers = await getAuthHeaders()
+    const result = await getAdminBookings(headers, params)
     return { success: true, data: result }
   } catch (e) {
     return { success: false, error: (e as Error).message }

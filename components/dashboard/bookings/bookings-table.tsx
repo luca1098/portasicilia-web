@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import Image from 'next/image'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
@@ -11,11 +12,15 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useTranslation } from '@/lib/context/translation.context'
-import { MoreHorizontalIcon, EyeIcon, ImageIcon } from '@/lib/constants/icons'
-import type { AdminBooking } from '@/lib/api/bookings'
+import { useAction } from '@/lib/hooks/use-action'
+import { MoreHorizontalIcon, EyeIcon, ImageIcon, LoaderIcon } from '@/lib/constants/icons'
+import { getAdminBookingsAction } from '@/lib/actions/bookings.actions'
+import type { AdminBooking, GetAdminBookingsParams, PaginatedAdminBookings } from '@/lib/api/bookings'
 
 type BookingsTableProps = {
-  bookings: AdminBooking[]
+  initialBookings: AdminBooking[]
+  initialNextCursor: string | null
+  fetchParams: GetAdminBookingsParams
 }
 
 function formatDate(dateString: string) {
@@ -51,8 +56,28 @@ function PaymentBadge({ status, t }: { status: string; t: Record<string, string>
   )
 }
 
-export default function BookingsTable({ bookings }: BookingsTableProps) {
+export default function BookingsTable({
+  initialBookings,
+  initialNextCursor,
+  fetchParams,
+}: BookingsTableProps) {
   const t = useTranslation() as Record<string, string>
+  const [bookings, setBookings] = useState(initialBookings)
+  const [nextCursor, setNextCursor] = useState(initialNextCursor)
+
+  const { loading, execute: loadMore } = useAction<PaginatedAdminBookings>({
+    onSuccess: data => {
+      if (data) {
+        setBookings(prev => [...prev, ...data.data])
+        setNextCursor(data.nextCursor)
+      }
+    },
+  })
+
+  function handleLoadMore() {
+    if (!nextCursor) return
+    loadMore(() => getAdminBookingsAction({ ...fetchParams, cursor: nextCursor }))
+  }
 
   return (
     <Tabs defaultValue="experiences">
@@ -67,81 +92,92 @@ export default function BookingsTable({ bookings }: BookingsTableProps) {
             <p className="text-sm text-muted-foreground">{t.admin_bookings_no_results}</p>
           </div>
         ) : (
-          <div className="rounded-xl border border-border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-16" />
-                  <TableHead>{t.admin_booking_col_experience}</TableHead>
-                  <TableHead>{t.admin_booking_col_date}</TableHead>
-                  <TableHead>{t.admin_booking_col_participants}</TableHead>
-                  <TableHead>{t.admin_booking_col_total}</TableHead>
-                  <TableHead>{t.admin_booking_col_deposit}</TableHead>
-                  <TableHead>{t.admin_booking_col_payment}</TableHead>
-                  <TableHead className="w-16" />
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {bookings.map(booking => (
-                  <TableRow key={booking.id}>
-                    <TableCell>
-                      {booking.experience.cover ? (
-                        <Image
-                          src={booking.experience.cover}
-                          alt={booking.experience.name}
-                          width={40}
-                          height={40}
-                          className="size-10 rounded-lg object-cover"
-                          unoptimized
-                        />
-                      ) : (
-                        <div className="flex size-10 items-center justify-center rounded-lg bg-muted">
-                          <ImageIcon className="size-4 text-muted-foreground" />
-                        </div>
-                      )}
-                    </TableCell>
-                    <TableCell className="font-medium">{booking.experience.name}</TableCell>
-                    <TableCell className="text-muted-foreground">
-                      <div className="flex flex-col">
-                        <span>{formatDate(booking.date)}</span>
-                        {booking.timeSlot && (
-                          <span className="text-xs">
-                            {formatTime(booking.timeSlot.startTime)} - {formatTime(booking.timeSlot.endTime)}
-                          </span>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-sm">{booking.totalPax}</span>
-                    </TableCell>
-                    <TableCell className="text-sm">
-                      {booking.priceSnapshot ? formatCurrency(booking.priceSnapshot.total) : '\u2014'}
-                    </TableCell>
-                    <TableCell className="text-sm text-muted-foreground">
-                      {booking.depositAmount ? formatCurrency(booking.depositAmount) : '\u2014'}
-                    </TableCell>
-                    <TableCell>
-                      <PaymentBadge status={booking.paymentStatus} t={t} />
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon-sm">
-                            <MoreHorizontalIcon className="size-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem>
-                            <EyeIcon className="size-4" />
-                            {t.admin_booking_action_view}
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
+          <div className="space-y-4">
+            <div className="rounded-xl border border-border">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-16" />
+                    <TableHead>{t.admin_booking_col_experience}</TableHead>
+                    <TableHead>{t.admin_booking_col_date}</TableHead>
+                    <TableHead>{t.admin_booking_col_participants}</TableHead>
+                    <TableHead>{t.admin_booking_col_total}</TableHead>
+                    <TableHead>{t.admin_booking_col_deposit}</TableHead>
+                    <TableHead>{t.admin_booking_col_payment}</TableHead>
+                    <TableHead className="w-16" />
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {bookings.map(booking => (
+                    <TableRow key={booking.id}>
+                      <TableCell>
+                        {booking.experience.cover ? (
+                          <Image
+                            src={booking.experience.cover}
+                            alt={booking.experience.name}
+                            width={40}
+                            height={40}
+                            className="size-10 rounded-lg object-cover"
+                            unoptimized
+                          />
+                        ) : (
+                          <div className="flex size-10 items-center justify-center rounded-lg bg-muted">
+                            <ImageIcon className="size-4 text-muted-foreground" />
+                          </div>
+                        )}
+                      </TableCell>
+                      <TableCell className="font-medium">{booking.experience.name}</TableCell>
+                      <TableCell className="text-muted-foreground">
+                        <div className="flex flex-col">
+                          <span>{formatDate(booking.date)}</span>
+                          {booking.timeSlot && (
+                            <span className="text-xs">
+                              {formatTime(booking.timeSlot.startTime)} -{' '}
+                              {formatTime(booking.timeSlot.endTime)}
+                            </span>
+                          )}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <span className="text-sm">{booking.totalPax}</span>
+                      </TableCell>
+                      <TableCell className="text-sm">
+                        {booking.priceSnapshot ? formatCurrency(booking.priceSnapshot.total) : '\u2014'}
+                      </TableCell>
+                      <TableCell className="text-sm text-muted-foreground">
+                        {booking.depositAmount ? formatCurrency(booking.depositAmount) : '\u2014'}
+                      </TableCell>
+                      <TableCell>
+                        <PaymentBadge status={booking.paymentStatus} t={t} />
+                      </TableCell>
+                      <TableCell>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon-sm">
+                              <MoreHorizontalIcon className="size-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem>
+                              <EyeIcon className="size-4" />
+                              {t.admin_booking_action_view}
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+            {nextCursor && (
+              <div className="flex justify-center">
+                <Button variant="outline" onClick={handleLoadMore} disabled={loading}>
+                  {loading && <LoaderIcon className="size-4 animate-spin" />}
+                  {t.admin_load_more}
+                </Button>
+              </div>
+            )}
           </div>
         )}
       </TabsContent>

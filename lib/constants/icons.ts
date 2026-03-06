@@ -57,4 +57,7 @@ export {
   ShieldCheckIcon,
   AlertTriangleIcon,
   RotateCcwIcon,
+  MessageSquareIcon,
+  InboxIcon,
+  HomeIcon,
 } from 'lucide-react'

@@ -13,7 +13,7 @@ const ROLE_KEYS: Record<string, string> = {
   USER: 'role_user',
 }
 
-export default function DashboardHeader() {
+export default function DashboardHeader({ children }: { children?: React.ReactNode }) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const { data: session } = useSession()
@@ -44,7 +44,9 @@ export default function DashboardHeader() {
   }, [open])
 
   return (
-    <header className="flex h-16 shrink-0 items-center justify-end border-b border-border bg-background px-6 lg:px-10">
+    <header className="flex h-16 shrink-0 items-center border-b border-border bg-background px-6 lg:px-10">
+      {children && <div className="flex items-center gap-3">{children}</div>}
+      <div className="flex-1" />
       {/* Bell icon */}
       <button className="relative mr-4 text-muted-foreground transition-colors hover:text-foreground">
         <BellIcon className="size-5" />

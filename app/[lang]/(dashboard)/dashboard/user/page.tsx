@@ -5,22 +5,36 @@ import { PageParamsProps } from '@/lib/types/page.type'
 import { interpolate } from '@/lib/utils/i18n.utils'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
+import { getUserBookings } from '@/lib/api/user-bookings'
+import UserBookingsProvider from '@/components/dashboard/user/user-bookings-provider'
+import UserDashboardContent from '@/components/dashboard/user/user-dashboard-content'
+import type { UserBooking } from '@/lib/api/user-bookings'
 
 export default async function UserDashboardPage({ params }: PageParamsProps) {
   const { lang } = await params
   const session = await getServerSession(authOptions)
 
-  if (!session?.user) {
+  if (!session?.user || !session.accessToken) {
     redirect(`/${lang}`)
   }
 
   const t = await getTranslations(lang as SupportedLocale)
   const name = session.user.firstName || session.user.email
+  const headers = { Authorization: `Bearer ${session.accessToken}` }
+
+  let bookings: UserBooking[] = []
+  try {
+    bookings = await getUserBookings(headers)
+  } catch {
+    // API may not be available; show empty state
+  }
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8">
-      <h1 className="text-3xl font-bold">{t.dashboard_user_title}</h1>
-      <p className="mt-2 text-muted-foreground">{interpolate(t.dashboard_welcome, { name })}</p>
-    </div>
+    <UserBookingsProvider initialBookings={bookings}>
+      <UserDashboardContent
+        title={t.dashboard_user_title}
+        welcome={interpolate(t.dashboard_welcome, { name })}
+      />
+    </UserBookingsProvider>
   )
 }

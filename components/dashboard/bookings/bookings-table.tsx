@@ -13,7 +13,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useTranslation } from '@/lib/context/translation.context'
 import { useAction } from '@/lib/hooks/use-action'
-import { MoreHorizontalIcon, EyeIcon, ImageIcon, LoaderIcon } from '@/lib/constants/icons'
+import { CalendarCheck2Icon, MoreHorizontalIcon, EyeIcon, ImageIcon, LoaderIcon } from '@/lib/constants/icons'
 import { getAdminBookingsAction } from '@/lib/actions/bookings.actions'
 import type { AdminBooking, GetAdminBookingsParams, PaginatedAdminBookings } from '@/lib/api/bookings'
 
@@ -88,8 +88,13 @@ export default function BookingsTable({
 
       <TabsContent value="experiences" className="mt-4">
         {bookings.length === 0 ? (
-          <div className="rounded-xl border border-border bg-card p-8 text-center">
-            <p className="text-sm text-muted-foreground">{t.admin_bookings_no_results}</p>
+          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border/60 bg-muted/20 px-6 py-14 text-center">
+            <div className="mb-4 flex size-14 items-center justify-center rounded-2xl bg-muted/60">
+              <CalendarCheck2Icon className="size-6 text-muted-foreground/50" />
+            </div>
+            <p className="max-w-[240px] text-sm leading-relaxed text-muted-foreground/70">
+              {t.admin_bookings_no_results}
+            </p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -183,8 +188,13 @@ export default function BookingsTable({
       </TabsContent>
 
       <TabsContent value="stays" className="mt-4">
-        <div className="rounded-xl border border-border bg-card p-8 text-center">
-          <p className="text-sm text-muted-foreground">{t.admin_bookings_stays_coming_soon}</p>
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border/60 bg-muted/20 px-6 py-14 text-center">
+          <div className="mb-4 flex size-14 items-center justify-center rounded-2xl bg-muted/60">
+            <CalendarCheck2Icon className="size-6 text-muted-foreground/50" />
+          </div>
+          <p className="max-w-[240px] text-sm leading-relaxed text-muted-foreground/70">
+            {t.admin_bookings_stays_coming_soon}
+          </p>
         </div>
       </TabsContent>
     </Tabs>

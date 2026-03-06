@@ -23,12 +23,12 @@ export default async function LocationsSettingsPage({ params }: PageParamsProps)
 
   return (
     <div className="mx-auto max-w-5xl space-y-8">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 rounded-2xl bg-gradient-to-br from-primary/8 via-primary/5 to-transparent p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">{t.admin_locations_title}</h1>
-          <p className="mt-1 text-sm text-muted-foreground">{t.admin_locations_subtitle}</p>
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{t.admin_locations_title}</h1>
+          <p className="mt-1.5 text-sm text-muted-foreground sm:text-base">{t.admin_locations_subtitle}</p>
         </div>
-        <Button asChild size="default">
+        <Button asChild size="default" className="shrink-0">
           <Link href={`/${lang}/dashboard/admin/locations/new`}>
             <PlusIcon className="size-4" />
             {t.admin_loc_add}

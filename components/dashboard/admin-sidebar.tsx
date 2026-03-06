@@ -140,9 +140,9 @@ export default function AdminSidebar() {
                 href={`${basePath}${item.href}`}
                 onClick={() => setMobileOpen(false)}
                 className={cn(
-                  'group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200',
+                  'group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200',
                   active
-                    ? 'bg-sidebar-accent text-sidebar-accent-foreground'
+                    ? 'bg-primary/10 text-sidebar-accent-foreground shadow-sm'
                     : 'text-sidebar-foreground/60 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground',
                   collapsed && 'lg:justify-center lg:px-0'
                 )}

@@ -33,9 +33,11 @@ export default async function RequestsPage({
 
   return (
     <div className="mx-auto max-w-5xl space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">{t.admin_requests_title}</h1>
-        <p className="mt-1 text-sm text-muted-foreground">{t.admin_requests_filter_subtitle}</p>
+      <div className="rounded-2xl bg-gradient-to-br from-primary/8 via-primary/5 to-transparent p-6 sm:p-8">
+        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{t.admin_requests_title}</h1>
+        <p className="mt-1.5 text-sm text-muted-foreground sm:text-base">
+          {t.admin_requests_filter_subtitle}
+        </p>
       </div>
 
       <RequestsTable

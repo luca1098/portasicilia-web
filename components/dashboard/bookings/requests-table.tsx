@@ -25,6 +25,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useTranslation } from '@/lib/context/translation.context'
 import { useAction } from '@/lib/hooks/use-action'
 import {
+  ClipboardListIcon,
   MoreHorizontalIcon,
   EyeIcon,
   CheckIcon,
@@ -76,8 +77,10 @@ function StatusFilterPills({ activeStatus }: { activeStatus: string }) {
           <button
             key={filter.key}
             onClick={() => handleFilter(filter.key)}
-            className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
-              isActive ? 'bg-foreground text-background' : 'bg-muted text-muted-foreground hover:bg-muted/80'
+            className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition-all duration-200 ${
+              isActive
+                ? 'bg-primary text-primary-foreground shadow-sm'
+                : 'bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground'
             }`}
           >
             {t[filter.labelKey] || filter.key}
@@ -218,8 +221,11 @@ function InnerBookingsTable({
 
   if (bookings.length === 0) {
     return (
-      <div className="rounded-xl border border-border bg-card p-8 text-center">
-        <p className="text-sm text-muted-foreground">{t[emptyKey]}</p>
+      <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border/60 bg-muted/20 px-6 py-14 text-center">
+        <div className="mb-4 flex size-14 items-center justify-center rounded-2xl bg-muted/60">
+          <ClipboardListIcon className="size-6 text-muted-foreground/50" />
+        </div>
+        <p className="max-w-[240px] text-sm leading-relaxed text-muted-foreground/70">{t[emptyKey]}</p>
       </div>
     )
   }
@@ -332,8 +338,13 @@ export default function RequestsTable({
       </TabsContent>
 
       <TabsContent value="stays" className="mt-4">
-        <div className="rounded-xl border border-border bg-card p-8 text-center">
-          <p className="text-sm text-muted-foreground">{t.admin_requests_stays_coming_soon}</p>
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border/60 bg-muted/20 px-6 py-14 text-center">
+          <div className="mb-4 flex size-14 items-center justify-center rounded-2xl bg-muted/60">
+            <ClipboardListIcon className="size-6 text-muted-foreground/50" />
+          </div>
+          <p className="max-w-[240px] text-sm leading-relaxed text-muted-foreground/70">
+            {t.admin_requests_stays_coming_soon}
+          </p>
         </div>
       </TabsContent>
     </Tabs>

@@ -155,3 +155,14 @@ export function getAdminBookings(headers: HeadersInit, params?: GetAdminBookings
 export function refundBooking(bookingId: string) {
   return api.post<AdminBooking>(`/bookings/${bookingId}/refund`)
 }
+
+export type AdminDashboardStats = {
+  locations: number
+  experiences: number
+  stays: number
+  users: number
+}
+
+export function getAdminStats(headers: HeadersInit) {
+  return apiServer.get<AdminDashboardStats>('/bookings/admin/stats', { headers })
+}

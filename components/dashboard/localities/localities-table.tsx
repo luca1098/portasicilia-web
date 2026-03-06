@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { useTranslation } from '@/lib/context/translation.context'
-import { MoreHorizontalIcon, PencilIcon, Trash2Icon, ImageIcon } from '@/lib/constants/icons'
+import { MapPinnedIcon, MoreHorizontalIcon, PencilIcon, Trash2Icon, ImageIcon } from '@/lib/constants/icons'
 import type { Locality } from '@/lib/schemas/entities/locality.entity.schema'
 import LocalityDeleteDialog from './locality-delete-dialog'
 
@@ -30,8 +30,13 @@ export default function LocalitiesTable({ localities }: LocalitiesTableProps) {
 
   if (localities.length === 0) {
     return (
-      <div className="rounded-xl border border-border bg-card p-8 text-center">
-        <p className="text-sm text-muted-foreground">{t.admin_loc_no_results}</p>
+      <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border/60 bg-muted/20 px-6 py-14 text-center">
+        <div className="mb-4 flex size-14 items-center justify-center rounded-2xl bg-muted/60">
+          <MapPinnedIcon className="size-6 text-muted-foreground/50" />
+        </div>
+        <p className="max-w-[240px] text-sm leading-relaxed text-muted-foreground/70">
+          {t.admin_loc_no_results}
+        </p>
       </div>
     )
   }

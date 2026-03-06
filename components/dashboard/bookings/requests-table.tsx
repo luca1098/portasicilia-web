@@ -35,6 +35,8 @@ import {
 } from '@/lib/constants/icons'
 import { refundBooking } from '@/lib/api/bookings'
 import { getAdminBookingsAction } from '@/lib/actions/bookings.actions'
+import { formatDate, formatTime, formatCurrency } from '@/lib/utils/format.utils'
+import { StatusBadge, PaymentBadge } from '@/components/dashboard/bookings/status-badge'
 import type { AdminBooking, GetAdminBookingsParams, PaginatedAdminBookings } from '@/lib/api/bookings'
 
 type RequestsTableProps = {
@@ -48,55 +50,13 @@ const STATUS_FILTERS = [
   { key: 'ALL', labelKey: 'admin_requests_filter_all' },
   { key: 'PENDING_APPROVAL', labelKey: 'admin_booking_status_pending_approval' },
   { key: 'REJECTED', labelKey: 'admin_booking_status_rejected' },
+  { key: 'COUNTER_PROPOSED', labelKey: 'admin_booking_status_counter_proposed' },
   { key: 'CANCELLED', labelKey: 'admin_booking_status_cancelled' },
   { key: 'NO_SHOW', labelKey: 'admin_booking_status_no_show' },
 ]
 
-function formatDate(dateString: string) {
-  return new Date(dateString).toLocaleDateString('it-IT', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  })
-}
-
-function formatTime(time: string) {
-  return time.slice(0, 5)
-}
-
-function formatCurrency(value: string) {
-  return new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(Number(value))
-}
-
-function StatusBadge({ status, t }: { status: string; t: Record<string, string> }) {
-  const colorMap: Record<string, string> = {
-    PENDING_APPROVAL: 'bg-amber-100 text-amber-800',
-    CONFIRMED: 'bg-green-100 text-green-800',
-    REJECTED: 'bg-red-100 text-red-800',
-    CANCELLED: 'bg-gray-100 text-gray-800',
-    COMPLETED: 'bg-blue-100 text-blue-800',
-    NO_SHOW: 'bg-gray-100 text-gray-500',
-  }
-
-  return (
-    <span
-      className={`rounded-full px-2 py-0.5 text-xs font-medium ${colorMap[status] || 'bg-muted text-muted-foreground'}`}
-    >
-      {t[`admin_booking_status_${status.toLowerCase()}`] || status}
-    </span>
-  )
-}
-
-function PaymentBadge({ status, t }: { status: string; t: Record<string, string> }) {
-  if (status !== 'REFUNDED') return null
-  return (
-    <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-800">
-      {t.admin_booking_payment_refunded}
-    </span>
-  )
-}
-
-function StatusFilterPills({ activeStatus, t }: { activeStatus: string; t: Record<string, string> }) {
+function StatusFilterPills({ activeStatus }: { activeStatus: string }) {
+  const t = useTranslation() as Record<string, string>
   const router = useRouter()
   const pathname = usePathname()
 
@@ -130,13 +90,12 @@ function StatusFilterPills({ activeStatus, t }: { activeStatus: string; t: Recor
 
 function BookingActions({
   booking,
-  t,
   onRefundSuccess,
 }: {
   booking: AdminBooking
-  t: Record<string, string>
   onRefundSuccess: (bookingId: string) => void
 }) {
+  const t = useTranslation() as Record<string, string>
   const [refundDialogOpen, setRefundDialogOpen] = useState(false)
 
   const { loading: refundLoading, execute: executeRefund } = useAction<AdminBooking>({
@@ -146,9 +105,15 @@ function BookingActions({
 
   const isPending = booking.status === 'PENDING_APPROVAL'
   const isRefundable =
-    (booking.status === 'REJECTED' || booking.status === 'CANCELLED') && booking.paymentStatus !== 'REFUNDED'
+    (booking.status === 'REJECTED' ||
+      booking.status === 'COUNTER_PROPOSED' ||
+      booking.status === 'CANCELLED') &&
+    booking.paymentStatus !== 'REFUNDED'
   const isRefunded =
-    (booking.status === 'REJECTED' || booking.status === 'CANCELLED') && booking.paymentStatus === 'REFUNDED'
+    (booking.status === 'REJECTED' ||
+      booking.status === 'COUNTER_PROPOSED' ||
+      booking.status === 'CANCELLED') &&
+    booking.paymentStatus === 'REFUNDED'
 
   function handleRefund() {
     executeRefund(async () => {
@@ -220,14 +185,13 @@ function InnerBookingsTable({
   initialNextCursor,
   fetchParams,
   activeStatus,
-  t,
 }: {
   bookings: AdminBooking[]
   initialNextCursor: string | null
   fetchParams: GetAdminBookingsParams
   activeStatus: string
-  t: Record<string, string>
 }) {
+  const t = useTranslation() as Record<string, string>
   const [bookings, setBookings] = useState(initialBookings)
   const [nextCursor, setNextCursor] = useState(initialNextCursor)
 
@@ -311,8 +275,8 @@ function InnerBookingsTable({
                 </TableCell>
                 <TableCell>
                   <div className="flex flex-col gap-1">
-                    <StatusBadge status={booking.status} t={t} />
-                    <PaymentBadge status={booking.paymentStatus} t={t} />
+                    <StatusBadge status={booking.status} />
+                    <PaymentBadge status={booking.paymentStatus} />
                   </div>
                 </TableCell>
                 <TableCell className="text-sm">
@@ -322,7 +286,7 @@ function InnerBookingsTable({
                   {booking.depositAmount ? formatCurrency(booking.depositAmount) : '\u2014'}
                 </TableCell>
                 <TableCell>
-                  <BookingActions booking={booking} t={t} onRefundSuccess={handleRefundSuccess} />
+                  <BookingActions booking={booking} onRefundSuccess={handleRefundSuccess} />
                 </TableCell>
               </TableRow>
             ))}
@@ -357,14 +321,13 @@ export default function RequestsTable({
       </TabsList>
 
       <TabsContent value="experiences" className="mt-4 space-y-4">
-        <StatusFilterPills activeStatus={activeStatus} t={t} />
+        <StatusFilterPills activeStatus={activeStatus} />
         <InnerBookingsTable
           key={activeStatus}
           bookings={bookings}
           initialNextCursor={initialNextCursor}
           fetchParams={fetchParams}
           activeStatus={activeStatus}
-          t={t}
         />
       </TabsContent>
 

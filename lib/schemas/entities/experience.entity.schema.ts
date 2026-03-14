@@ -115,7 +115,13 @@ export const ExperienceSchema = z.object({
   ownerId: z.string(),
   owner: OwnerSchema.nullish(),
   localityId: z.string(),
-  categories: z.array(z.object({ category: z.object({ id: z.string(), name: z.string() }) })).nullish(),
+  categories: z
+    .array(
+      z.object({
+        category: z.object({ id: z.string(), name: z.string(), icon: z.string().nullable().optional() }),
+      })
+    )
+    .nullish(),
   daysOfWeek: z.array(DayOfWeekSchema).nullish(),
   minAdvanceNoticeDays: z.number().int().optional(),
   commissionType: CommissionTypeSchema.nullable(),

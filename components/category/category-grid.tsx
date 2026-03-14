@@ -27,7 +27,7 @@ export default function CategoryGrid({ categories, lang, labels }: CategoryGridP
                   category={category}
                   lang={lang}
                   label={labels[category.nameKey]}
-                  className="aspect-[4/3]"
+                  className="aspect-4/3"
                   mobileRounded
                 />
               </CarouselItem>

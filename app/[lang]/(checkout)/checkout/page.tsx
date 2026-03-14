@@ -4,7 +4,7 @@ import CheckoutContent from '@/components/checkout/checkout-content'
 
 type CheckoutPageProps = {
   searchParams: Promise<{
-    experienceId?: string
+    listingId?: string
     slotId?: string
     date?: string
     adults?: string
@@ -17,16 +17,16 @@ type CheckoutPageProps = {
 }
 
 export default async function CheckoutPage({ searchParams, params }: CheckoutPageProps) {
-  const [{ lang }, { experienceId, slotId, date, adults, children, infants, assetCount, payment_error }] =
+  const [{ lang }, { listingId, slotId, date, adults, children, infants, assetCount, payment_error }] =
     await Promise.all([params, searchParams])
 
-  if (!experienceId || !slotId || !date) {
+  if (!listingId || !slotId || !date) {
     redirect(`/${lang}`)
   }
 
   let experience
   try {
-    experience = await getExperienceById(experienceId)
+    experience = await getExperienceById(listingId)
   } catch {
     notFound()
   }
@@ -125,7 +125,7 @@ export default async function CheckoutPage({ searchParams, params }: CheckoutPag
       totalPrice={totalPrice}
       depositAmount={depositAmount}
       priceTiers={priceTiers}
-      experienceId={experienceId}
+      listingId={listingId}
       slotId={slotId}
       assetCount={assetCountNum}
       pricingMode={pricingMode}

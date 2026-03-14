@@ -16,9 +16,9 @@ export function getPriceListById(id: string) {
   return apiServer.get<PriceList>(`/pricing/price-lists/${id}`)
 }
 
-export function getPriceListsByExperienceId(experienceId: string) {
+export function getPriceListsByListingId(listingId: string) {
   return apiServer.get<PriceList[]>('/pricing/price-lists', {
-    params: { experienceId },
+    params: { listingId },
   })
 }
 

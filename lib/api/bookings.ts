@@ -27,7 +27,7 @@ export type CreateBookingAsset = {
 }
 
 export type CreateBookingDto = {
-  experienceId: string
+  listingId: string
   date: string
   timeSlotId?: string
   participants?: CreateBookingParticipant[]
@@ -75,7 +75,7 @@ export type BookingResponse = {
   depositAmount: string
   contactEmail: string
   contactPhone: string
-  experience: { id: string; name: string; slug: string }
+  listing: { id: string; name: string; slug: string }
   priceSnapshot: BookingPriceSnapshot
 }
 
@@ -97,7 +97,7 @@ export type AdminBookingUser = {
   avatar: string | null
 }
 
-export type AdminBookingExperience = {
+export type AdminBookingListing = {
   id: string
   name: string
   slug: string
@@ -118,7 +118,7 @@ export type AdminBooking = {
   paymentStatus: string
   createdAt: string
   user: AdminBookingUser
-  experience: AdminBookingExperience
+  listing: AdminBookingListing
   timeSlot: { id: string; startTime: string; endTime: string } | null
   priceSnapshot: BookingPriceSnapshot | null
 }

@@ -10,24 +10,19 @@ import CategoryGrid from '@/components/category/category-grid'
 import ShopCategoryGrid from '@/components/shop/shop-category-grid'
 import { getLocalityCards } from '@/lib/api/localities'
 import { getExperienceCards } from '@/lib/api/experiences'
-import { mockStays } from '@/lib/constants/stays'
+import { getStayCards } from '@/lib/api/stays'
 import { mockCategories } from '@/lib/constants/categories'
 import { mockShopCategories } from '@/lib/constants/shop-categories'
 import { Button } from '@/components/ui/button'
 
 export default async function Home({ params }: PageParamsProps) {
   const { lang } = await params
-  const [t, { data: locationCards }, { data: experienceCards }] = await Promise.all([
+  const [t, { data: locationCards }, { data: experienceCards }, { data: stayCards }] = await Promise.all([
     getTranslations(lang as SupportedLocale),
     getLocalityCards({ limit: 6, highlighted: true }),
     getExperienceCards({ limit: 6, highlighted: true }),
+    getStayCards({ limit: 6, highlighted: true }),
   ])
-
-  const experienceCategoryLabels: Record<string, string> = {
-    conferma_immediata: t.experience_cat_conferma_immediata,
-    specialita_culinaria: t.experience_cat_specialita_culinaria,
-    adrenalina_pura: t.experience_cat_adrenalina_pura,
-  }
 
   const categoryLabels: Record<string, string> = {
     category_fuga_romantica: t.category_fuga_romantica,
@@ -129,7 +124,7 @@ export default async function Home({ params }: PageParamsProps) {
           <h2 className="mb-10 text-center text-3xl font-bold text-white drop-shadow-lg md:text-4xl">
             {t.home_stays_title}
           </h2>
-          <StayList stays={mockStays} lang={lang} categoryLabels={experienceCategoryLabels} darkBg />
+          <StayList stays={stayCards} lang={lang} darkBg />
           <div className="mt-10 flex justify-center">
             <Button asChild>
               <Link href={`/${lang}/stays`}>{t.home_cta_stays}</Link>

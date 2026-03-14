@@ -3,8 +3,8 @@ import { getTranslations } from '@/lib/configs/locales/i18n'
 import { SupportedLocale } from '@/lib/configs/locales'
 import { getLocalityBySlug } from '@/lib/api/localities'
 import { getExperienceCards } from '@/lib/api/experiences'
+import { getStayCards } from '@/lib/api/stays'
 import { interpolate } from '@/lib/utils/i18n.utils'
-import { mockStays } from '@/lib/constants/stays'
 import { ApiError } from '@/lib/api/fetch-client'
 import LocationDetailHero from '@/components/location/location-detail-hero'
 import StayList from '@/components/stay/stay-list'
@@ -29,13 +29,10 @@ export default async function LocationDetailPage({ params }: LocationDetailPageP
     throw error
   }
 
-  const { data: experienceCards } = await getExperienceCards({ localityId: locality.id })
-
-  const stayCategoryLabels: Record<string, string> = {
-    conferma_immediata: t.experience_cat_conferma_immediata,
-    specialita_culinaria: t.experience_cat_specialita_culinaria,
-    adrenalina_pura: t.experience_cat_adrenalina_pura,
-  }
+  const [{ data: experienceCards }, { data: stayCards }] = await Promise.all([
+    getExperienceCards({ localityId: locality.id }),
+    getStayCards({ localityId: locality.id }),
+  ])
 
   return (
     <main className="min-h-screen">
@@ -52,7 +49,7 @@ export default async function LocationDetailPage({ params }: LocationDetailPageP
         <h2 className="mb-6 text-2xl font-bold md:text-3xl">
           {interpolate(t.location_detail_stays_title, { name: locality.name })}
         </h2>
-        <StayList stays={mockStays} lang={lang} categoryLabels={stayCategoryLabels} />
+        <StayList stays={stayCards} lang={lang} />
       </section>
 
       <LocationTipsSection

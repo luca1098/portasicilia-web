@@ -82,7 +82,7 @@ export const PriceListSchema = z.object({
   id: z.string(),
   currency: z.string(),
   pricingMode: PricingModeSchema,
-  experienceId: z.string(),
+  listingId: z.string(),
   tiers: z.array(PriceTierSchema).nullish(),
   modifiers: z.array(PriceModifierSchema).nullish(),
   createdAt: z.string(),

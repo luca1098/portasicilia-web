@@ -1,5 +1,5 @@
 import type { Locality } from '@/lib/schemas/entities/locality.entity.schema'
-import { apiServer } from './fetch-client'
+import { api, apiServer } from './fetch-client'
 
 export type LocalityCard = {
   id: string
@@ -40,6 +40,15 @@ export async function getLocalityCards(params?: GetLocalityCardsParams) {
   if (limit) queryParams.limit = limit.toString()
   if (cursor) queryParams.cursor = cursor
   return apiServer.get<PaginatedLocalityCards>('/localities/cards', { params: queryParams })
+}
+
+export function getLocalitiesClient(params?: GetLocalitiesParams) {
+  const { limit } = params || {}
+  const queryParams: Record<string, string> = {}
+  if (limit) {
+    queryParams.limit = limit.toString()
+  }
+  return api.get<Locality[]>('/localities', { params: queryParams })
 }
 
 export function getLocalityById(id: string) {

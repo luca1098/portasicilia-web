@@ -1,10 +1,11 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { Compass } from 'lucide-react'
 import { useTranslation } from '@/lib/context/translation.context'
 import { Locality } from '@/lib/schemas/entities/locality.entity.schema'
-import { interpolate } from '@/lib/utils/i18n.utils'
+import { getLocalitiesClient } from '@/lib/api/localities'
 
 type LocationPopupProps = {
   onSelect: (location: Locality | null) => void
@@ -13,12 +14,18 @@ type LocationPopupProps = {
 
 export default function LocationPopup({ onSelect, onClose }: LocationPopupProps) {
   const t = useTranslation()
-  const locations: Locality[] = []
+  const [locations, setLocations] = useState<Locality[]>([])
+
+  useEffect(() => {
+    getLocalitiesClient()
+      .then(setLocations)
+      .catch(() => {})
+  }, [])
 
   return (
     <>
       <div className="fixed inset-0 z-40" onClick={onClose} />
-      <div className="absolute left-0 top-full z-50 mt-2 w-80 rounded-2xl bg-white p-4 shadow-xl">
+      <div className="absolute left-0 top-full z-50 mt-2 max-h-80 w-80 overflow-y-auto rounded-2xl bg-white p-4 shadow-xl">
         <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
           {t.search_suggested_destinations}
         </p>
@@ -48,9 +55,6 @@ export default function LocationPopup({ onSelect, onClose }: LocationPopupProps)
             </div>
             <div className="text-left">
               <p className="text-sm font-medium">{location.name}</p>
-              <p className="text-xs text-muted-foreground">
-                {interpolate(t.location_card_count, { count: 200 })}
-              </p>
             </div>
           </button>
         ))}

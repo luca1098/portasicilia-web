@@ -154,7 +154,7 @@ export default function ExperienceTab({
   }, [])
 
   const onSubmit = async (data: ExperienceTabValues) => {
-    const { street, city, zipCode, latitude, longitude, ownerId: _, ...rest } = data
+    const { street, city, zipCode, latitude, longitude, ...rest } = data
 
     const processed: Record<string, unknown> = { ...rest }
     for (const field of NEWLINE_ARRAY_FIELDS) {

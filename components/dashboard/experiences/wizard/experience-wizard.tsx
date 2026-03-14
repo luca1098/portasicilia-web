@@ -57,7 +57,7 @@ export default function ExperienceWizard({
   }
 
   const handleExperienceUpdated = (updated: Experience) => {
-    setCurrentExperience(prev => (prev ? { ...prev, ...updated } : updated))
+    setCurrentExperience(prev => (prev ? { ...prev, ...updated, id: prev.id } : updated))
   }
 
   return (

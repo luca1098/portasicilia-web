@@ -26,10 +26,10 @@ function BookingRow({ booking }: { booking: AdminBooking }) {
     <>
       <TableRow className="cursor-pointer" onClick={() => setOpen(!open)}>
         <TableCell>
-          {booking.experience.cover ? (
+          {booking.listing.cover ? (
             <Image
-              src={booking.experience.cover}
-              alt={booking.experience.name}
+              src={booking.listing.cover}
+              alt={booking.listing.name}
               width={40}
               height={40}
               className="size-10 rounded-lg object-cover"
@@ -41,7 +41,7 @@ function BookingRow({ booking }: { booking: AdminBooking }) {
             </div>
           )}
         </TableCell>
-        <TableCell className="font-medium">{booking.experience.name}</TableCell>
+        <TableCell className="font-medium">{booking.listing.name}</TableCell>
         <TableCell className="text-muted-foreground">
           <div className="flex flex-col">
             <span>{formatDate(booking.date)}</span>

@@ -141,11 +141,11 @@ function CounterProposalForm({ token }: { token: string }) {
   useEffect(() => {
     api
       .get<{
-        experience: { timeSlots: TimeSlot[] }
+        listing: { experienceDetail?: { timeSlots: TimeSlot[] } }
       }>(`/bookings/magic/${token}/details`)
       .then(data => {
-        if (data?.experience?.timeSlots?.length) {
-          setTimeSlots(data.experience.timeSlots)
+        if (data?.listing?.experienceDetail?.timeSlots?.length) {
+          setTimeSlots(data.listing.experienceDetail.timeSlots)
         }
       })
       .catch(err => {

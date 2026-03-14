@@ -48,10 +48,10 @@ export default function UserBookingCard({ booking }: { booking: UserBooking }) {
           className="flex w-full items-center gap-4 p-4 text-left transition-colors hover:bg-accent/30"
         >
           {/* Thumbnail */}
-          {booking.experience.cover ? (
+          {booking.listing.cover ? (
             <Image
-              src={booking.experience.cover}
-              alt={booking.experience.name}
+              src={booking.listing.cover}
+              alt={booking.listing.name}
               width={96}
               height={96}
               className="size-20 shrink-0 rounded-xl object-cover sm:size-24"
@@ -65,7 +65,7 @@ export default function UserBookingCard({ booking }: { booking: UserBooking }) {
 
           {/* Info */}
           <div className="flex min-w-0 flex-1 flex-col gap-1">
-            <p className="truncate text-base font-semibold">{booking.experience.name}</p>
+            <p className="truncate text-base font-semibold">{booking.listing.name}</p>
             <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
               <span className="flex items-center gap-1">
                 <CalendarIcon className="size-3.5" />

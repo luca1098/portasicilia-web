@@ -21,7 +21,7 @@ type BookingContext = {
   totalPrice: number
   depositAmount: number | null
   priceTiers: PriceTier[]
-  experienceId: string
+  listingId: string
   slotId: string
   assetCount: number
   pricingMode: string

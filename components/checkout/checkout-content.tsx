@@ -22,7 +22,7 @@ type CheckoutContentProps = {
   totalPrice: number | null
   depositAmount: number | null
   priceTiers: PriceTier[]
-  experienceId: string
+  listingId: string
   slotId: string
   assetCount: number
   pricingMode: string
@@ -41,7 +41,7 @@ export default function CheckoutContent({
   totalPrice,
   depositAmount,
   priceTiers,
-  experienceId,
+  listingId,
   slotId,
   assetCount,
   pricingMode,
@@ -64,7 +64,7 @@ export default function CheckoutContent({
       totalPrice: totalPrice ?? 0,
       depositAmount,
       priceTiers,
-      experienceId,
+      listingId,
       slotId,
       assetCount,
       pricingMode,
@@ -82,7 +82,7 @@ export default function CheckoutContent({
     totalPrice,
     depositAmount,
     priceTiers,
-    experienceId,
+    listingId,
     slotId,
     assetCount,
     pricingMode,

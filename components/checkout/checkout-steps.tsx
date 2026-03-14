@@ -58,7 +58,7 @@ export default function CheckoutSteps() {
     setSubmitError(null)
 
     const billingDto = mapBillingToDto(data)
-    const { experienceId, date, slotId, adults, children, infants, assetCount, pricingMode, assetTierType } =
+    const { listingId, date, slotId, adults, children, infants, assetCount, pricingMode, assetTierType } =
       bookingContext
 
     const isAssetMode = pricingMode === 'PER_ASSET'
@@ -75,7 +75,7 @@ export default function CheckoutSteps() {
 
     executeCheckout(() =>
       checkoutAction({
-        experienceId,
+        listingId,
         date,
         timeSlotId: slotId,
         participants,

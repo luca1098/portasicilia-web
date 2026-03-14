@@ -9,6 +9,7 @@ import TypologyPopup from '@/components/search/typology-popup'
 import { Button } from '../ui/button'
 import { cn } from '@/lib/utils/shadcn.utils'
 import { Locality } from '@/lib/schemas/entities/locality.entity.schema'
+import { getLocalitiesClient } from '@/lib/api/localities'
 
 type Typology = 'experiences' | 'stays'
 
@@ -22,12 +23,6 @@ function getInitialTypology(pathname: string): Typology {
   return 'experiences'
 }
 
-function getInitialLocation(locationId: string | null): Locality | null {
-  if (!locationId) return null
-  const locations: Locality[] = []
-  return locations.find(l => l.id === locationId) ?? null
-}
-
 export default function SearchBar({ shadow = true, size = 'default' }: SearchBarProps) {
   const t = useTranslation()
   const router = useRouter()
@@ -36,13 +31,22 @@ export default function SearchBar({ shadow = true, size = 'default' }: SearchBar
   const searchParams = useSearchParams()
   const lang = params.lang as string
 
-  const [selectedLocation, setSelectedLocation] = useState<Locality | null>(() =>
-    getInitialLocation(searchParams.get('location'))
-  )
+  const [selectedLocation, setSelectedLocation] = useState<Locality | null>(null)
   const [selectedTypology, setSelectedTypology] = useState<Typology>(() => getInitialTypology(pathname))
   const [locationOpen, setLocationOpen] = useState(false)
   const [typologyOpen, setTypologyOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const locationId = searchParams.get('location')
+    if (!locationId) return
+    getLocalitiesClient()
+      .then(localities => {
+        const match = localities.find(l => l.id === locationId)
+        if (match) setSelectedLocation(match)
+      })
+      .catch(() => {})
+  }, [searchParams])
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {

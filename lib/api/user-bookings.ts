@@ -1,7 +1,7 @@
 import { apiServer } from './fetch-client'
 import type { BookingPriceSnapshot, CreateBookingParticipant } from './bookings'
 
-export type UserBookingExperience = {
+export type UserBookingListing = {
   id: string
   name: string
   slug: string
@@ -37,7 +37,7 @@ export type UserBooking = {
   respondedAt: string | null
   createdAt: string
   updatedAt: string
-  experience: UserBookingExperience
+  listing: UserBookingListing
   priceSnapshot: BookingPriceSnapshot | null
   timeSlot: UserBookingTimeSlot
 }

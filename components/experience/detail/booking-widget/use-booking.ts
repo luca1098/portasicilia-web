@@ -144,7 +144,7 @@ export function useBooking(experience: Experience) {
   const handleSlotSelect = useCallback(
     (slotId: string, date: string) => {
       const params = new URLSearchParams({
-        experienceId: experience.id,
+        listingId: experience.id,
         slotId,
         date,
         adults: String(adults),

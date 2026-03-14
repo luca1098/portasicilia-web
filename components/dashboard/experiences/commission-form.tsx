@@ -14,6 +14,7 @@ import { toFormData } from '@/lib/utils/form-data.utils'
 import { useAction } from '@/lib/hooks/use-action'
 import { LoaderIcon, InfoIcon } from '@/lib/constants/icons'
 import type { Experience } from '@/lib/schemas/entities/experience.entity.schema'
+import type { ActionResult } from '@/lib/actions/action.types'
 
 const CommissionFormSchema = z.object({
   commissionType: z.enum(['PERCENTAGE', 'FLAT']).optional(),
@@ -44,12 +45,13 @@ function formatCurrency(value: number): string {
 
 type CommissionFormProps = {
   experience: Experience
+  updateAction?: (id: string, formData: FormData) => Promise<ActionResult<unknown>>
 }
 
-export default function CommissionForm({ experience }: CommissionFormProps) {
+export default function CommissionForm({ experience, updateAction }: CommissionFormProps) {
   const t = useTranslation() as Record<string, string>
 
-  const { loading, execute } = useAction<Experience>({
+  const { loading, execute } = useAction<unknown>({
     successMessage: t.admin_exp_update_success,
   })
 
@@ -105,7 +107,8 @@ export default function CommissionForm({ experience }: CommissionFormProps) {
     }
 
     const fd = toFormData(processed)
-    await execute(() => updateExperienceAction(experience.id, fd))
+    const action = updateAction ?? updateExperienceAction
+    await execute(() => action(experience.id, fd))
   }
 
   return (

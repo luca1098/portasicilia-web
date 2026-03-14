@@ -9,12 +9,14 @@ import {
   LayoutDashboardIcon,
   MapPinnedIcon,
   Compass,
+  HomeIcon,
   ChevronLeftIcon,
   ExternalLinkIcon,
   PanelLeftIcon,
   XIcon,
   ClipboardListIcon,
   CalendarCheck2Icon,
+  LayersIcon,
 } from '@/lib/constants/icons'
 import { Button } from '@/components/ui/button'
 
@@ -24,12 +26,29 @@ type SidebarItem = {
   href: string
 }
 
-const sidebarItems: SidebarItem[] = [
-  { key: 'admin_sidebar_dashboard', icon: LayoutDashboardIcon, href: '' },
-  { key: 'admin_sidebar_locations', icon: MapPinnedIcon, href: '/locations' },
-  { key: 'admin_sidebar_experiences', icon: Compass, href: '/experiences' },
-  { key: 'admin_sidebar_requests', icon: ClipboardListIcon, href: '/requests' },
-  { key: 'admin_sidebar_bookings', icon: CalendarCheck2Icon, href: '/bookings' },
+type SidebarSection = {
+  labelKey: string
+  items: SidebarItem[]
+}
+
+const sidebarSections: SidebarSection[] = [
+  {
+    labelKey: 'admin_sidebar_section_management',
+    items: [
+      { key: 'admin_sidebar_dashboard', icon: LayoutDashboardIcon, href: '' },
+      { key: 'admin_sidebar_locations', icon: MapPinnedIcon, href: '/locations' },
+      { key: 'admin_sidebar_categories', icon: LayersIcon, href: '/categories' },
+      { key: 'admin_sidebar_experiences', icon: Compass, href: '/experiences' },
+      { key: 'admin_sidebar_stays', icon: HomeIcon, href: '/stays' },
+    ],
+  },
+  {
+    labelKey: 'admin_sidebar_section_bookings',
+    items: [
+      { key: 'admin_sidebar_requests', icon: ClipboardListIcon, href: '/requests' },
+      { key: 'admin_sidebar_bookings', icon: CalendarCheck2Icon, href: '/bookings' },
+    ],
+  },
 ]
 
 export default function AdminSidebar() {
@@ -48,6 +67,32 @@ export default function AdminSidebar() {
       return pathname === fullPath || pathname === `${fullPath}/`
     }
     return pathname.startsWith(fullPath)
+  }
+
+  const renderItem = (item: SidebarItem) => {
+    const active = isActive(item.href)
+    return (
+      <Link
+        key={item.key}
+        href={`${basePath}${item.href}`}
+        onClick={() => setMobileOpen(false)}
+        className={cn(
+          'group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200',
+          active
+            ? 'bg-primary/10 text-sidebar-accent-foreground shadow-sm'
+            : 'text-sidebar-foreground/60 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground',
+          collapsed && 'lg:justify-center lg:px-0'
+        )}
+      >
+        <item.icon
+          className={cn(
+            'size-[18px] shrink-0 transition-colors duration-200',
+            active ? 'text-primary' : 'text-sidebar-foreground/40 group-hover:text-sidebar-foreground/70'
+          )}
+        />
+        <span className={cn('transition-opacity duration-200', collapsed && 'lg:hidden')}>{t[item.key]}</span>
+      </Link>
+    )
   }
 
   return (
@@ -121,46 +166,23 @@ export default function AdminSidebar() {
           </Button>
         </div>
 
-        {/* Section label */}
-        {!collapsed && (
-          <div className="px-4 pt-6 pb-2">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-sidebar-foreground/40">
-              {t.admin_sidebar_title}
-            </span>
-          </div>
-        )}
-
         {/* Navigation */}
-        <nav className={cn('flex-1 space-y-1 overflow-y-auto px-3', collapsed && 'pt-4')}>
-          {sidebarItems.map(item => {
-            const active = isActive(item.href)
-            return (
-              <Link
-                key={item.key}
-                href={`${basePath}${item.href}`}
-                onClick={() => setMobileOpen(false)}
-                className={cn(
-                  'group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200',
-                  active
-                    ? 'bg-primary/10 text-sidebar-accent-foreground shadow-sm'
-                    : 'text-sidebar-foreground/60 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground',
-                  collapsed && 'lg:justify-center lg:px-0'
-                )}
-              >
-                <item.icon
-                  className={cn(
-                    'size-[18px] shrink-0 transition-colors duration-200',
-                    active
-                      ? 'text-primary'
-                      : 'text-sidebar-foreground/40 group-hover:text-sidebar-foreground/70'
-                  )}
-                />
-                <span className={cn('transition-opacity duration-200', collapsed && 'lg:hidden')}>
-                  {t[item.key]}
-                </span>
-              </Link>
-            )
-          })}
+        <nav className={cn('flex-1 overflow-y-auto px-3', collapsed && 'pt-4')}>
+          {sidebarSections.map(section => (
+            <div key={section.labelKey}>
+              {!collapsed && (
+                <div className="px-1 pt-6 pb-2">
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-sidebar-foreground/40">
+                    {t[section.labelKey]}
+                  </span>
+                </div>
+              )}
+              {collapsed && section !== sidebarSections[0] && (
+                <div className="mx-2 my-3 border-t border-sidebar-border" />
+              )}
+              <div className="space-y-1">{section.items.map(renderItem)}</div>
+            </div>
+          ))}
         </nav>
 
         {/* Sidebar footer */}

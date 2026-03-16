@@ -4,31 +4,16 @@ import Link from 'next/link'
 import { useParams, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useTranslation } from '@/lib/context/translation.context'
-import { interpolate } from '@/lib/utils/i18n.utils'
 import { api } from '@/lib/api/fetch-client'
 import { useAction } from '@/lib/hooks/use-action'
+import { useCounterProposals } from '@/lib/hooks/use-counter-proposals'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Calendar } from '@/components/ui/calendar'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { InputWrapper } from '@/components/form/input-wrapper'
-import {
-  CheckCircle2Icon,
-  XIcon,
-  AlertTriangleIcon,
-  CalendarIcon,
-  PlusIcon,
-  Trash2Icon,
-  LoaderIcon,
-} from '@/lib/constants/icons'
-import { formatDate, formatTime } from '@/lib/utils/format.utils'
+import ProposalCards from '@/components/shared/proposal-cards'
+import { CheckCircle2Icon, XIcon, AlertTriangleIcon, CalendarIcon, LoaderIcon } from '@/lib/constants/icons'
 
-type Proposal = { date: Date | undefined; timeSlotId: string }
 type TimeSlot = { id: string; startTime: string; endTime: string }
-
-const EMPTY_PROPOSAL: Proposal = { date: undefined, timeSlotId: '' }
-const MAX_PROPOSALS = 3
 
 function ResultView({ variant }: { variant: 'accepted' | 'rejected' | 'counter-accepted' | 'error' }) {
   const t = useTranslation()
@@ -88,11 +73,20 @@ function ResultView({ variant }: { variant: 'accepted' | 'rejected' | 'counter-a
 }
 
 function CounterProposalForm({ token }: { token: string }) {
-  const t = useTranslation()
+  const t = useTranslation() as Record<string, string>
   const { lang } = useParams<{ lang: string }>()
 
-  const [proposals, setProposals] = useState<Proposal[]>([{ ...EMPTY_PROPOSAL }])
-  const [responseMessage, setResponseMessage] = useState('')
+  const {
+    proposals,
+    message,
+    allValid,
+    setMessage,
+    addProposal,
+    removeProposal,
+    updateProposal,
+    getValidProposals,
+  } = useCounterProposals()
+
   const [submitted, setSubmitted] = useState(false)
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([])
 
@@ -101,38 +95,15 @@ function CounterProposalForm({ token }: { token: string }) {
     onSuccess: () => setSubmitted(true),
   })
 
-  const allProposalsValid = proposals.every(p => p.date && p.timeSlotId)
-
-  function addProposal() {
-    if (proposals.length < MAX_PROPOSALS) {
-      setProposals(prev => [...prev, { ...EMPTY_PROPOSAL }])
-    }
-  }
-
-  function removeProposal(index: number) {
-    if (proposals.length > 1) {
-      setProposals(prev => prev.filter((_, i) => i !== index))
-    }
-  }
-
-  function updateProposal(index: number, updates: Partial<Proposal>) {
-    setProposals(prev => prev.map((p, i) => (i === index ? { ...p, ...updates } : p)))
-  }
-
   function handleSubmit() {
-    const validProposals = proposals.filter(
-      (p): p is Proposal & { date: Date } => p.date !== undefined && !!p.timeSlotId
-    )
+    const validProposals = getValidProposals()
     if (validProposals.length === 0) return
 
     execute(async () => {
       await api.post('/bookings/magic/counter', {
         token,
-        counterProposals: validProposals.map(p => ({
-          date: p.date.toISOString().split('T')[0],
-          timeSlotId: p.timeSlotId,
-        })),
-        responseMessage: responseMessage || undefined,
+        counterProposals: validProposals,
+        responseMessage: message || undefined,
       })
       return { success: true }
     })
@@ -191,83 +162,29 @@ function CounterProposalForm({ token }: { token: string }) {
 
       <div className="mt-8 rounded-xl border bg-background">
         <div className="space-y-4 p-5">
-          {proposals.map((proposal, index) => (
-            <div key={index} className="space-y-3 rounded-xl border border-border p-4">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">
-                  {interpolate(t.owner_request_counter_proposal_label, { number: index + 1 })}
-                </span>
-                {proposals.length > 1 && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => removeProposal(index)}
-                    className="h-7 gap-1 px-2 text-xs text-muted-foreground"
-                  >
-                    <Trash2Icon className="size-3" />
-                    {t.owner_request_counter_remove}
-                  </Button>
-                )}
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <InputWrapper label={t.booking_respond_counter_date} hasValue={!!proposal.date}>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <button
-                        type="button"
-                        className="border-input flex h-14 w-full items-center rounded-xl border bg-transparent px-3 pt-5 pb-1 text-left text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
-                      >
-                        {proposal.date ? formatDate(proposal.date.toISOString()) : ''}
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={proposal.date}
-                        onSelect={date => updateProposal(index, { date })}
-                        disabled={date => date < new Date()}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </InputWrapper>
-                {timeSlots.length > 0 && (
-                  <InputWrapper label={t.booking_respond_counter_timeslot} hasValue={!!proposal.timeSlotId}>
-                    <Select
-                      value={proposal.timeSlotId}
-                      onValueChange={value => updateProposal(index, { timeSlotId: value })}
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {timeSlots.map(slot => (
-                          <SelectItem key={slot.id} value={slot.id}>
-                            {formatTime(slot.startTime)} - {formatTime(slot.endTime)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </InputWrapper>
-                )}
-              </div>
-            </div>
-          ))}
-
-          {proposals.length < MAX_PROPOSALS && (
-            <Button variant="outline" size="sm" className="w-full gap-1" onClick={addProposal}>
-              <PlusIcon className="size-4" />
-              {t.booking_respond_counter_add_date}
-            </Button>
-          )}
+          <ProposalCards
+            proposals={proposals}
+            timeSlots={timeSlots}
+            labels={{
+              proposalLabel: t.owner_request_counter_proposal_label,
+              removeLabel: t.owner_request_counter_remove,
+              dateLabel: t.booking_respond_counter_date,
+              timeslotLabel: t.booking_respond_counter_timeslot,
+              addDateLabel: t.booking_respond_counter_add_date,
+            }}
+            onUpdate={updateProposal}
+            onRemove={removeProposal}
+            onAdd={addProposal}
+          />
         </div>
 
         <hr className="border-border" />
 
         <div className="p-5">
-          <InputWrapper label={t.booking_respond_counter_message} hasValue={!!responseMessage}>
+          <InputWrapper label={t.booking_respond_counter_message} hasValue={!!message}>
             <Textarea
-              value={responseMessage}
-              onChange={e => setResponseMessage(e.target.value)}
+              value={message}
+              onChange={e => setMessage(e.target.value)}
               placeholder={t.booking_respond_counter_message_placeholder}
               maxLength={1000}
               rows={3}
@@ -277,7 +194,7 @@ function CounterProposalForm({ token }: { token: string }) {
       </div>
 
       <div className="mt-6">
-        <Button className="h-11 w-full" onClick={handleSubmit} disabled={loading || !allProposalsValid}>
+        <Button className="h-11 w-full" onClick={handleSubmit} disabled={loading || !allValid}>
           {loading && <LoaderIcon className="mr-2 size-4 animate-spin" />}
           {loading ? t.booking_respond_counter_submitting : t.booking_respond_counter_submit}
         </Button>

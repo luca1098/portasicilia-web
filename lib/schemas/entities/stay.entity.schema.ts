@@ -16,6 +16,7 @@ export const StayAvailabilitySchema = z.object({
   dateFrom: z.string(),
   dateTo: z.string(),
   available: z.boolean(),
+  source: z.string().optional(),
 })
 
 export type StayAvailability = z.infer<typeof StayAvailabilitySchema>
@@ -32,6 +33,9 @@ export const StayDetailSchema = z.object({
   checkInTime: z.string().nullable(),
   checkOutTime: z.string().nullable(),
   amenities: z.array(z.string()),
+  icsUrl: z.string().nullable().optional(),
+  icsSyncedAt: z.string().nullable().optional(),
+  icsSyncError: z.string().nullable().optional(),
   availability: z.array(StayAvailabilitySchema).nullish(),
 })
 

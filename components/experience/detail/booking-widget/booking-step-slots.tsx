@@ -110,6 +110,9 @@ export default function BookingStepSlots({
                       disabled={disabledCalendarDays}
                       locale={calendarLocales[lang as keyof typeof calendarLocales] ?? it}
                     />
+                    <p className="px-4 pb-3 text-center text-xs text-muted-foreground">
+                      {t.checkout_timezone}
+                    </p>
                   </PopoverContent>
                 </Popover>
               )}

@@ -4,20 +4,21 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Switch } from '@/components/ui/switch'
 import { useTranslation } from '@/lib/context/translation.context'
+import { interpolate } from '@/lib/utils/i18n.utils'
 import { useAction } from '@/lib/hooks/use-action'
-import { setStayAvailabilityAction } from '@/lib/actions/stays.actions'
-import { PlusIcon, Trash2Icon, LoaderIcon, CalendarIcon } from '@/lib/constants/icons'
+import { setStayIcsUrlAction, syncStayIcsAction } from '@/lib/actions/stays.actions'
+import {
+  LoaderIcon,
+  CalendarIcon,
+  Link2Icon,
+  RefreshCwIcon,
+  UnlinkIcon,
+  AlertCircleIcon,
+  CheckCircle2Icon,
+} from '@/lib/constants/icons'
 import type { Stay } from '@/lib/schemas/entities/stay.entity.schema'
 import type { StayAvailability } from '@/lib/schemas/entities/stay.entity.schema'
-
-type AvailabilityRange = {
-  id?: string
-  dateFrom: string
-  dateTo: string
-  available: boolean
-}
 
 type AvailabilityTabProps = {
   stayId: string
@@ -29,115 +30,170 @@ export default function AvailabilityTab({ stayId, stay, onSaved }: AvailabilityT
   const t = useTranslation() as Record<string, string>
 
   const existingAvailability: StayAvailability[] = stay.stayDetail?.availability ?? stay.availability ?? []
+  const icsRanges = existingAvailability.filter(a => a.source === 'ICS')
 
-  const [ranges, setRanges] = useState<AvailabilityRange[]>(
-    existingAvailability.map(a => ({
-      id: a.id,
-      dateFrom: a.dateFrom.split('T')[0],
-      dateTo: a.dateTo.split('T')[0],
-      available: a.available,
-    }))
-  )
+  const stayDetail = stay.stayDetail
+  const [icsUrl, setIcsUrl] = useState(stayDetail?.icsUrl ?? '')
+  const hasIcs = !!stayDetail?.icsUrl
 
-  const { loading, execute } = useAction<Stay>({
-    successMessage: t.admin_stay_availability_success,
+  const { loading: icsConnecting, execute: executeIcsConnect } = useAction<Stay>({
+    successMessage: t.admin_stay_ics_connect_success,
     onSuccess: data => {
       if (data) onSaved?.(data)
     },
   })
 
-  const addRange = () => {
-    setRanges(prev => [...prev, { dateFrom: '', dateTo: '', available: true }])
+  const { loading: icsDisconnecting, execute: executeIcsDisconnect } = useAction<Stay>({
+    successMessage: t.admin_stay_ics_disconnect_success,
+    onSuccess: data => {
+      if (data) {
+        setIcsUrl('')
+        onSaved?.(data)
+      }
+    },
+  })
+
+  const { loading: icsSyncing, execute: executeIcsSync } = useAction<Stay>({
+    successMessage: t.admin_stay_ics_sync_success,
+    onSuccess: data => {
+      if (data) onSaved?.(data)
+    },
+  })
+
+  const handleConnectIcs = async () => {
+    if (!icsUrl.trim()) return
+    await executeIcsConnect(() => setStayIcsUrlAction(stayId, { icsUrl: icsUrl.trim() }))
   }
 
-  const removeRange = (index: number) => {
-    setRanges(prev => prev.filter((_, i) => i !== index))
+  const handleDisconnectIcs = async () => {
+    await executeIcsDisconnect(() => setStayIcsUrlAction(stayId, { icsUrl: null }))
   }
 
-  const updateRange = (index: number, field: keyof AvailabilityRange, value: string | boolean) => {
-    setRanges(prev => prev.map((r, i) => (i === index ? { ...r, [field]: value } : r)))
-  }
-
-  const handleSave = async () => {
-    const validRanges = ranges.filter(r => r.dateFrom && r.dateTo)
-    await execute(() =>
-      setStayAvailabilityAction(stayId, {
-        ranges: validRanges.map(r => ({
-          dateFrom: r.dateFrom,
-          dateTo: r.dateTo,
-          available: r.available,
-        })),
-      })
-    )
+  const handleSyncIcs = async () => {
+    await executeIcsSync(() => syncStayIcsAction(stayId))
   }
 
   return (
     <div className="space-y-6">
-      <div className="rounded-xl border border-border bg-card p-6 space-y-6">
+      {/* ICS Calendar Section */}
+      <div className="rounded-xl border border-border bg-card p-6 space-y-4">
         <div>
-          <h3 className="text-sm font-semibold">{t.admin_stay_availability_title}</h3>
-          <p className="mt-1 text-xs text-muted-foreground">{t.admin_stay_availability_subtitle}</p>
+          <h3 className="text-sm font-semibold">{t.admin_stay_ics_title}</h3>
+          <p className="mt-1 text-xs text-muted-foreground">{t.admin_stay_ics_subtitle}</p>
         </div>
 
-        {ranges.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-border p-8 text-center">
-            <CalendarIcon className="mx-auto mb-3 size-8 text-muted-foreground/40" />
-            <p className="text-sm text-muted-foreground">{t.admin_stay_availability_empty}</p>
+        {hasIcs ? (
+          <div className="space-y-3">
+            <div className="flex items-center gap-2 rounded-lg border border-border bg-muted/30 p-3">
+              <CheckCircle2Icon className="size-4 shrink-0 text-emerald-500" />
+              <span className="flex-1 truncate text-sm">{stayDetail?.icsUrl}</span>
+            </div>
+
+            {stayDetail?.icsSyncedAt && (
+              <p className="text-xs text-muted-foreground">
+                {interpolate(t.admin_stay_ics_last_sync, {
+                  date: new Date(stayDetail.icsSyncedAt).toLocaleString(),
+                })}
+              </p>
+            )}
+
+            {stayDetail?.icsSyncError && (
+              <div className="flex items-start gap-2 rounded-lg border border-destructive/30 bg-destructive/5 p-3">
+                <AlertCircleIcon className="mt-0.5 size-4 shrink-0 text-destructive" />
+                <p className="text-xs text-destructive">
+                  {interpolate(t.admin_stay_ics_sync_error, { error: stayDetail.icsSyncError })}
+                </p>
+              </div>
+            )}
+
+            <p className="text-xs text-muted-foreground">{t.admin_stay_ics_sync_info}</p>
+
+            <div className="flex gap-2">
+              <Button type="button" variant="outline" size="sm" onClick={handleSyncIcs} disabled={icsSyncing}>
+                {icsSyncing ? (
+                  <LoaderIcon className="size-4 animate-spin" />
+                ) : (
+                  <RefreshCwIcon className="size-4" />
+                )}
+                {icsSyncing ? t.admin_stay_ics_syncing : t.admin_stay_ics_sync_now}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleDisconnectIcs}
+                disabled={icsDisconnecting}
+              >
+                {icsDisconnecting ? (
+                  <LoaderIcon className="size-4 animate-spin" />
+                ) : (
+                  <UnlinkIcon className="size-4" />
+                )}
+                {t.admin_stay_ics_disconnect}
+              </Button>
+            </div>
           </div>
         ) : (
+          <div className="flex gap-2">
+            <Input
+              value={icsUrl}
+              onChange={e => setIcsUrl(e.target.value)}
+              placeholder={t.admin_stay_ics_url_placeholder}
+              className="flex-1"
+            />
+            <Button type="button" onClick={handleConnectIcs} disabled={icsConnecting || !icsUrl.trim()}>
+              {icsConnecting ? (
+                <LoaderIcon className="size-4 animate-spin" />
+              ) : (
+                <Link2Icon className="size-4" />
+              )}
+              {t.admin_stay_ics_connect}
+            </Button>
+          </div>
+        )}
+      </div>
+
+      {/* Blocked dates from ICS (read-only) */}
+      {icsRanges.length > 0 && (
+        <div className="rounded-xl border border-border bg-card p-6 space-y-4">
+          <div>
+            <h3 className="text-sm font-semibold">{t.admin_stay_availability_title}</h3>
+            <p className="mt-1 text-xs text-muted-foreground">{t.admin_stay_availability_subtitle}</p>
+          </div>
+
           <div className="space-y-3">
-            {ranges.map((range, index) => (
+            {icsRanges.map(range => (
               <div
-                key={index}
-                className="flex flex-col gap-3 rounded-lg border border-border p-4 sm:flex-row sm:items-end"
+                key={range.id}
+                className="flex flex-col gap-3 rounded-lg border border-border bg-muted/30 p-4 sm:flex-row sm:items-end"
               >
                 <div className="flex-1 space-y-1.5">
                   <Label className="text-xs">{t.admin_stay_availability_from}</Label>
-                  <Input
-                    type="date"
-                    value={range.dateFrom}
-                    onChange={e => updateRange(index, 'dateFrom', e.target.value)}
-                  />
+                  <Input type="date" value={range.dateFrom.split('T')[0]} disabled />
                 </div>
                 <div className="flex-1 space-y-1.5">
                   <Label className="text-xs">{t.admin_stay_availability_to}</Label>
-                  <Input
-                    type="date"
-                    value={range.dateTo}
-                    onChange={e => updateRange(index, 'dateTo', e.target.value)}
-                  />
+                  <Input type="date" value={range.dateTo.split('T')[0]} disabled />
                 </div>
                 <div className="flex items-center gap-2">
-                  <Switch
-                    checked={range.available}
-                    onCheckedChange={checked => updateRange(index, 'available', checked)}
-                  />
-                  <span className="text-xs text-muted-foreground">
-                    {range.available
-                      ? t.admin_stay_availability_available
-                      : t.admin_stay_availability_blocked}
+                  <span className="rounded bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                    {t.admin_stay_availability_ics_badge}
                   </span>
+                  <span className="text-xs text-muted-foreground">{t.admin_stay_availability_blocked}</span>
                 </div>
-                <Button type="button" variant="ghost" size="icon-sm" onClick={() => removeRange(index)}>
-                  <Trash2Icon className="size-4 text-destructive" />
-                </Button>
               </div>
             ))}
           </div>
-        )}
+        </div>
+      )}
 
-        <Button type="button" variant="outline" onClick={addRange}>
-          <PlusIcon className="size-4" />
-          {t.admin_stay_availability_add}
-        </Button>
-      </div>
-
-      <div className="flex justify-end">
-        <Button onClick={handleSave} disabled={loading}>
-          {loading && <LoaderIcon className="size-4 animate-spin" />}
-          {loading ? t.admin_exp_saving : t.admin_stay_availability_save}
-        </Button>
-      </div>
+      {/* Empty state when no ICS connected */}
+      {!hasIcs && (
+        <div className="rounded-xl border border-dashed border-border p-8 text-center">
+          <CalendarIcon className="mx-auto mb-3 size-8 text-muted-foreground/40" />
+          <p className="text-sm text-muted-foreground">{t.admin_stay_availability_empty}</p>
+        </div>
+      )}
     </div>
   )
 }

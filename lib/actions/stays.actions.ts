@@ -7,6 +7,8 @@ import {
   setStayAvailability,
   setStayPricing,
   getStayById,
+  setStayIcsUrl,
+  syncStayIcs,
 } from '@/lib/api/stays'
 import type { Stay } from '@/lib/schemas/entities/stay.entity.schema'
 import { revalidatePath } from 'next/cache'
@@ -52,6 +54,33 @@ export async function setStayAvailabilityAction(
   try {
     const headers = await getAuthHeaders()
     await setStayAvailability(stayId, data, headers)
+    const stay = await getStayById(stayId)
+    revalidatePath('/[lang]/(dashboard)/dashboard/admin/stays/[id]', 'page')
+    return { success: true, data: stay }
+  } catch (e) {
+    return { success: false, error: (e as Error).message }
+  }
+}
+
+export async function setStayIcsUrlAction(
+  stayId: string,
+  data: { icsUrl: string | null }
+): Promise<ActionResult<Stay>> {
+  try {
+    const headers = await getAuthHeaders()
+    await setStayIcsUrl(stayId, data, headers)
+    const stay = await getStayById(stayId)
+    revalidatePath('/[lang]/(dashboard)/dashboard/admin/stays/[id]', 'page')
+    return { success: true, data: stay }
+  } catch (e) {
+    return { success: false, error: (e as Error).message }
+  }
+}
+
+export async function syncStayIcsAction(stayId: string): Promise<ActionResult<Stay>> {
+  try {
+    const headers = await getAuthHeaders()
+    await syncStayIcs(stayId, headers)
     const stay = await getStayById(stayId)
     revalidatePath('/[lang]/(dashboard)/dashboard/admin/stays/[id]', 'page')
     return { success: true, data: stay }

@@ -100,3 +100,28 @@ export function setStayAvailability(id: string, data: unknown, headers: HeadersI
 export function setStayPricing(id: string, data: unknown, headers: HeadersInit) {
   return apiServer.put<unknown>(`/stays/${id}/pricing`, data, { headers })
 }
+
+export type StayAvailabilityResponse = {
+  availability: Array<{
+    id: string
+    dateFrom: string
+    dateTo: string
+    available: boolean
+    source: string
+  }>
+  hasIcs: boolean
+  icsSyncedAt: string | null
+  icsSyncError: string | null
+}
+
+export function getStayAvailability(id: string) {
+  return apiServer.get<StayAvailabilityResponse>(`/stays/${id}/availability`)
+}
+
+export function setStayIcsUrl(id: string, data: { icsUrl: string | null }, headers: HeadersInit) {
+  return apiServer.put<Stay>(`/stays/${id}/ics`, data, { headers })
+}
+
+export function syncStayIcs(id: string, headers: HeadersInit) {
+  return apiServer.post<Stay>(`/stays/${id}/ics/sync`, {}, { headers })
+}

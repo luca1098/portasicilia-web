@@ -15,28 +15,13 @@ import { useTranslation } from '@/lib/context/translation.context'
 import { useAction } from '@/lib/hooks/use-action'
 import { CalendarCheck2Icon, MoreHorizontalIcon, EyeIcon, ImageIcon, LoaderIcon } from '@/lib/constants/icons'
 import { getAdminBookingsAction } from '@/lib/actions/bookings.actions'
+import { formatDate, formatTime, formatCurrency } from '@/lib/utils/format.utils'
 import type { AdminBooking, GetAdminBookingsParams, PaginatedAdminBookings } from '@/lib/api/bookings'
 
 type BookingsTableProps = {
   initialBookings: AdminBooking[]
   initialNextCursor: string | null
   fetchParams: GetAdminBookingsParams
-}
-
-function formatDate(dateString: string) {
-  return new Date(dateString).toLocaleDateString('it-IT', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  })
-}
-
-function formatTime(time: string) {
-  return time.slice(0, 5)
-}
-
-function formatCurrency(value: string) {
-  return new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(Number(value))
 }
 
 function PaymentBadge({ status, t }: { status: string; t: Record<string, string> }) {

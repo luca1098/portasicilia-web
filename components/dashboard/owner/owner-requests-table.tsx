@@ -29,13 +29,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { Calendar } from '@/components/ui/calendar'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { InputWrapper } from '@/components/form/input-wrapper'
 import { useTranslation } from '@/lib/context/translation.context'
 import { useAction } from '@/lib/hooks/use-action'
+import { useCounterProposals } from '@/lib/hooks/use-counter-proposals'
 import {
   ClipboardListIcon,
   MoreHorizontalIcon,
@@ -44,12 +42,10 @@ import {
   CalendarIcon,
   ImageIcon,
   LoaderIcon,
-  PlusIcon,
-  Trash2Icon,
 } from '@/lib/constants/icons'
-import { interpolate } from '@/lib/utils/i18n.utils'
 import { formatDate, formatTime } from '@/lib/utils/format.utils'
 import { StatusBadge } from '@/components/dashboard/bookings/status-badge'
+import ProposalCards from '@/components/shared/proposal-cards'
 import {
   ownerRespondBookingAction,
   getOwnerBookingsAction,
@@ -71,14 +67,6 @@ const STATUS_FILTERS = [
   { key: 'COUNTER_PROPOSED', labelKey: 'admin_booking_status_counter_proposed' },
   { key: 'REJECTED', labelKey: 'admin_booking_status_rejected' },
 ]
-
-type Proposal = {
-  date: Date | undefined
-  timeSlotId: string
-}
-
-const EMPTY_PROPOSAL: Proposal = { date: undefined, timeSlotId: '' }
-const MAX_PROPOSALS = 3
 
 function StatusFilterPills({ activeStatus }: { activeStatus: string }) {
   const t = useTranslation() as Record<string, string>
@@ -127,8 +115,18 @@ function CounterProposalDialog({
   onSuccess: () => void
 }) {
   const t = useTranslation() as Record<string, string>
-  const [proposals, setProposals] = useState<Proposal[]>([{ ...EMPTY_PROPOSAL }])
-  const [responseMessage, setResponseMessage] = useState('')
+  const {
+    proposals,
+    message,
+    allValid,
+    setMessage,
+    addProposal,
+    removeProposal,
+    updateProposal,
+    reset,
+    getValidProposals,
+  } = useCounterProposals()
+
   const [timeSlots, setTimeSlots] = useState<ExperienceTimeSlot[]>([])
 
   const { loading: timeSlotsLoading, execute: fetchTimeSlots } = useAction<ExperienceTimeSlot[]>({
@@ -142,46 +140,22 @@ function CounterProposalDialog({
     onSuccess,
   })
 
-  const allProposalsValid = proposals.every(p => p.date && p.timeSlotId)
-
   function handleOpen(isOpen: boolean) {
     if (isOpen) {
-      setProposals([{ ...EMPTY_PROPOSAL }])
+      reset()
       fetchTimeSlots(() => getExperienceTimeSlotsAction(booking.listing.id))
     } else {
-      setProposals([{ ...EMPTY_PROPOSAL }])
-      setResponseMessage('')
+      reset()
       setTimeSlots([])
     }
     onOpenChange(isOpen)
   }
 
-  function updateProposal(index: number, updates: Partial<Proposal>) {
-    setProposals(prev => prev.map((p, i) => (i === index ? { ...p, ...updates } : p)))
-  }
-
-  function addProposal() {
-    if (proposals.length < MAX_PROPOSALS) {
-      setProposals(prev => [...prev, { ...EMPTY_PROPOSAL }])
-    }
-  }
-
-  function removeProposal(index: number) {
-    if (proposals.length > 1) {
-      setProposals(prev => prev.filter((_, i) => i !== index))
-    }
-  }
-
   function handleSubmit() {
-    if (!allProposalsValid) return
-    const counterProposals = proposals
-      .filter((p): p is Proposal & { date: Date } => p.date !== undefined)
-      .map(p => ({
-        date: p.date.toISOString().split('T')[0],
-        timeSlotId: p.timeSlotId,
-      }))
+    if (!allValid) return
+    const counterProposals = getValidProposals()
     executeCounter(() =>
-      ownerRespondBookingAction(booking.id, 'REJECT', counterProposals, responseMessage || undefined)
+      ownerRespondBookingAction(booking.id, 'REJECT', counterProposals, message || undefined)
     )
     onOpenChange(false)
   }
@@ -199,92 +173,38 @@ function CounterProposalDialog({
               <LoaderIcon className="size-5 animate-spin text-muted-foreground" />
             </div>
           ) : (
-            proposals.map((proposal, index) => (
-              <div key={index} className="space-y-3 rounded-xl border border-border p-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">
-                    {interpolate(t.owner_request_counter_proposal_label, { number: index + 1 })}
-                  </span>
-                  {proposals.length > 1 && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => removeProposal(index)}
-                      className="h-7 gap-1 px-2 text-xs text-muted-foreground"
-                    >
-                      <Trash2Icon className="size-3" />
-                      {t.owner_request_counter_remove}
-                    </Button>
-                  )}
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <InputWrapper label={t.owner_request_counter_select_date} hasValue={!!proposal.date}>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <button
-                          type="button"
-                          className="border-input flex h-14 w-full items-center rounded-xl border bg-transparent px-3 pt-5 pb-1 text-left text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
-                        >
-                          {proposal.date ? formatDate(proposal.date.toISOString()) : ''}
-                        </button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={proposal.date}
-                          onSelect={date => updateProposal(index, { date })}
-                          disabled={date => date < new Date()}
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  </InputWrapper>
-                  <InputWrapper
-                    label={t.owner_request_counter_select_timeslot}
-                    hasValue={!!proposal.timeSlotId}
-                  >
-                    <Select
-                      value={proposal.timeSlotId}
-                      onValueChange={value => updateProposal(index, { timeSlotId: value })}
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {timeSlots.map(slot => (
-                          <SelectItem key={slot.id} value={slot.id}>
-                            {formatTime(slot.startTime)} - {formatTime(slot.endTime)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </InputWrapper>
-                </div>
-              </div>
-            ))
-          )}
-          {!timeSlotsLoading && proposals.length < MAX_PROPOSALS && (
-            <Button variant="outline" size="sm" onClick={addProposal} className="w-full gap-1">
-              <PlusIcon className="size-4" />
-              {t.owner_request_counter_add_date}
-            </Button>
-          )}
-          {!timeSlotsLoading && (
-            <InputWrapper label={t.owner_request_counter_message} hasValue={!!responseMessage}>
-              <Textarea
-                value={responseMessage}
-                onChange={e => setResponseMessage(e.target.value)}
-                placeholder={t.owner_request_counter_message_placeholder}
-                maxLength={1000}
-                rows={3}
+            <>
+              <ProposalCards
+                proposals={proposals}
+                timeSlots={timeSlots}
+                labels={{
+                  proposalLabel: t.owner_request_counter_proposal_label,
+                  removeLabel: t.owner_request_counter_remove,
+                  dateLabel: t.owner_request_counter_select_date,
+                  timeslotLabel: t.owner_request_counter_select_timeslot,
+                  addDateLabel: t.owner_request_counter_add_date,
+                }}
+                onUpdate={updateProposal}
+                onRemove={removeProposal}
+                onAdd={addProposal}
               />
-            </InputWrapper>
+              <InputWrapper label={t.owner_request_counter_message} hasValue={!!message}>
+                <Textarea
+                  value={message}
+                  onChange={e => setMessage(e.target.value)}
+                  placeholder={t.owner_request_counter_message_placeholder}
+                  maxLength={1000}
+                  rows={3}
+                />
+              </InputWrapper>
+            </>
           )}
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             {t.admin_common_cancel}
           </Button>
-          <Button onClick={handleSubmit} disabled={counterLoading || !allProposalsValid}>
+          <Button onClick={handleSubmit} disabled={counterLoading || !allValid}>
             {counterLoading && <LoaderIcon className="size-4 animate-spin" />}
             {t.owner_request_counter_submit}
           </Button>

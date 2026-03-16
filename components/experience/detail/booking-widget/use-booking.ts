@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation'
 import { useTranslation } from '@/lib/context/translation.context'
 import { interpolate } from '@/lib/utils/i18n.utils'
 import { useAction } from '@/lib/hooks/use-action'
+import { today as getToday } from '@/lib/utils/date.utils'
 import { getAvailabilityAction } from '@/lib/actions/experiences.actions'
 import type { AvailableDateSlots } from '@/lib/api/experiences'
 import type { Experience } from '@/lib/schemas/entities/experience.entity.schema'
@@ -159,9 +160,8 @@ export function useBooking(experience: Experience) {
 
   const disabledCalendarDays = useCallback(
     (date: Date) => {
-      const today = new Date()
-      today.setHours(0, 0, 0, 0)
-      if (date <= today) return true
+      const td = getToday()
+      if (date <= td) return true
       if (!allowedDayNumbers) return false
       return !allowedDayNumbers.has(date.getDay())
     },

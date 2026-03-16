@@ -1,3 +1,4 @@
+import { parseDate } from '@/lib/utils/date.utils'
 import type { AvailableDateSlots } from '@/lib/api/experiences'
 
 export const DAY_MAP: Record<string, number> = {
@@ -15,13 +16,13 @@ function capitalizeFirst(str: string): string {
 }
 
 export function formatDayHeader(dateStr: string, locale: string = 'it'): string {
-  const date = new Date(dateStr + 'T00:00:00')
+  const date = parseDate(dateStr)
   const tag = locale === 'en' ? 'en-GB' : 'it-IT'
   return capitalizeFirst(date.toLocaleDateString(tag, { weekday: 'long', day: 'numeric', month: 'long' }))
 }
 
 export function formatMonthYear(dateStr: string, locale: string = 'it'): string {
-  const date = new Date(dateStr + 'T00:00:00')
+  const date = parseDate(dateStr)
   const tag = locale === 'en' ? 'en-GB' : 'it-IT'
   return capitalizeFirst(date.toLocaleDateString(tag, { month: 'long', year: 'numeric' }))
 }
@@ -29,7 +30,7 @@ export function formatMonthYear(dateStr: string, locale: string = 'it'): string 
 export function groupByMonth(entries: AvailableDateSlots[]): Map<string, AvailableDateSlots[]> {
   const grouped = new Map<string, AvailableDateSlots[]>()
   for (const entry of entries) {
-    const date = new Date(entry.date + 'T00:00:00')
+    const date = parseDate(entry.date)
     const key = `${date.getFullYear()}-${date.getMonth()}`
     const existing = grouped.get(key) ?? []
     existing.push(entry)

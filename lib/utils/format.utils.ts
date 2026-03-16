@@ -1,5 +1,7 @@
+import { parseDate } from './date.utils'
+
 export function formatDate(dateString: string) {
-  return new Date(dateString).toLocaleDateString('it-IT', {
+  return parseDate(dateString).toLocaleDateString('it-IT', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',

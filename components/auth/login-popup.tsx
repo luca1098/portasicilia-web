@@ -1,5 +1,6 @@
 'use client'
 
+import { createPortal } from 'react-dom'
 import { X } from '@/lib/constants/icons'
 import { Button } from '@/components/ui/button'
 import { useTranslation } from '@/lib/context/translation.context'
@@ -45,7 +46,7 @@ export default function LoginPopup({ onClose }: LoginPopupProps) {
   const { lang } = useParams()
   const t = useTranslation()
 
-  return (
+  return createPortal(
     <>
       {/* Backdrop */}
       <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm" onClick={onClose} />
@@ -104,6 +105,7 @@ export default function LoginPopup({ onClose }: LoginPopupProps) {
           </p>
         </div>
       </div>
-    </>
+    </>,
+    document.body
   )
 }

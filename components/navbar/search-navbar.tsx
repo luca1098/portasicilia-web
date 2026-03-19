@@ -2,10 +2,10 @@
 
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { HeartIcon } from 'lucide-react'
+import { HeartIcon } from '@/lib/constants/icons'
 import { Button } from '@/components/ui/button'
 import SearchBar from '@/components/search/search-bar'
-import LangSwitch from '@/components/navbar/lang-switch'
+import NavbarActions from '@/components/navbar/navbar-actions'
 
 export default function SearchNavbar() {
   const params = useParams()
@@ -26,11 +26,12 @@ export default function SearchNavbar() {
             </div>
           </div>
 
-          <div className="flex shrink-0 items-center gap-1">
-            <Button variant="ghost" size="icon" aria-label="Favorites">
-              <HeartIcon className="size-5" />
-            </Button>
-            <LangSwitch />
+          <div className="shrink-0">
+            <NavbarActions>
+              <Button variant="ghost" size="icon" aria-label="Favorites">
+                <HeartIcon className="size-5" />
+              </Button>
+            </NavbarActions>
           </div>
         </div>
       </header>

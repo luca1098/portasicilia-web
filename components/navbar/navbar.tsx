@@ -7,8 +7,7 @@ import { MenuIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useTranslation } from '@/lib/context/translation.context'
 import { getMenuItemsByArea } from '@/lib/constants/menu'
-import LangSwitch from '@/components/navbar/lang-switch'
-import AccountMenu from '@/components/navbar/account-menu'
+import NavbarActions from '@/components/navbar/navbar-actions'
 import MobileMenu from '@/components/navbar/mobile-menu'
 import Link from 'next/link'
 import { cn } from '@/lib/utils/shadcn.utils'
@@ -66,18 +65,18 @@ export default function Navbar() {
             ))}
           </nav>
 
-          <div className="ml-auto flex items-center gap-1">
-            <AccountMenu />
-            <LangSwitch />
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden"
-              onClick={() => setMobileOpen(true)}
-              aria-label="Open menu"
-            >
-              <MenuIcon />
-            </Button>
+          <div className="ml-auto">
+            <NavbarActions>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="md:hidden"
+                onClick={() => setMobileOpen(true)}
+                aria-label="Open menu"
+              >
+                <MenuIcon />
+              </Button>
+            </NavbarActions>
           </div>
         </div>
       </header>

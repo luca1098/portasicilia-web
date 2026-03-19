@@ -9,11 +9,16 @@ import { useCheckoutActions } from '@/core/store/checkout.store'
 import CheckoutSteps from '@/components/checkout/checkout-steps'
 import BookingRecap from '@/components/checkout/booking-recap'
 import type { Experience } from '@/lib/schemas/entities/experience.entity.schema'
+import type { Stay } from '@/lib/schemas/entities/stay.entity.schema'
 import type { PriceTier } from '@/core/store/checkout.store'
 
 type CheckoutContentProps = {
+  listingType: 'EXPERIENCE' | 'STAY'
   experience: Experience
+  stay?: Stay
   date: string
+  dateTo?: string
+  nights?: number
   startTime: string
   endTime: string
   adults: number
@@ -31,8 +36,12 @@ type CheckoutContentProps = {
 }
 
 export default function CheckoutContent({
+  listingType,
   experience,
+  stay,
   date,
+  dateTo,
+  nights,
   startTime,
   endTime,
   adults,
@@ -52,10 +61,19 @@ export default function CheckoutContent({
   const { lang } = useParams<{ lang: string }>()
   const { setBookingContext } = useCheckoutActions()
 
+  const isStay = listingType === 'STAY'
+  const backHref = isStay
+    ? `/${lang}/stays/${stay?.slug ?? ''}`
+    : `/${lang}/experiences/${experience?.slug ?? ''}`
+
   useEffect(() => {
     setBookingContext({
-      experience,
+      listingType,
+      experience: experience ?? ({} as Experience),
+      stay,
       date,
+      dateTo,
+      nights,
       startTime,
       endTime,
       adults,
@@ -72,8 +90,12 @@ export default function CheckoutContent({
       paymentError: paymentError ?? false,
     })
   }, [
+    listingType,
     experience,
+    stay,
     date,
+    dateTo,
+    nights,
     startTime,
     endTime,
     adults,
@@ -96,7 +118,7 @@ export default function CheckoutContent({
       {/* Back link + title */}
       <div className="flex items-center gap-3">
         <Link
-          href={`/${lang}/experiences/${experience.slug}`}
+          href={backHref}
           className="flex size-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
           aria-label={t.checkout_back}
         >

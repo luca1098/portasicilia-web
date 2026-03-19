@@ -5,6 +5,7 @@ export type BookingPriceTier = {
   baseAmount: number
   quantity: number
   subtotal: number
+  label?: string
 }
 
 export function getPriceTierLine(
@@ -19,6 +20,18 @@ export function getPriceTierLine(
       quantity: tier.quantity,
       asset: assetLabel ?? '',
     })
+  }
+  if (tier.tierType === 'NIGHTLY') {
+    const key =
+      tier.quantity === 1 ? t.checkout_stay_price_per_night_singular : t.checkout_stay_price_per_night
+    return interpolate(key, {
+      price: Math.round(tier.baseAmount),
+      count: tier.quantity,
+    })
+  }
+  // Tier types with custom labels (e.g., extras like breakfast)
+  if (tier.label) {
+    return `\u20AC ${Math.round(tier.baseAmount)} x ${tier.label}`
   }
   const label = (() => {
     switch (tier.tierType) {

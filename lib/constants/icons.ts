@@ -99,4 +99,5 @@ export {
   Link2Icon,
   RefreshCwIcon,
   UnlinkIcon,
+  CopyIcon,
 } from 'lucide-react'

@@ -29,6 +29,7 @@ export type CreateBookingAsset = {
 export type CreateBookingDto = {
   listingId: string
   date: string
+  dateTo?: string
   timeSlotId?: string
   participants?: CreateBookingParticipant[]
   assets?: CreateBookingAsset[]

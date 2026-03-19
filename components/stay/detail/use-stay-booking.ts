@@ -22,7 +22,13 @@ export type PriceBreakdown = {
   subtotalBeforeModifiers: string
   modifiersTotal: string
   commissionAmount: string
-  lineItems: Array<{ quantity: number; effectiveUnitPrice: string; subtotal: string }>
+  lineItems: Array<{
+    tierType: string
+    label: string | null
+    quantity: number
+    effectiveUnitPrice: string
+    subtotal: string
+  }>
   modifiersApplied: Array<{ name: string; adjustment: string }>
 }
 
@@ -186,7 +192,8 @@ export function useStayBooking(stay: Stay): UseStayBookingReturn {
     setCalendarMonth(month)
   }, [])
 
-  useEffect(() => {
+  const fetchAvailability = useCallback(() => {
+    setLoadingAvailability(true)
     api
       .get<StayAvailabilityResponse>(`/stays/${stay.id}/availability`)
       .then(data => {
@@ -203,6 +210,10 @@ export function useStayBooking(stay: Stay): UseStayBookingReturn {
   }, [stay.id])
 
   useEffect(() => {
+    fetchAvailability()
+  }, [fetchAvailability])
+
+  useEffect(() => {
     if (!hasValidRange || !dateRange?.from) {
       return
     }
@@ -213,8 +224,11 @@ export function useStayBooking(stay: Stay): UseStayBookingReturn {
   }, [hasValidRange, checkinTime, nights, fetchBreakdown, dateRange?.from])
 
   useEffect(() => {
-    if (open) fetchDailyRates(calendarMonth)
-  }, [open, calendarMonth, fetchDailyRates])
+    if (open) {
+      fetchAvailability()
+      fetchDailyRates(calendarMonth)
+    }
+  }, [open, calendarMonth, fetchDailyRates, fetchAvailability])
 
   return {
     dateRange,

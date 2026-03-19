@@ -58,9 +58,21 @@ export default function CheckoutSteps() {
     setSubmitError(null)
 
     const billingDto = mapBillingToDto(data)
-    const { listingId, date, slotId, adults, children, infants, assetCount, pricingMode, assetTierType } =
-      bookingContext
+    const {
+      listingType,
+      listingId,
+      date,
+      dateTo,
+      slotId,
+      adults,
+      children,
+      infants,
+      assetCount,
+      pricingMode,
+      assetTierType,
+    } = bookingContext
 
+    const isStay = listingType === 'STAY'
     const isAssetMode = pricingMode === 'PER_ASSET'
 
     const participants = isAssetMode
@@ -77,7 +89,8 @@ export default function CheckoutSteps() {
       checkoutAction({
         listingId,
         date,
-        timeSlotId: slotId,
+        dateTo: isStay ? dateTo : undefined,
+        timeSlotId: isStay ? undefined : slotId,
         participants,
         assets,
         contactEmail: session.user.email,

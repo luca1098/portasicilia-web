@@ -30,6 +30,9 @@ type BookingCardState = {
   totalPrice: number | null
   depositAmount: number | null
   priceTiers: BookingPriceTier[]
+  // Stay-specific
+  formattedDateTo?: string
+  guestSummary?: string
 }
 
 const BookingCardContext = createContext<BookingCardState | null>(null)
@@ -126,6 +129,38 @@ function AddressWithIcon() {
           {state.street}, {state.city}
         </p>
       </div>
+    </div>
+  )
+}
+
+function DateRange() {
+  const state = useBookingCard()
+  const t = useTranslation()
+
+  return (
+    <div className="px-5 py-4">
+      <div className="flex items-center justify-between">
+        <p className="text-sm font-medium">{t.checkout_stay_date}</p>
+        <p className="text-xs text-muted-foreground">{t.checkout_timezone}</p>
+      </div>
+      <p className="mt-1 text-sm capitalize text-muted-foreground">
+        {state.formattedDate}
+        {state.formattedDateTo ? ` - ${state.formattedDateTo}` : ''}
+      </p>
+    </div>
+  )
+}
+
+function Guests() {
+  const state = useBookingCard()
+  const t = useTranslation()
+
+  if (!state.guestSummary) return null
+
+  return (
+    <div className="px-5 py-4">
+      <p className="text-sm font-medium">{t.checkout_stay_guests}</p>
+      <p className="mt-1 text-sm text-muted-foreground">{state.guestSummary}</p>
     </div>
   )
 }
@@ -245,9 +280,11 @@ export const BookingCard = {
   Divider,
   Header,
   DateTime,
+  DateRange,
   Address,
   AddressWithIcon,
   Participants,
+  Guests,
   PriceDetails,
   Total,
   DepositNote,

@@ -3,6 +3,8 @@ import { getStayBySlug } from '@/lib/api/stays'
 import { ApiError } from '@/lib/api/fetch-client'
 import StayDetailContent from '@/components/stay/detail/stay-detail-content'
 
+export const dynamic = 'force-dynamic'
+
 type StayDetailPageProps = {
   params: Promise<{ lang: string; slug: string }>
 }

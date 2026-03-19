@@ -1,8 +1,9 @@
 'use client'
 
-import { createContext, useContext, useCallback } from 'react'
+import { createContext, useContext, useCallback, useRef } from 'react'
 import Image from 'next/image'
-import { StarIcon, XIcon, LoaderIcon } from '@/lib/constants/icons'
+import { useRouter } from 'next/navigation'
+import { StarIcon, XIcon, LoaderIcon, InfoIcon } from '@/lib/constants/icons'
 import { useTranslation } from '@/lib/context/translation.context'
 import { interpolate } from '@/lib/utils/i18n.utils'
 import { formatCurrency } from '@/core/utils/currency.utils'
@@ -11,6 +12,7 @@ import { Button } from '@/components/ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Calendar, CalendarDayButton } from '@/components/ui/calendar'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { it, enUS } from 'date-fns/locale'
 import { format } from 'date-fns'
 import { today as getToday } from '@/lib/utils/date.utils'
@@ -41,7 +43,11 @@ type StayBookingCardProps = {
 export default function StayBookingCard({ stay }: StayBookingCardProps) {
   const t = useTranslation()
   const lang = useLocaleStore(s => s.lang)
+  const router = useRouter()
   const booking = useStayBooking(stay)
+  const guestsRef = useRef<HTMLInputElement>(null)
+
+  const maxGuests = stay.stayDetail?.maxPeople ?? stay.maxPeople ?? 10
 
   const dateLocale = lang === 'it' ? it : enUS
   const reviews = stay.reviews ?? []
@@ -54,6 +60,22 @@ export default function StayBookingCard({ stay }: StayBookingCardProps) {
     (date: Date) => format(date, 'd/M/yyyy', { locale: dateLocale }),
     [dateLocale]
   )
+
+  const handleBook = () => {
+    if (!booking.dateRange?.from || !booking.dateRange?.to) {
+      booking.handleOpenCheckin()
+      return
+    }
+    const guests = guestsRef.current?.value ?? '1'
+    const params = new URLSearchParams({
+      listingId: stay.id,
+      type: 'stay',
+      date: format(booking.dateRange.from, 'yyyy-MM-dd'),
+      dateTo: format(booking.dateRange.to, 'yyyy-MM-dd'),
+      adults: guests,
+    })
+    router.push(`/${lang}/checkout?${params.toString()}`)
+  }
 
   return (
     <div className="rounded-2xl border bg-background p-5 shadow-sm">
@@ -238,10 +260,16 @@ export default function StayBookingCard({ stay }: StayBookingCardProps) {
       <div className="mt-2">
         <div className="group/field relative" data-has-value>
           <input
+            ref={guestsRef}
             type="number"
             min={1}
-            max={stay.stayDetail?.maxPeople ?? stay.maxPeople ?? 10}
+            max={maxGuests}
             defaultValue={1}
+            onChange={e => {
+              const val = parseInt(e.target.value, 10)
+              if (val > maxGuests) e.target.value = String(maxGuests)
+              else if (val < 1) e.target.value = '1'
+            }}
             className="border-input h-14 w-full rounded-xl border bg-background px-3 pt-5 pb-1 text-sm shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
           />
           <label className="pointer-events-none absolute left-3 top-1.5 select-none text-xs text-muted-foreground">
@@ -260,15 +288,50 @@ export default function StayBookingCard({ stay }: StayBookingCardProps) {
           ) : booking.loadingPrice ? (
             <Skeleton className="h-5 w-32" />
           ) : (
-            <p className="text-base font-bold">
-              {interpolate(t.stay_detail_total, { price: formatCurrency(booking.totalPrice) })}
-            </p>
+            <div className="flex items-center gap-1">
+              <p className="text-base font-bold">
+                {interpolate(t.stay_detail_total, { price: formatCurrency(booking.totalPrice) })}
+              </p>
+              {booking.breakdown && (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        className="text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        <InfoIcon className="size-3.5" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent side="top" className="max-w-56 space-y-1 p-3">
+                      {booking.breakdown.lineItems.map((item, i) => (
+                        <div key={i} className="flex items-center justify-between gap-4 text-xs">
+                          <span>
+                            {item.tierType === 'CLEANING_FEE'
+                              ? t.stay_detail_cleaning_fee
+                              : interpolate(t.stay_detail_nights_total, {
+                                  count: item.quantity.toString(),
+                                  price: formatCurrency(Number(item.effectiveUnitPrice)),
+                                })}
+                          </span>
+                          <span className="font-medium">{formatCurrency(Number(item.subtotal))}</span>
+                        </div>
+                      ))}
+                      <div className="flex items-center justify-between gap-4 border-t border-background/20 pt-1 text-xs font-semibold">
+                        <span>{t.stay_detail_total.replace(' {{price}}', '')}</span>
+                        <span>{formatCurrency(booking.totalPrice)}</span>
+                      </div>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
+            </div>
           )}
           {stay.cancellationTerms.length > 0 && (
             <p className="text-xs font-semibold text-primary">{stay.cancellationTerms[0]}</p>
           )}
         </div>
-        <Button size="lg" className="rounded-xl px-8" disabled={booking.loadingPrice}>
+        <Button size="lg" className="rounded-xl px-8" disabled={booking.loadingPrice} onClick={handleBook}>
           {booking.loadingPrice && <LoaderIcon className="size-4 animate-spin" />}
           {booking.nights > 0
             ? interpolate(t.stay_detail_block_with, { price: formatCurrency(booking.deposit) })

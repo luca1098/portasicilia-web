@@ -36,6 +36,7 @@ export const StayDetailSchema = z.object({
   icsUrl: z.string().nullable().optional(),
   icsSyncedAt: z.string().nullable().optional(),
   icsSyncError: z.string().nullable().optional(),
+  icsExportToken: z.string().nullable().optional(),
   availability: z.array(StayAvailabilitySchema).nullish(),
 })
 

@@ -2,15 +2,18 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { BillingFormValues } from '@/lib/schemas/forms/billing.form.schema'
 import type { Experience } from '@/lib/schemas/entities/experience.entity.schema'
+import type { Stay } from '@/lib/schemas/entities/stay.entity.schema'
 
 export type PriceTier = {
   tierType: string
   baseAmount: number
   quantity: number
   subtotal: number
+  label?: string
 }
 
 type BookingContext = {
+  listingType: 'EXPERIENCE' | 'STAY'
   experience: Experience
   date: string
   startTime: string
@@ -27,6 +30,10 @@ type BookingContext = {
   pricingMode: string
   assetTierType: string
   paymentError: boolean
+  // Stay-specific fields
+  stay?: Stay
+  dateTo?: string
+  nights?: number
 }
 
 type CheckoutRestore = {

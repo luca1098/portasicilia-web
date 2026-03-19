@@ -16,6 +16,7 @@ import {
   UnlinkIcon,
   AlertCircleIcon,
   CheckCircle2Icon,
+  CopyIcon,
 } from '@/lib/constants/icons'
 import type { Stay } from '@/lib/schemas/entities/stay.entity.schema'
 import type { StayAvailability } from '@/lib/schemas/entities/stay.entity.schema'
@@ -35,6 +36,7 @@ export default function AvailabilityTab({ stayId, stay, onSaved }: AvailabilityT
   const stayDetail = stay.stayDetail
   const [icsUrl, setIcsUrl] = useState(stayDetail?.icsUrl ?? '')
   const hasIcs = !!stayDetail?.icsUrl
+  const [exportCopied, setExportCopied] = useState(false)
 
   const { loading: icsConnecting, execute: executeIcsConnect } = useAction<Stay>({
     successMessage: t.admin_stay_ics_connect_success,
@@ -71,6 +73,13 @@ export default function AvailabilityTab({ stayId, stay, onSaved }: AvailabilityT
 
   const handleSyncIcs = async () => {
     await executeIcsSync(() => syncStayIcsAction(stayId))
+  }
+
+  const handleCopyExportUrl = async () => {
+    const url = `${window.location.origin}/api/stays/calendar/${stayDetail?.icsExportToken}.ics`
+    await navigator.clipboard.writeText(url)
+    setExportCopied(true)
+    setTimeout(() => setExportCopied(false), 2000)
   }
 
   return (
@@ -152,6 +161,32 @@ export default function AvailabilityTab({ stayId, stay, onSaved }: AvailabilityT
           </div>
         )}
       </div>
+
+      {/* ICS Export Section */}
+      {stayDetail?.icsExportToken && (
+        <div className="rounded-xl border border-border bg-card p-6 space-y-4">
+          <div>
+            <h3 className="text-sm font-semibold">{t.admin_stay_ics_export_title}</h3>
+            <p className="mt-1 text-xs text-muted-foreground">{t.admin_stay_ics_export_subtitle}</p>
+          </div>
+
+          <div className="flex gap-2">
+            <Input
+              value={`${typeof window !== 'undefined' ? window.location.origin : ''}/api/stays/calendar/${stayDetail.icsExportToken}.ics`}
+              readOnly
+              className="flex-1"
+            />
+            <Button type="button" variant="outline" onClick={handleCopyExportUrl}>
+              {exportCopied ? (
+                <CheckCircle2Icon className="size-4 text-emerald-500" />
+              ) : (
+                <CopyIcon className="size-4" />
+              )}
+              {exportCopied ? t.admin_stay_ics_export_copied : t.admin_stay_ics_export_title}
+            </Button>
+          </div>
+        </div>
+      )}
 
       {/* Blocked dates from ICS (read-only) */}
       {icsRanges.length > 0 && (

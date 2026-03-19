@@ -8,49 +8,32 @@ import BookingDaySlotGroup from './booking-day-slot-group'
 import BookingSlotsSkeleton from './booking-slots-skeleton'
 import { formatMonthYear } from './booking.utils'
 import { it, enUS } from 'react-day-picker/locale'
-import type { AvailableDateSlots } from '@/lib/api/experiences'
-import type { PricingMode } from '@/lib/schemas/entities/pricing.entity.schema'
+import { useBookingContext } from './booking-context'
 
 const calendarLocales = { it, en: enUS } as const
 
-type BookingStepSlotsProps = {
-  participantSummary: string
-  loadingSlots: boolean
-  availabilityData: AvailableDateSlots[] | null
-  selectedDate: Date | undefined
-  calendarOpen: boolean
-  daysOfWeek: string[]
-  pricingMode: PricingMode
-  assetLabel?: string | null
-  onEditParticipants: () => void
-  onDateSelect: (date: Date | undefined) => void
-  onClearDate: () => void
-  onSlotSelect: (slotId: string, slotDate: string) => void
-  onCalendarOpenChange: (open: boolean) => void
-  disabledCalendarDays: (date: Date) => boolean
-}
-
-export default function BookingStepSlots({
-  participantSummary,
-  loadingSlots,
-  availabilityData,
-  selectedDate,
-  calendarOpen,
-  daysOfWeek,
-  pricingMode,
-  assetLabel,
-  onEditParticipants,
-  onDateSelect,
-  onSlotSelect,
-  onCalendarOpenChange,
-  disabledCalendarDays,
-}: BookingStepSlotsProps) {
+export default function BookingStepSlots() {
+  const {
+    participantSummary,
+    loadingSlots,
+    availabilityData,
+    selectedDate,
+    calendarOpen,
+    daysOfWeek,
+    pricingMode,
+    experience,
+    handleEditParticipants,
+    handleDateSelect,
+    handleSlotSelect,
+    setCalendarOpen,
+    disabledCalendarDays,
+  } = useBookingContext()
   const t = useTranslation()
   const { lang } = useParams<{ lang: string }>()
 
+  const assetLabel = experience.assetLabel
   const visibleMonth =
     availabilityData && availabilityData.length > 0 ? formatMonthYear(availabilityData[0].date, lang) : ''
-
   const hasNoSlots = availabilityData !== null && availabilityData.every(d => d.slots.length === 0)
 
   return (
@@ -61,7 +44,7 @@ export default function BookingStepSlots({
           <p className="text-xs text-muted-foreground">{t.exp_detail_participants}</p>
           <p className="text-sm font-medium">{participantSummary}</p>
         </div>
-        <Button variant="outline" size="xs" className="rounded-full" onClick={onEditParticipants}>
+        <Button variant="outline" size="xs" className="rounded-full" onClick={handleEditParticipants}>
           {t.admin_common_edit}
         </Button>
       </div>
@@ -89,13 +72,13 @@ export default function BookingStepSlots({
                   entry={entry}
                   pricingMode={pricingMode}
                   assetLabel={assetLabel}
-                  onSlotSelect={onSlotSelect}
+                  onSlotSelect={handleSlotSelect}
                 />
               ))}
 
               {/* Date picker button */}
               {daysOfWeek.length > 0 && (
-                <Popover open={calendarOpen} onOpenChange={onCalendarOpenChange}>
+                <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
                   <PopoverTrigger asChild>
                     <Button variant="outline" className="h-12 w-full rounded-xl text-sm font-semibold">
                       <CalendarIcon className="size-4" />
@@ -106,7 +89,7 @@ export default function BookingStepSlots({
                     <Calendar
                       mode="single"
                       selected={selectedDate}
-                      onSelect={onDateSelect}
+                      onSelect={handleDateSelect}
                       disabled={disabledCalendarDays}
                       locale={calendarLocales[lang as keyof typeof calendarLocales] ?? it}
                     />

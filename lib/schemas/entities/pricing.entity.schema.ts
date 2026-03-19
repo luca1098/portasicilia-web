@@ -6,6 +6,7 @@ export const PricingModeSchema = z.union([
   z.literal('PER_PERSON'),
   z.literal('PER_EXPERIENCE'),
   z.literal('PER_ASSET'),
+  z.literal('PER_NIGHT'),
 ])
 
 export type PricingMode = z.infer<typeof PricingModeSchema>

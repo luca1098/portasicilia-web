@@ -1,23 +1,38 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { createContext, useContext, useCallback } from 'react'
 import Image from 'next/image'
-import { StarIcon, XIcon } from '@/lib/constants/icons'
+import { StarIcon, XIcon, LoaderIcon } from '@/lib/constants/icons'
 import { useTranslation } from '@/lib/context/translation.context'
 import { interpolate } from '@/lib/utils/i18n.utils'
 import { formatCurrency } from '@/core/utils/currency.utils'
 import useLocaleStore from '@/core/store/locale.store'
 import { Button } from '@/components/ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { Calendar } from '@/components/ui/calendar'
+import { Calendar, CalendarDayButton } from '@/components/ui/calendar'
 import { Skeleton } from '@/components/ui/skeleton'
-import { api } from '@/lib/api/fetch-client'
 import { it, enUS } from 'date-fns/locale'
-import { addDays, differenceInCalendarDays, format, isBefore } from 'date-fns'
-import { parseDate, today as getToday } from '@/lib/utils/date.utils'
-import type { DateRange } from 'react-day-picker'
+import { format } from 'date-fns'
+import { today as getToday } from '@/lib/utils/date.utils'
+import { useStayBooking } from './use-stay-booking'
+import type { DayButton } from 'react-day-picker'
 import type { Stay } from '@/lib/schemas/entities/stay.entity.schema'
-import type { StayAvailabilityResponse } from '@/lib/api/stays'
+
+const DailyRatesContext = createContext<Record<string, string>>({})
+
+function PriceDayButton(props: React.ComponentProps<typeof DayButton>) {
+  const rates = useContext(DailyRatesContext)
+  const dateKey = format(props.day.date, 'yyyy-MM-dd')
+  const rate = rates[dateKey]
+  const isHidden = props.modifiers.disabled || props.modifiers.outside
+
+  return (
+    <CalendarDayButton {...props}>
+      {props.children}
+      {rate && !isHidden && <span className="text-9px! leading-none!">{`€${Math.round(Number(rate))}`}</span>}
+    </CalendarDayButton>
+  )
+}
 
 type StayBookingCardProps = {
   stay: Stay
@@ -26,84 +41,19 @@ type StayBookingCardProps = {
 export default function StayBookingCard({ stay }: StayBookingCardProps) {
   const t = useTranslation()
   const lang = useLocaleStore(s => s.lang)
-  const dateLocale = lang === 'it' ? it : enUS
+  const booking = useStayBooking(stay)
 
+  const dateLocale = lang === 'it' ? it : enUS
   const reviews = stay.reviews ?? []
   const avgRating =
     reviews.length > 0 ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1) : null
-
-  const tiers = stay.priceLists?.[0]?.tiers
-  const nightlyPrice = tiers && tiers.length > 0 ? Math.min(...tiers.map(tier => tier.baseAmount)) : 0
-
   const coverUrl = stay.images?.[0]?.url ?? stay.cover
+  const today = getToday()
 
-  const [blockedRanges, setBlockedRanges] = useState<Array<{ from: Date; to: Date }>>([])
-  const [loadingAvailability, setLoadingAvailability] = useState(true)
-  const [dateRange, setDateRange] = useState<DateRange | undefined>()
-  const [open, setOpen] = useState(false)
-  const [activeField, setActiveField] = useState<'from' | 'to'>('from')
-
-  useEffect(() => {
-    api
-      .get<StayAvailabilityResponse>(`/stays/${stay.id}/availability`)
-      .then(data => {
-        const blocked = data.availability
-          .filter(a => !a.available)
-          .map(a => ({
-            from: parseDate(a.dateFrom),
-            to: parseDate(a.dateTo),
-          }))
-        setBlockedRanges(blocked)
-      })
-      .catch(() => {})
-      .finally(() => setLoadingAvailability(false))
-  }, [stay.id])
-
-  const nights = dateRange?.from && dateRange?.to ? differenceInCalendarDays(dateRange.to, dateRange.from) : 0
-
-  const formatDate = useCallback(
+  const formatDateDisplay = useCallback(
     (date: Date) => format(date, 'd/M/yyyy', { locale: dateLocale }),
     [dateLocale]
   )
-
-  const handleSelect = (range: DateRange | undefined) => {
-    if (activeField === 'from') {
-      // When selecting check-in, reset the range
-      setDateRange({ from: range?.from, to: undefined })
-      if (range?.from) setActiveField('to')
-    } else {
-      // When selecting check-out
-      if (range?.from && range?.to && isBefore(range.to, range.from)) {
-        setDateRange({ from: range.to, to: undefined })
-        setActiveField('to')
-      } else {
-        setDateRange(range)
-        if (range?.to) setOpen(false)
-      }
-    }
-  }
-
-  const handleClear = () => {
-    setDateRange(undefined)
-    setActiveField('from')
-  }
-
-  const handleOpenCheckin = () => {
-    setActiveField('from')
-    setOpen(true)
-  }
-
-  const handleOpenCheckout = () => {
-    setActiveField('to')
-    setOpen(true)
-  }
-
-  const today = getToday()
-
-  const disabledRanges =
-    activeField === 'to'
-      ? blockedRanges.map(r => ({ from: addDays(r.from, 1), to: r.to })).filter(r => r.from <= r.to)
-      : blockedRanges
 
   return (
     <div className="rounded-2xl border bg-background p-5 shadow-sm">
@@ -126,38 +76,39 @@ export default function StayBookingCard({ stay }: StayBookingCardProps) {
       </div>
 
       {/* Date picker trigger */}
-      <Popover open={open} onOpenChange={setOpen}>
+      <Popover open={booking.open} onOpenChange={booking.setOpen}>
         <div className="mt-5 grid grid-cols-2">
-          {/* Check-in */}
           {/* Check-in */}
           <PopoverTrigger asChild>
             <div
               role="button"
               tabIndex={0}
-              onClick={handleOpenCheckin}
-              className={`flex h-14 cursor-pointer items-center justify-between rounded-l-xl border border-input bg-background px-3 text-left shadow-xs transition-[color,box-shadow] ${
-                open && activeField === 'from' ? 'border-ring ring-ring/50 ring-[3px]' : ''
-              }`}
+              onClick={booking.handleOpenCheckin}
+              className={`flex h-14 cursor-pointer items-center justify-between rounded-l-xl border border-input bg-background px-3 text-left shadow-xs transition-[color,box-shadow] ${booking.open && booking.activeField === 'from' ? 'border-ring ring-ring/50 ring-[3px]' : ''}`}
             >
               <div className="min-w-0">
                 <p className="text-xs text-muted-foreground">{t.stay_detail_check_in}</p>
-                <p className={`text-sm ${dateRange?.from ? 'text-foreground' : 'text-muted-foreground'}`}>
-                  {dateRange?.from ? formatDate(dateRange.from) : t.stay_detail_select_dates}
+                <p
+                  className={`text-sm ${booking.dateRange?.from ? 'text-foreground' : 'text-muted-foreground'}`}
+                >
+                  {booking.dateRange?.from
+                    ? formatDateDisplay(booking.dateRange.from)
+                    : t.stay_detail_select_dates}
                 </p>
               </div>
-              {dateRange?.from && (
+              {booking.dateRange?.from && (
                 <span
                   role="button"
                   tabIndex={0}
                   className="ml-2 shrink-0 cursor-pointer rounded-full p-0.5 hover:bg-muted"
                   onClick={e => {
                     e.stopPropagation()
-                    handleClear()
+                    booking.handleClear()
                   }}
                   onKeyDown={e => {
                     if (e.key === 'Enter') {
                       e.stopPropagation()
-                      handleClear()
+                      booking.handleClear()
                     }
                   }}
                 >
@@ -172,34 +123,32 @@ export default function StayBookingCard({ stay }: StayBookingCardProps) {
             <div
               role="button"
               tabIndex={0}
-              onClick={handleOpenCheckout}
-              className={`flex h-14 cursor-pointer items-center justify-between rounded-r-xl border border-l-0 border-input bg-background px-3 text-left shadow-xs transition-[color,box-shadow] ${
-                open && activeField === 'to' ? 'border-ring ring-ring/50 ring-[3px]' : ''
-              }`}
+              onClick={booking.handleOpenCheckout}
+              className={`flex h-14 cursor-pointer items-center justify-between rounded-r-xl border border-l-0 border-input bg-background px-3 text-left shadow-xs transition-[color,box-shadow] ${booking.open && booking.activeField === 'to' ? 'border-ring ring-ring/50 ring-[3px]' : ''}`}
             >
               <div className="min-w-0">
                 <p className="text-xs text-muted-foreground">{t.stay_detail_check_out}</p>
-                <p className={`text-sm ${dateRange?.to ? 'text-foreground' : 'text-muted-foreground'}`}>
-                  {dateRange?.to ? formatDate(dateRange.to) : t.stay_detail_select_dates}
+                <p
+                  className={`text-sm ${booking.dateRange?.to ? 'text-foreground' : 'text-muted-foreground'}`}
+                >
+                  {booking.dateRange?.to
+                    ? formatDateDisplay(booking.dateRange.to)
+                    : t.stay_detail_select_dates}
                 </p>
               </div>
-              {dateRange?.to && (
+              {booking.dateRange?.to && (
                 <span
                   role="button"
                   tabIndex={0}
                   className="ml-2 shrink-0 cursor-pointer rounded-full p-0.5 hover:bg-muted"
                   onClick={e => {
                     e.stopPropagation()
-                    setDateRange(prev => ({ from: prev?.from, to: undefined }))
-                    setActiveField('to')
-                    setOpen(true)
+                    booking.handleClearCheckout()
                   }}
                   onKeyDown={e => {
                     if (e.key === 'Enter') {
                       e.stopPropagation()
-                      setDateRange(prev => ({ from: prev?.from, to: undefined }))
-                      setActiveField('to')
-                      setOpen(true)
+                      booking.handleClearCheckout()
                     }
                   }}
                 >
@@ -215,7 +164,7 @@ export default function StayBookingCard({ stay }: StayBookingCardProps) {
             className="w-auto p-0"
             onOpenAutoFocus={e => e.preventDefault()}
           >
-            {loadingAvailability ? (
+            {booking.loadingAvailability ? (
               <div className="p-4">
                 <Skeleton className="mb-4 h-7 w-48" />
                 <div className="flex gap-4">
@@ -234,16 +183,17 @@ export default function StayBookingCard({ stay }: StayBookingCardProps) {
             ) : (
               <div className="p-4">
                 {/* Header summary */}
-                {nights > 0 && dateRange?.from && dateRange?.to ? (
+                {booking.nights > 0 && booking.dateRange?.from && booking.dateRange?.to ? (
                   <div className="mb-4">
                     <p className="text-lg font-bold">
-                      {interpolate(nights === 1 ? t.stay_detail_night_count : t.stay_detail_nights_count, {
-                        count: nights.toString(),
-                      })}
+                      {interpolate(
+                        booking.nights === 1 ? t.stay_detail_night_count : t.stay_detail_nights_count,
+                        { count: booking.nights.toString() }
+                      )}
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      {format(dateRange.from, 'MMM d, yyyy', { locale: dateLocale })} -{' '}
-                      {format(dateRange.to, 'MMM d, yyyy', { locale: dateLocale })}
+                      {format(booking.dateRange.from, 'MMM d, yyyy', { locale: dateLocale })} -{' '}
+                      {format(booking.dateRange.to, 'MMM d, yyyy', { locale: dateLocale })}
                     </p>
                   </div>
                 ) : (
@@ -253,23 +203,28 @@ export default function StayBookingCard({ stay }: StayBookingCardProps) {
                 )}
 
                 {/* Calendar */}
-                <Calendar
-                  mode="range"
-                  selected={dateRange}
-                  onSelect={handleSelect}
-                  numberOfMonths={2}
-                  disabled={[{ before: today }, ...disabledRanges]}
-                  locale={dateLocale}
-                  defaultMonth={dateRange?.from ?? today}
-                />
+                <DailyRatesContext.Provider value={booking.dailyRates}>
+                  <Calendar
+                    mode="range"
+                    selected={booking.dateRange}
+                    onSelect={booking.handleSelect}
+                    numberOfMonths={2}
+                    disabled={[{ before: today }, ...booking.disabledRanges]}
+                    locale={dateLocale}
+                    defaultMonth={booking.dateRange?.from ?? today}
+                    onMonthChange={booking.handleMonthChange}
+                    className="[--cell-size:--spacing(10)]"
+                    components={{ DayButton: PriceDayButton }}
+                  />
+                </DailyRatesContext.Provider>
                 <p className="text-center text-xs text-muted-foreground">{t.checkout_timezone}</p>
 
                 {/* Footer */}
                 <div className="mt-2 flex items-center justify-end gap-2 border-t pt-3">
-                  <Button variant="ghost" size="sm" onClick={handleClear}>
+                  <Button variant="ghost" size="sm" onClick={booking.handleClear}>
                     {t.stay_detail_clear_dates}
                   </Button>
-                  <Button size="sm" onClick={() => setOpen(false)}>
+                  <Button size="sm" onClick={() => booking.setOpen(false)}>
                     {t.stay_detail_close}
                   </Button>
                 </div>
@@ -295,16 +250,29 @@ export default function StayBookingCard({ stay }: StayBookingCardProps) {
         </div>
       </div>
 
-      {/* Price + Book */}
+      {/* Deposit + Book */}
       <div className="mt-5 flex items-center justify-between">
         <div>
-          <p className="text-base font-bold">
-            {interpolate(t.stay_detail_price_per_night, { price: formatCurrency(nightlyPrice) })}
-          </p>
-          <p className="text-xs font-semibold text-primary">{t.stay_detail_free_cancellation}</p>
+          {booking.nights <= 0 ? (
+            <p className="text-base font-bold">
+              {interpolate(t.stay_detail_price_per_night, { price: formatCurrency(booking.nightlyPrice) })}
+            </p>
+          ) : booking.loadingPrice ? (
+            <Skeleton className="h-5 w-32" />
+          ) : (
+            <p className="text-base font-bold">
+              {interpolate(t.stay_detail_total, { price: formatCurrency(booking.totalPrice) })}
+            </p>
+          )}
+          {stay.cancellationTerms.length > 0 && (
+            <p className="text-xs font-semibold text-primary">{stay.cancellationTerms[0]}</p>
+          )}
         </div>
-        <Button size="lg" className="rounded-xl px-8">
-          {t.stay_detail_book}
+        <Button size="lg" className="rounded-xl px-8" disabled={booking.loadingPrice}>
+          {booking.loadingPrice && <LoaderIcon className="size-4 animate-spin" />}
+          {booking.nights > 0
+            ? interpolate(t.stay_detail_block_with, { price: formatCurrency(booking.deposit) })
+            : t.stay_detail_book}
         </Button>
       </div>
     </div>

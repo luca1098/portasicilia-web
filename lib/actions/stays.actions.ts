@@ -10,6 +10,7 @@ import {
   setStayIcsUrl,
   syncStayIcs,
 } from '@/lib/api/stays'
+import { createPriceModifier, updatePriceModifier, deletePriceModifier } from '@/lib/api/pricing'
 import type { Stay } from '@/lib/schemas/entities/stay.entity.schema'
 import { revalidatePath } from 'next/cache'
 import { type ActionResult, getAuthHeaders } from './action.types'
@@ -96,6 +97,55 @@ export async function setStayPricingAction(
   try {
     const headers = await getAuthHeaders()
     await setStayPricing(stayId, data, headers)
+    const stay = await getStayById(stayId)
+    revalidatePath('/[lang]/(dashboard)/dashboard/admin/stays/[id]', 'page')
+    return { success: true, data: stay }
+  } catch (e) {
+    return { success: false, error: (e as Error).message }
+  }
+}
+
+export async function createStayModifierAction(
+  stayId: string,
+  priceListId: string,
+  data: Record<string, unknown>
+): Promise<ActionResult<Stay>> {
+  try {
+    const headers = await getAuthHeaders()
+    await createPriceModifier(priceListId, data, headers)
+    const stay = await getStayById(stayId)
+    revalidatePath('/[lang]/(dashboard)/dashboard/admin/stays/[id]', 'page')
+    return { success: true, data: stay }
+  } catch (e) {
+    return { success: false, error: (e as Error).message }
+  }
+}
+
+export async function updateStayModifierAction(
+  stayId: string,
+  priceListId: string,
+  modifierId: string,
+  data: Record<string, unknown>
+): Promise<ActionResult<Stay>> {
+  try {
+    const headers = await getAuthHeaders()
+    await updatePriceModifier(priceListId, modifierId, data, headers)
+    const stay = await getStayById(stayId)
+    revalidatePath('/[lang]/(dashboard)/dashboard/admin/stays/[id]', 'page')
+    return { success: true, data: stay }
+  } catch (e) {
+    return { success: false, error: (e as Error).message }
+  }
+}
+
+export async function deleteStayModifierAction(
+  stayId: string,
+  priceListId: string,
+  modifierId: string
+): Promise<ActionResult<Stay>> {
+  try {
+    const headers = await getAuthHeaders()
+    await deletePriceModifier(priceListId, modifierId, headers)
     const stay = await getStayById(stayId)
     revalidatePath('/[lang]/(dashboard)/dashboard/admin/stays/[id]', 'page')
     return { success: true, data: stay }

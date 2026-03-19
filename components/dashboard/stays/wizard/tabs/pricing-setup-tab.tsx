@@ -10,6 +10,8 @@ import { useAction } from '@/lib/hooks/use-action'
 import { setStayPricingAction } from '@/lib/actions/stays.actions'
 import { LoaderIcon } from '@/lib/constants/icons'
 import type { Stay } from '@/lib/schemas/entities/stay.entity.schema'
+import SeasonalPricingSection from './seasonal-pricing-section'
+import type { PriceModifier } from '@/lib/schemas/entities/pricing.entity.schema'
 
 const StayPricingSchema = z.object({
   nightlyRate: z.number().min(0),
@@ -120,6 +122,19 @@ export default function StayPricingSetupTab({ stayId, stay, onSaved }: StayPrici
           </form>
         </FormProvider>
       </div>
+
+      {existingPriceList && (
+        <SeasonalPricingSection
+          stayId={stayId}
+          priceListId={existingPriceList.id}
+          modifiers={
+            ((existingPriceList as unknown as { modifiers?: PriceModifier[] }).modifiers ?? []).filter(
+              m => m.type === 'SEASONAL'
+            ) as PriceModifier[]
+          }
+          onSaved={onSaved}
+        />
+      )}
     </div>
   )
 }

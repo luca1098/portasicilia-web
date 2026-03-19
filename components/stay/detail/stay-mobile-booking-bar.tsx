@@ -17,8 +17,8 @@ export default function StayMobileBookingBar({ stay }: StayMobileBookingBarProps
   const t = useTranslation()
   const [open, setOpen] = useState(false)
 
-  const tiers = stay.priceLists?.[0]?.tiers
-  const nightlyPrice = tiers && tiers.length > 0 ? Math.min(...tiers.map(tier => tier.baseAmount)) : 0
+  const tiers = stay.priceLists?.[0]?.tiers ?? []
+  const nightlyPrice = tiers.find(t => t.tierType === 'NIGHTLY')?.baseAmount ?? 0
 
   const handleOpen = () => {
     setOpen(true)

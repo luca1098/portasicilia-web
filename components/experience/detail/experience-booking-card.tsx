@@ -1,17 +1,17 @@
 'use client'
 
 import type { Experience } from '@/lib/schemas/entities/experience.entity.schema'
+import { BookingProvider, useBookingContext } from './booking-widget/booking-context'
 import BookingCardHeader from './booking-widget/booking-card-header'
 import BookingStepParticipants from './booking-widget/booking-step-participants'
 import BookingStepSlots from './booking-widget/booking-step-slots'
-import { useBooking } from './booking-widget/use-booking'
 
 type ExperienceBookingCardProps = {
   experience: Experience
 }
 
-export default function ExperienceBookingCard({ experience }: ExperienceBookingCardProps) {
-  const booking = useBooking(experience)
+function BookingCardContent({ experience }: { experience: Experience }) {
+  const { step, avgRating } = useBookingContext()
 
   return (
     <div className="rounded-xl border bg-background shadow-sm">
@@ -19,46 +19,18 @@ export default function ExperienceBookingCard({ experience }: ExperienceBookingC
         name={experience.name}
         cover={experience.cover}
         imageUrl={experience.images?.[0]?.url}
-        avgRating={booking.avgRating}
+        avgRating={avgRating}
       />
-
-      {booking.step === 1 && (
-        <BookingStepParticipants
-          isPerAsset={booking.isPerAsset}
-          assetLabel={experience.assetLabel}
-          maxCapacity={booking.maxCapacity}
-          adults={booking.adults}
-          children={booking.children}
-          infants={booking.infants}
-          assetCount={booking.assetCount}
-          onAdultsChange={booking.setAdults}
-          onChildrenChange={booking.setChildren}
-          onInfantsChange={booking.setInfants}
-          onAssetCountChange={booking.setAssetCount}
-          basePrice={booking.basePrice}
-          pricingMode={booking.pricingMode}
-          onChooseDate={booking.handleChooseDate}
-        />
-      )}
-
-      {booking.step === 2 && (
-        <BookingStepSlots
-          participantSummary={booking.participantSummary}
-          loadingSlots={booking.loadingSlots}
-          availabilityData={booking.availabilityData}
-          selectedDate={booking.selectedDate}
-          calendarOpen={booking.calendarOpen}
-          daysOfWeek={booking.daysOfWeek}
-          pricingMode={booking.pricingMode}
-          assetLabel={experience.assetLabel}
-          onEditParticipants={booking.handleEditParticipants}
-          onDateSelect={booking.handleDateSelect}
-          onClearDate={booking.handleClearDate}
-          onSlotSelect={booking.handleSlotSelect}
-          onCalendarOpenChange={booking.setCalendarOpen}
-          disabledCalendarDays={booking.disabledCalendarDays}
-        />
-      )}
+      {step === 1 && <BookingStepParticipants />}
+      {step === 2 && <BookingStepSlots />}
     </div>
+  )
+}
+
+export default function ExperienceBookingCard({ experience }: ExperienceBookingCardProps) {
+  return (
+    <BookingProvider experience={experience}>
+      <BookingCardContent experience={experience} />
+    </BookingProvider>
   )
 }

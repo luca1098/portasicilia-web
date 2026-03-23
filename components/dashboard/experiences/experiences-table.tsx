@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import {
@@ -16,6 +16,7 @@ import { useTranslation } from '@/lib/context/translation.context'
 import { Compass, MoreHorizontalIcon, PencilIcon, Trash2Icon, ImageIcon } from '@/lib/constants/icons'
 import type { Experience } from '@/lib/schemas/entities/experience.entity.schema'
 import ExperienceDeleteDialog from './experience-delete-dialog'
+import TranslationStatusPopover from '@/components/dashboard/translation-status-popover'
 
 type ExperiencesTableProps = {
   experiences: Experience[]
@@ -24,6 +25,7 @@ type ExperiencesTableProps = {
 export default function ExperiencesTable({ experiences }: ExperiencesTableProps) {
   const [deleteTarget, setDeleteTarget] = useState<Experience | null>(null)
   const params = useParams()
+  const router = useRouter()
   const lang = params.lang as string
   const t = useTranslation() as Record<string, string>
   const basePath = `/${lang}/dashboard/admin/experiences`
@@ -51,6 +53,7 @@ export default function ExperiencesTable({ experiences }: ExperiencesTableProps)
               <TableHead>{t.admin_exp_name}</TableHead>
               <TableHead>{t.admin_exp_status}</TableHead>
               <TableHead>{t.admin_exp_city}</TableHead>
+              <TableHead>{t.admin_col_translations}</TableHead>
               <TableHead className="w-16" />
             </TableRow>
           </TableHeader>
@@ -87,6 +90,13 @@ export default function ExperiencesTable({ experiences }: ExperiencesTableProps)
                   </span>
                 </TableCell>
                 <TableCell className="text-muted-foreground">{experience.city}</TableCell>
+                <TableCell>
+                  <TranslationStatusPopover
+                    listingId={experience.id}
+                    status={experience.translationStatus}
+                    onTranslationComplete={() => router.refresh()}
+                  />
+                </TableCell>
                 <TableCell>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>

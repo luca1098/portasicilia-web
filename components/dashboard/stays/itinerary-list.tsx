@@ -202,6 +202,7 @@ export default function ItineraryList({ stayId, items }: ItineraryListProps) {
       <ItineraryFormDialog
         stayId={stayId}
         mode="create"
+        itemCount={displayItems.length}
         open={formOpen}
         onOpenChange={setFormOpen}
         onSuccess={addItem}

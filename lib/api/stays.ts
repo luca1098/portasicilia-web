@@ -1,4 +1,5 @@
 import type { Stay } from '@/lib/schemas/entities/stay.entity.schema'
+import type { SupportedLocale } from '@/lib/configs/locales'
 import { apiServer } from './fetch-client'
 
 type PaginatedStays = {
@@ -77,8 +78,10 @@ export function getStayById(id: string) {
   return apiServer.get<Stay>(`/stays/${id}`)
 }
 
-export function getStayBySlug(slug: string) {
-  return apiServer.get<Stay>(`/stays/slug/${slug}`)
+export function getStayBySlug(slug: string, lang?: string) {
+  return apiServer.get<Stay>(`/stays/slug/${slug}`, {
+    ...(lang && lang !== 'it' && { lang: lang as SupportedLocale }),
+  })
 }
 
 export function createStay(data: FormData, headers: HeadersInit) {

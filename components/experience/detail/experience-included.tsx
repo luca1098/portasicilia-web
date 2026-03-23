@@ -2,6 +2,7 @@
 
 import { useTranslation } from '@/lib/context/translation.context'
 import { CheckIcon, XIcon } from '@/lib/constants/icons'
+import TranslationBadge from '@/components/ui/translation-badge'
 
 type ExperienceIncludedProps = {
   included: string[]
@@ -18,7 +19,10 @@ export default function ExperienceIncluded({ included, notIncluded }: Experience
 
   return (
     <div>
-      <h2 className="mb-4 text-xl font-bold">{t.exp_detail_whats_included}</h2>
+      <div className="mb-4 flex flex-wrap items-center gap-3">
+        <h2 className="text-xl font-bold">{t.exp_detail_whats_included}</h2>
+        <TranslationBadge />
+      </div>
       <div className="grid grid-cols-1 gap-x-12 gap-y-3 sm:grid-cols-2">
         <div className="flex flex-col gap-3">
           {includedItems.map((item, index) => (

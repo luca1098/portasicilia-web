@@ -1,8 +1,10 @@
 'use client'
 
 import { useTranslation } from '@/lib/context/translation.context'
+import { useTranslationToggle } from '@/lib/context/translation-toggle.context'
 import { interpolate } from '@/lib/utils/i18n.utils'
 import type { Stay } from '@/lib/schemas/entities/stay.entity.schema'
+import TranslationBadge from '@/components/ui/translation-badge'
 
 type StayHouseRulesProps = {
   stay: Stay
@@ -10,9 +12,14 @@ type StayHouseRulesProps = {
 
 export default function StayHouseRules({ stay }: StayHouseRulesProps) {
   const t = useTranslation()
+  const { showingOriginal, isTranslated } = useTranslationToggle()
 
   const detail = stay.stayDetail
-  const houseRules = detail?.houseRules ?? stay.houseRules ?? []
+  const originals = stay._originals ?? {}
+  const houseRules =
+    showingOriginal && isTranslated && originals['houseRules']
+      ? (originals['houseRules'] as string[])
+      : (detail?.houseRules ?? stay.houseRules ?? [])
   const checkInTime = detail?.checkInTime ?? stay.checkInTime
   const checkOutTime = detail?.checkOutTime ?? stay.checkOutTime
   const maxPeople = detail?.maxPeople ?? stay.maxPeople
@@ -37,7 +44,10 @@ export default function StayHouseRules({ stay }: StayHouseRulesProps) {
 
   return (
     <div>
-      <h2 className="mb-4 text-xl font-bold">{t.stay_detail_house_rules}</h2>
+      <div className="mb-4 flex flex-wrap items-center gap-3">
+        <h2 className="text-xl font-bold">{t.stay_detail_house_rules}</h2>
+        <TranslationBadge />
+      </div>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {rules.map((rule, index) => (
           <div key={index} className="flex items-start gap-2">

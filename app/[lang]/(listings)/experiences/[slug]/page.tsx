@@ -12,7 +12,7 @@ export default async function ExperienceDetailPage({ params }: ExperienceDetailP
 
   let experience
   try {
-    experience = await getExperienceBySlug(slug)
+    experience = await getExperienceBySlug(slug, lang)
   } catch (error) {
     if (error instanceof ApiError && error.status === 404) {
       notFound()

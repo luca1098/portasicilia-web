@@ -17,12 +17,12 @@ import { toFormData } from '@/lib/utils/form-data.utils'
 import { useAction } from '@/lib/hooks/use-action'
 import { LoaderIcon } from '@/lib/constants/icons'
 import type { ExperienceItinerary } from '@/lib/schemas/entities/experience.entity.schema'
-import { NumberFormField } from '@/components/form'
 
 type ItineraryFormDialogProps = {
   stayId: string
   mode: 'create' | 'edit'
   item?: ExperienceItinerary
+  itemCount?: number
   open: boolean
   onOpenChange: (open: boolean) => void
   onSuccess?: (item: ExperienceItinerary) => void
@@ -32,6 +32,7 @@ export default function ItineraryFormDialog({
   stayId,
   mode,
   item,
+  itemCount = 0,
   open,
   onOpenChange,
   onSuccess,
@@ -44,7 +45,7 @@ export default function ItineraryFormDialog({
       title: item?.title ?? '',
       description: item?.description ?? '',
       image: item?.image ?? null,
-      order: item?.order ?? 0,
+      order: item?.order ?? itemCount,
     },
   })
 
@@ -89,7 +90,6 @@ export default function ItineraryFormDialog({
               name="image"
               label={t.admin_itinerary_image}
             />
-            <NumberFormField<ExperienceItineraryFormValues> name="order" label={t.admin_itinerary_order} />
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={loading}>
                 {t.admin_common_cancel}

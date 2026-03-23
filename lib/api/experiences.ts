@@ -1,4 +1,5 @@
 import type { Experience } from '@/lib/schemas/entities/experience.entity.schema'
+import type { SupportedLocale } from '@/lib/configs/locales'
 import { apiServer } from './fetch-client'
 
 type PaginatedExperiences = {
@@ -77,8 +78,10 @@ export function getExperienceById(id: string) {
   return apiServer.get<Experience>(`/experiences/${id}`)
 }
 
-export function getExperienceBySlug(slug: string) {
-  return apiServer.get<Experience>(`/experiences/slug/${slug}`)
+export function getExperienceBySlug(slug: string, lang?: string) {
+  return apiServer.get<Experience>(`/experiences/slug/${slug}`, {
+    ...(lang && lang !== 'it' && { lang: lang as SupportedLocale }),
+  })
 }
 
 export type AvailableSlot = {

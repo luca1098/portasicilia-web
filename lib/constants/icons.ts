@@ -100,4 +100,5 @@ export {
   RefreshCwIcon,
   UnlinkIcon,
   CopyIcon,
+  LanguagesIcon,
 } from 'lucide-react'

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { useTranslation } from '@/lib/context/translation.context'
 import type { ExperienceItinerary as ExperienceItineraryType } from '@/lib/schemas/entities/experience.entity.schema'
+import TranslationBadge from '@/components/ui/translation-badge'
 
 const VISIBLE_LIMIT = 4
 
@@ -21,7 +22,10 @@ export default function ExperienceItinerary({ title, steps }: ExperienceItinerar
 
   return (
     <div>
-      <h2 className="mb-4 text-xl font-bold">{title}</h2>
+      <div className="mb-4 flex flex-wrap items-center gap-3">
+        <h2 className="text-xl font-bold">{title}</h2>
+        <TranslationBadge />
+      </div>
       <div className="space-y-4">
         {visibleSteps.map(step => (
           <div key={step.id} className="flex gap-4">

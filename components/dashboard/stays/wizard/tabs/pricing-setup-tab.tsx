@@ -3,7 +3,7 @@
 import { FormProvider, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { CurrencyFormField } from '@/components/form'
+import { CurrencyFormField, NumberFormField } from '@/components/form'
 import { Button } from '@/components/ui/button'
 import { useTranslation } from '@/lib/context/translation.context'
 import { useAction } from '@/lib/hooks/use-action'
@@ -17,6 +17,7 @@ const StayPricingSchema = z.object({
   nightlyRate: z.number().min(0),
   cleaningFee: z.number().min(0),
   extraPersonFee: z.number().min(0),
+  baseOccupancy: z.number().int().min(1).nullable(),
 })
 
 type StayPricingValues = z.infer<typeof StayPricingSchema>
@@ -48,12 +49,20 @@ export default function StayPricingSetupTab({ stayId, stay, onSaved }: StayPrici
     return tier ? Number(tier.baseAmount) : 0
   }
 
+  const getBaseOccupancy = () => {
+    const tier = existingTiers.find(t => t.tierType === 'EXTRA_PERSON_FEE')
+    return tier?.minQuantity ?? null
+  }
+
+  const maxPeople = stay.stayDetail?.maxPeople ?? stay.maxPeople ?? 0
+
   const form = useForm<StayPricingValues>({
     resolver: zodResolver(StayPricingSchema),
     defaultValues: {
       nightlyRate: getNightlyRate(),
       cleaningFee: getCleaningFee(),
       extraPersonFee: getExtraPersonFee(),
+      baseOccupancy: getBaseOccupancy(),
     },
   })
 
@@ -65,7 +74,13 @@ export default function StayPricingSetupTab({ stayId, stay, onSaved }: StayPrici
   })
 
   const onSubmit = async (data: StayPricingValues) => {
-    const tiers = [{ tierType: 'NIGHTLY', baseAmount: data.nightlyRate, label: t.admin_stay_pricing_nightly }]
+    if (data.baseOccupancy != null && maxPeople > 1) {
+      data.baseOccupancy = Math.max(1, Math.min(data.baseOccupancy, maxPeople - 1))
+    }
+
+    const tiers: { tierType: string; baseAmount: number; label: string; minQuantity?: number }[] = [
+      { tierType: 'NIGHTLY', baseAmount: data.nightlyRate, label: t.admin_stay_pricing_nightly },
+    ]
 
     if (data.cleaningFee > 0) {
       tiers.push({
@@ -75,11 +90,12 @@ export default function StayPricingSetupTab({ stayId, stay, onSaved }: StayPrici
       })
     }
 
-    if (data.extraPersonFee > 0) {
+    if (data.extraPersonFee > 0 && data.baseOccupancy) {
       tiers.push({
         tierType: 'EXTRA_PERSON_FEE',
         baseAmount: data.extraPersonFee,
         label: t.admin_stay_pricing_extra_person,
+        minQuantity: data.baseOccupancy,
       })
     }
 
@@ -107,11 +123,29 @@ export default function StayPricingSetupTab({ stayId, stay, onSaved }: StayPrici
                 name="cleaningFee"
                 label={t.admin_stay_pricing_cleaning}
               />
-              <CurrencyFormField<StayPricingValues>
-                name="extraPersonFee"
-                label={t.admin_stay_pricing_extra_person}
-              />
+              {maxPeople > 1 ? (
+                <CurrencyFormField<StayPricingValues>
+                  name="extraPersonFee"
+                  label={t.admin_stay_pricing_extra_person}
+                />
+              ) : null}
             </div>
+
+            {maxPeople > 1 ? (
+              <NumberFormField<StayPricingValues>
+                name="baseOccupancy"
+                label={t.admin_stay_pricing_base_occupancy}
+                description={t.admin_stay_pricing_base_occupancy_desc}
+                min={1}
+                max={maxPeople - 1}
+                onBlur={() => {
+                  const val = form.getValues('baseOccupancy')
+                  if (val != null && val > maxPeople - 1) {
+                    form.setValue('baseOccupancy', maxPeople - 1)
+                  }
+                }}
+              />
+            ) : null}
 
             <div className="flex justify-end">
               <Button type="submit" disabled={loading}>

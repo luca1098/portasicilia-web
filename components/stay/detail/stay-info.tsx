@@ -2,6 +2,7 @@
 
 import { MapPin } from '@/lib/constants/icons'
 import { useTranslation } from '@/lib/context/translation.context'
+import { TranslationToggleProvider, useTranslationToggle } from '@/lib/context/translation-toggle.context'
 import { interpolate } from '@/lib/utils/i18n.utils'
 import type { Stay } from '@/lib/schemas/entities/stay.entity.schema'
 import StayHighlights from '@/components/stay/detail/stay-highlights'
@@ -10,13 +11,25 @@ import StayAmenities from '@/components/stay/detail/stay-amenities'
 import StayReviews from '@/components/stay/detail/stay-reviews'
 import StayLocation from '@/components/stay/detail/stay-location'
 import StayHouseRules from '@/components/stay/detail/stay-house-rules'
+import TranslationBadge from '@/components/ui/translation-badge'
 
 type StayInfoProps = {
   stay: Stay
 }
 
 export default function StayInfo({ stay }: StayInfoProps) {
+  return (
+    <TranslationToggleProvider translated={stay._translated}>
+      <StayInfoContent stay={stay} />
+    </TranslationToggleProvider>
+  )
+}
+
+function StayInfoContent({ stay }: StayInfoProps) {
   const t = useTranslation()
+  const { showingOriginal, isTranslated } = useTranslationToggle()
+
+  const originals = stay._originals ?? {}
 
   const detail = stay.stayDetail
   const reviews = stay.reviews ?? []
@@ -29,6 +42,10 @@ export default function StayInfo({ stay }: StayInfoProps) {
   const bathrooms = detail?.bathroomNumber ?? stay.bathroomNumber ?? 0
 
   const cir = detail?.cir ?? stay.cir
+
+  const displayName = showingOriginal && isTranslated ? String(originals['name'] ?? stay.name) : stay.name
+  const displayDescription =
+    showingOriginal && isTranslated ? String(originals['description'] ?? stay.description) : stay.description
 
   return (
     <div className="space-y-8">
@@ -44,7 +61,10 @@ export default function StayInfo({ stay }: StayInfoProps) {
       </div>
 
       {/* Title */}
-      <h1 className="text-2xl font-bold md:text-3xl">{stay.name}</h1>
+      <h1 className="text-2xl font-bold md:text-3xl">{displayName}</h1>
+
+      {/* Translation badge */}
+      <TranslationBadge />
 
       {/* Subtitle: guests, beds, bathrooms */}
       <p className="text-sm text-muted-foreground">
@@ -63,7 +83,7 @@ export default function StayInfo({ stay }: StayInfoProps) {
       <hr className="border-border" />
 
       {/* Description */}
-      <StayExpandableText text={stay.description} />
+      <StayExpandableText text={displayDescription} />
 
       {/* Registration details (CIR/CIN) */}
       {cir && (

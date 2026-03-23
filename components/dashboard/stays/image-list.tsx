@@ -158,7 +158,13 @@ export default function ImageList({ stayId, images }: ImageListProps) {
         </>
       )}
 
-      <ImageFormDialog stayId={stayId} open={formOpen} onOpenChange={setFormOpen} onSuccess={addItem} />
+      <ImageFormDialog
+        stayId={stayId}
+        imageCount={displayItems.length}
+        open={formOpen}
+        onOpenChange={setFormOpen}
+        onSuccess={addItem}
+      />
 
       {deleteImage && (
         <ImageDeleteDialog

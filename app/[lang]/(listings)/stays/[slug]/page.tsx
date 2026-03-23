@@ -14,7 +14,7 @@ export default async function StayDetailPage({ params }: StayDetailPageProps) {
 
   let stay
   try {
-    stay = await getStayBySlug(slug)
+    stay = await getStayBySlug(slug, lang)
   } catch (error) {
     if (error instanceof ApiError && error.status === 404) {
       notFound()

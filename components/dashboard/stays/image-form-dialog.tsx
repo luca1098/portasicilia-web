@@ -3,7 +3,6 @@
 import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
-import { InputFormField } from '@/components/form/input-form-field'
 import { FileUploaderFormField } from '@/components/form/file-uploader-form-field'
 import { Button } from '@/components/ui/button'
 import { useTranslation } from '@/lib/context/translation.context'
@@ -18,19 +17,26 @@ import type { ExperienceImage } from '@/lib/schemas/entities/experience.entity.s
 
 type ImageFormDialogProps = {
   stayId: string
+  imageCount?: number
   open: boolean
   onOpenChange: (open: boolean) => void
   onSuccess?: (image: ExperienceImage) => void
 }
 
-export default function ImageFormDialog({ stayId, open, onOpenChange, onSuccess }: ImageFormDialogProps) {
+export default function ImageFormDialog({
+  stayId,
+  imageCount = 0,
+  open,
+  onOpenChange,
+  onSuccess,
+}: ImageFormDialogProps) {
   const t = useTranslation()
 
   const form = useForm<ExperienceImageFormValues>({
     resolver: zodResolver(ExperienceImageFormSchema),
     defaultValues: {
       image: undefined,
-      order: 0,
+      order: imageCount,
     },
   })
 
@@ -63,7 +69,6 @@ export default function ImageFormDialog({ stayId, open, onOpenChange, onSuccess 
               label={t.admin_image_file}
               required
             />
-            <InputFormField<ExperienceImageFormValues> name="order" label={t.admin_image_order} />
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={loading}>
                 {t.admin_common_cancel}

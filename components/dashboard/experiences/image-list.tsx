@@ -160,6 +160,7 @@ export default function ImageList({ experienceId, images }: ImageListProps) {
 
       <ImageFormDialog
         experienceId={experienceId}
+        imageCount={displayItems.length}
         open={formOpen}
         onOpenChange={setFormOpen}
         onSuccess={addItem}

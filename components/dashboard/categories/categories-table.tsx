@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import {
@@ -16,6 +16,7 @@ import { useTranslation } from '@/lib/context/translation.context'
 import { LayersIcon, MoreHorizontalIcon, PencilIcon, Trash2Icon, ImageIcon } from '@/lib/constants/icons'
 import { categoryIconMap } from '@/lib/constants/category-icons'
 import type { Category } from '@/lib/schemas/entities/category.entity.schema'
+import TranslationStatusPopover from '@/components/dashboard/translation-status-popover'
 import CategoryDeleteDialog from './category-delete-dialog'
 
 type CategoriesTableProps = {
@@ -25,6 +26,7 @@ type CategoriesTableProps = {
 export default function CategoriesTable({ categories }: CategoriesTableProps) {
   const [deleteTarget, setDeleteTarget] = useState<Category | null>(null)
   const params = useParams()
+  const router = useRouter()
   const lang = params.lang as string
   const t = useTranslation()
   const basePath = `/${lang}/dashboard/admin/categories`
@@ -51,7 +53,7 @@ export default function CategoriesTable({ categories }: CategoriesTableProps) {
               <TableHead className="w-16" />
               <TableHead>{t.admin_cat_name}</TableHead>
               <TableHead>{t.admin_cat_slug}</TableHead>
-              <TableHead>{t.admin_cat_type}</TableHead>
+              <TableHead>{t.admin_col_translations}</TableHead>
               <TableHead className="w-16" />
             </TableRow>
           </TableHeader>
@@ -81,18 +83,22 @@ export default function CategoriesTable({ categories }: CategoriesTableProps) {
                     </div>
                   )}
                 </TableCell>
-                <TableCell className="font-medium">{category.name}</TableCell>
+                <TableCell className="font-medium">
+                  <span>{category.name}</span>
+                  {category.highlighted && (
+                    <span className="ml-2 rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
+                      {t.admin_cat_highlighted}
+                    </span>
+                  )}
+                </TableCell>
                 <TableCell className="text-muted-foreground">{category.slug}</TableCell>
                 <TableCell>
-                  <span
-                    className={
-                      category.type === 'EXPERIENCE'
-                        ? 'rounded-full bg-blue-500/10 px-2 py-0.5 text-[11px] font-medium text-blue-600'
-                        : 'rounded-full bg-amber-500/10 px-2 py-0.5 text-[11px] font-medium text-amber-600'
-                    }
-                  >
-                    {category.type === 'EXPERIENCE' ? t.admin_cat_type_experience : t.admin_cat_type_stay}
-                  </span>
+                  <TranslationStatusPopover
+                    listingId={category.id}
+                    entityType="category"
+                    status={category.translationStatus}
+                    onTranslationComplete={() => router.refresh()}
+                  />
                 </TableCell>
                 <TableCell>
                   <DropdownMenu>

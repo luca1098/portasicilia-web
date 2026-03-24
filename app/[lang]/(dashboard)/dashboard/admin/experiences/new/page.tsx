@@ -21,7 +21,7 @@ export default async function NewExperiencePage({ params }: PageParamsProps) {
   const [t, localities, categories] = await Promise.all([
     getTranslations(lang as SupportedLocale),
     getLocalities(),
-    getCategories('EXPERIENCE'),
+    getCategories(),
   ])
 
   return (

@@ -30,6 +30,10 @@ type TranslationDetails = {
   stayDetail: TranslationFieldStatus[] | null
 }
 
+type CategoryTranslationDetails = {
+  fields: TranslationFieldStatus[]
+}
+
 type TranslationStatusValue = {
   status: TranslationStatusKey
   locales: Record<
@@ -44,6 +48,7 @@ type TranslationStatusValue = {
 
 type TranslationStatusPopoverProps = {
   listingId: string
+  entityType?: 'listing' | 'category'
   status: TranslationStatusValue | undefined
   onTranslationComplete?: () => void
 }
@@ -89,6 +94,7 @@ function SectionHeader({ children }: { children: React.ReactNode }) {
 
 export default function TranslationStatusPopover({
   listingId,
+  entityType = 'listing',
   status,
   onTranslationComplete,
 }: TranslationStatusPopoverProps) {
@@ -98,6 +104,7 @@ export default function TranslationStatusPopover({
   const [detailsCache, setDetailsCache] = useState<Record<string, TranslationDetails>>({})
   const [loadingDetails, setLoadingDetails] = useState(false)
   const [fetchError, setFetchError] = useState(false)
+  const [localStatus, setLocalStatus] = useState<TranslationStatusValue | undefined>(status)
 
   const { data: session } = useSession()
   const t = useTranslation() as Record<string, string>
@@ -105,7 +112,8 @@ export default function TranslationStatusPopover({
     ? { headers: { Authorization: `Bearer ${session.accessToken}` } }
     : {}
 
-  const resolvedStatus = status?.status ?? 'none'
+  const effectiveStatus = localStatus ?? status
+  const resolvedStatus = effectiveStatus?.status ?? 'none'
   const { bg, labelKey } = STATUS_CONFIG[resolvedStatus]
 
   const activeDetails = activeLocale ? (detailsCache[activeLocale] ?? null) : null
@@ -117,7 +125,7 @@ export default function TranslationStatusPopover({
       (activeDetails.stayDetail?.some(f => f.status !== 'completed') ?? false))
 
   const activeLocaleInfo =
-    activeLocale && status?.locales?.[activeLocale] ? status.locales[activeLocale] : null
+    activeLocale && effectiveStatus?.locales?.[activeLocale] ? effectiveStatus.locales[activeLocale] : null
 
   const { loading: translating, execute: executeTranslate } = useAction<void>({
     successMessage: t.admin_translation_complete_success,
@@ -128,7 +136,33 @@ export default function TranslationStatusPopover({
           delete next[activeLocale]
           return next
         })
-        await fetchDetailsForLocale(activeLocale)
+        const updatedDetails = await fetchDetailsForLocale(activeLocale)
+
+        if (updatedDetails) {
+          const allFields = [
+            ...updatedDetails.listing,
+            ...updatedDetails.itineraries.flatMap(it => it.fields),
+            ...(updatedDetails.stayDetail ?? []),
+          ]
+          const total = allFields.length
+          const completed = allFields.filter(f => f.status === 'completed').length
+          const hasFailed = allFields.some(f => f.status === 'failed')
+          const hasPending = allFields.some(f => f.status === 'pending')
+
+          let newStatus: TranslationStatusKey = 'none'
+          if (hasFailed) newStatus = 'failed'
+          else if (hasPending) newStatus = 'pending'
+          else if (completed >= total && total > 0) newStatus = 'complete'
+          else if (completed > 0) newStatus = 'partial'
+
+          setLocalStatus({
+            status: newStatus,
+            locales: {
+              ...effectiveStatus?.locales,
+              [activeLocale]: { status: newStatus, completed, total },
+            },
+          })
+        }
       }
       onTranslationComplete?.()
     },
@@ -139,17 +173,27 @@ export default function TranslationStatusPopover({
     return data
   }
 
-  async function fetchDetailsForLocale(locale: string) {
+  async function fetchDetailsForLocale(locale: string): Promise<TranslationDetails | null> {
     setLoadingDetails(true)
     setFetchError(false)
+    const detailsPath =
+      entityType === 'category'
+        ? `/translations/category/${listingId}/details`
+        : `/translations/listing/${listingId}/details`
     try {
-      const data = await api.get<TranslationDetails>(
-        `/translations/listing/${listingId}/details?locale=${locale}`,
-        authHeaders
-      )
-      setDetailsCache(prev => ({ ...prev, [locale]: data }))
+      let normalizedData: TranslationDetails
+      if (entityType === 'category') {
+        const data = await api.get<CategoryTranslationDetails>(`${detailsPath}?locale=${locale}`, authHeaders)
+        normalizedData = { listing: data.fields, itineraries: [], stayDetail: null }
+      } else {
+        const data = await api.get<TranslationDetails>(`${detailsPath}?locale=${locale}`, authHeaders)
+        normalizedData = data
+      }
+      setDetailsCache(prev => ({ ...prev, [locale]: normalizedData }))
+      return normalizedData
     } catch {
       setFetchError(true)
+      return null
     } finally {
       setLoadingDetails(false)
     }
@@ -187,25 +231,18 @@ export default function TranslationStatusPopover({
   }
 
   function handleTranslate() {
+    const completePath =
+      entityType === 'category'
+        ? `/translations/category/${listingId}/complete`
+        : `/translations/listing/${listingId}/complete`
     executeTranslate(async () => {
       await api.post(
-        `/translations/listing/${listingId}/complete${activeLocale ? `?locale=${activeLocale}` : ''}`,
+        `${completePath}${activeLocale ? `?locale=${activeLocale}` : ''}`,
         undefined,
         authHeaders
       )
       return { success: true }
     })
-  }
-
-  if (!status) {
-    return (
-      <span
-        className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium ${STATUS_CONFIG.none.bg}`}
-      >
-        <LanguagesIcon className="size-3" />
-        {t.admin_translation_none}
-      </span>
-    )
   }
 
   return (
@@ -267,7 +304,11 @@ export default function TranslationStatusPopover({
           <div>
             {activeDetails.listing.length > 0 && (
               <>
-                <SectionHeader>{t.admin_translation_listing_section}</SectionHeader>
+                <SectionHeader>
+                  {entityType === 'category'
+                    ? t.admin_translation_category_section
+                    : t.admin_translation_listing_section}
+                </SectionHeader>
                 {activeDetails.listing.map(f => (
                   <FieldRow key={f.field} field={f.field} status={f.status} />
                 ))}

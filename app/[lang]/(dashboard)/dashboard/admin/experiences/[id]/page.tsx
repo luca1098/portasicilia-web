@@ -26,7 +26,7 @@ export default async function EditExperiencePage({ params }: EditExperiencePageP
     getTranslations(lang as SupportedLocale),
     getExperienceById(id).catch(() => null),
     getLocalities(),
-    getCategories('EXPERIENCE'),
+    getCategories(),
   ])
 
   if (!experience) {

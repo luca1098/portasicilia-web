@@ -26,7 +26,7 @@ export default async function EditStayPage({ params }: EditStayPageProps) {
     getTranslations(lang as SupportedLocale),
     getStayById(id).catch(() => null),
     getLocalities(),
-    getCategories('STAY'),
+    getCategories(),
   ])
 
   if (!stay) {

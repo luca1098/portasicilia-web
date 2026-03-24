@@ -11,27 +11,20 @@ import ShopCategoryGrid from '@/components/shop/shop-category-grid'
 import { getLocalityCards } from '@/lib/api/localities'
 import { getExperienceCards } from '@/lib/api/experiences'
 import { getStayCards } from '@/lib/api/stays'
-import { mockCategories } from '@/lib/constants/categories'
+import { getHighlightedCategories } from '@/lib/api/categories'
 import { mockShopCategories } from '@/lib/constants/shop-categories'
 import { Button } from '@/components/ui/button'
 
 export default async function Home({ params }: PageParamsProps) {
   const { lang } = await params
-  const [t, { data: locationCards }, { data: experienceCards }, { data: stayCards }] = await Promise.all([
-    getTranslations(lang as SupportedLocale),
-    getLocalityCards({ limit: 6, highlighted: true }),
-    getExperienceCards({ limit: 6, highlighted: true }),
-    getStayCards({ limit: 6, highlighted: true }),
-  ])
-
-  const categoryLabels: Record<string, string> = {
-    category_fuga_romantica: t.category_fuga_romantica,
-    category_profumo_di_mare: t.category_profumo_di_mare,
-    category_madonie_segrete: t.category_madonie_segrete,
-    category_terra_lavica: t.category_terra_lavica,
-    category_immerso_nella_natura: t.category_immerso_nella_natura,
-    category_nel_cuore_della_citta: t.category_nel_cuore_della_citta,
-  }
+  const [t, { data: locationCards }, { data: experienceCards }, { data: stayCards }, highlightedCategories] =
+    await Promise.all([
+      getTranslations(lang as SupportedLocale),
+      getLocalityCards({ limit: 6, highlighted: true }),
+      getExperienceCards({ limit: 6, highlighted: true }),
+      getStayCards({ limit: 6, highlighted: true }),
+      getHighlightedCategories(lang),
+    ])
 
   const shopCategoryLabels = {
     titles: {
@@ -134,10 +127,11 @@ export default async function Home({ params }: PageParamsProps) {
       </section>
 
       {/* Categories */}
-      <section className="mx-auto max-w-7xl px-4 py-16 md:px-8">
-        <div className="mb-10 text-center"></div>
-        <CategoryGrid categories={mockCategories} lang={lang} labels={categoryLabels} />
-      </section>
+      {highlightedCategories.length > 0 && (
+        <section className="mx-auto max-w-7xl px-4 py-16 md:px-8">
+          <CategoryGrid categories={highlightedCategories} lang={lang} />
+        </section>
+      )}
 
       {/* Shop Categories */}
       <section className="mx-auto max-w-7xl px-4 py-16 md:px-8">

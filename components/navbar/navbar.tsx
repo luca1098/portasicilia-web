@@ -9,6 +9,7 @@ import { useTranslation } from '@/lib/context/translation.context'
 import { getMenuItemsByArea } from '@/lib/constants/menu'
 import NavbarActions from '@/components/navbar/navbar-actions'
 import MobileMenu from '@/components/navbar/mobile-menu'
+import InspirationMenu from '@/components/navbar/inspiration-menu'
 import Link from 'next/link'
 import { cn } from '@/lib/utils/shadcn.utils'
 
@@ -54,15 +55,27 @@ export default function Navbar() {
           </Link>
 
           <nav className="hidden items-center gap-10 md:flex">
-            {publicItems.map(item => (
-              <Link
-                key={item.key}
-                href={`/${lang}${item.href}`}
-                className="text-md font-medium transition-colors hover:text-primary"
-              >
-                {t[item.key] ?? item.key}
-              </Link>
-            ))}
+            {publicItems.map(item =>
+              item.key === 'shop' ? (
+                <span key="inspiration-and-shop" className="contents">
+                  <InspirationMenu />
+                  <Link
+                    href={`/${lang}${item.href}`}
+                    className="text-md font-medium transition-colors hover:text-primary"
+                  >
+                    {t[item.key] ?? item.key}
+                  </Link>
+                </span>
+              ) : (
+                <Link
+                  key={item.key}
+                  href={`/${lang}${item.href}`}
+                  className="text-md font-medium transition-colors hover:text-primary"
+                >
+                  {t[item.key] ?? item.key}
+                </Link>
+              )
+            )}
           </nav>
 
           <div className="ml-auto">

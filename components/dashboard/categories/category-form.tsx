@@ -4,8 +4,8 @@ import { useParams, useRouter } from 'next/navigation'
 import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { InputFormField } from '@/components/form/input-form-field'
-import { SelectFormField } from '@/components/form/select-form-field'
 import { TextareaFormField } from '@/components/form/textarea-form-field'
+import { CheckboxFormField } from '@/components/form/checkbox-form-field'
 import { FileUploaderFormField } from '@/components/form/file-uploader-form-field'
 import CategoryIconPicker from './category-icon-picker'
 import { Button } from '@/components/ui/button'
@@ -22,11 +22,6 @@ type CategoryFormProps = {
   category?: Category
 }
 
-const typeOptions = [
-  { value: 'EXPERIENCE', labelKey: 'admin_cat_type_experience' as const },
-  { value: 'STAY', labelKey: 'admin_cat_type_stay' as const },
-]
-
 export default function CategoryForm({ mode, category }: CategoryFormProps) {
   const router = useRouter()
   const params = useParams()
@@ -42,10 +37,10 @@ export default function CategoryForm({ mode, category }: CategoryFormProps) {
     resolver: zodResolver(CategoryFormSchema),
     defaultValues: {
       name: category?.name ?? '',
-      type: category?.type ?? 'EXPERIENCE',
       description: category?.description ?? '',
       icon: category?.icon ?? '',
       cover: category?.cover ?? null,
+      highlighted: category?.highlighted ?? false,
     },
   })
 
@@ -62,16 +57,6 @@ export default function CategoryForm({ mode, category }: CategoryFormProps) {
         <div className="rounded-xl border border-border bg-card p-6 space-y-4">
           <InputFormField<CategoryFormValues> name="name" label={t.admin_cat_name} required />
 
-          <SelectFormField<CategoryFormValues, (typeof typeOptions)[number]>
-            name="type"
-            label={t.admin_cat_type}
-            options={typeOptions}
-            getValue={o => o.value}
-            getLabel={o => t[o.labelKey]}
-            required
-            disabled={mode === 'edit'}
-          />
-
           <TextareaFormField<CategoryFormValues>
             name="description"
             label={t.admin_cat_description}
@@ -80,7 +65,13 @@ export default function CategoryForm({ mode, category }: CategoryFormProps) {
 
           <CategoryIconPicker />
 
-          <FileUploaderFormField<CategoryFormValues> name="cover" label={t.admin_cat_cover} />
+          <FileUploaderFormField<CategoryFormValues> name="cover" label={t.admin_cat_cover} maxSizeMB={3} />
+
+          <CheckboxFormField<CategoryFormValues>
+            name="highlighted"
+            label={t.admin_cat_highlighted}
+            description={t.admin_cat_highlighted_hint}
+          />
         </div>
 
         <div className="flex justify-end">

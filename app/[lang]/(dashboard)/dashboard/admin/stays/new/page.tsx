@@ -21,7 +21,7 @@ export default async function NewStayPage({ params }: PageParamsProps) {
   const [t, localities, categories] = await Promise.all([
     getTranslations(lang as SupportedLocale),
     getLocalities(),
-    getCategories('STAY'),
+    getCategories(),
   ])
 
   return (

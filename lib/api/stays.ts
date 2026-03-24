@@ -43,15 +43,17 @@ export async function getStays(params?: GetStaysParams) {
 type GetStayCardsParams = {
   localityId?: string
   highlighted?: boolean
+  categoryId?: string
   limit?: number
   cursor?: string
 }
 
 export async function getStayCards(params?: GetStayCardsParams) {
-  const { localityId, highlighted, limit, cursor } = params || {}
+  const { localityId, highlighted, categoryId, limit, cursor } = params || {}
   const queryParams: Record<string, string> = {}
   if (localityId) queryParams.localityId = localityId
   if (highlighted !== undefined) queryParams.highlighted = highlighted.toString()
+  if (categoryId) queryParams.categoryId = categoryId
   if (limit) queryParams.limit = limit.toString()
   if (cursor) queryParams.cursor = cursor
   return apiServer.get<PaginatedStayCards>('/stays/cards', { params: queryParams })

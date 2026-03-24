@@ -4,7 +4,7 @@ import { getTranslations } from '@/lib/configs/locales/i18n'
 import { PageParamsProps } from '@/lib/types/page.type'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
-import { getCategories } from '@/lib/api/categories'
+import { getCategoriesAdmin } from '@/lib/api/categories'
 import CategoriesTable from '@/components/dashboard/categories/categories-table'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
@@ -14,12 +14,13 @@ export default async function CategoriesSettingsPage({ params }: PageParamsProps
   const { lang } = await params
   const session = await getServerSession(authOptions)
 
-  if (!session?.user) {
+  if (!session?.user || !session.accessToken) {
     redirect(`/${lang}`)
   }
 
   const t = await getTranslations(lang as SupportedLocale)
-  const categories = await getCategories()
+  const headers = { Authorization: `Bearer ${session.accessToken}` }
+  const categories = await getCategoriesAdmin(headers)
 
   return (
     <div className="mx-auto max-w-5xl space-y-8">

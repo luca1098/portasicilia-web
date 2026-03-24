@@ -2,12 +2,16 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { getTranslations } from '@/lib/configs/locales/i18n'
 import type { SupportedLocale } from '@/lib/configs/locales'
-import { getCategoryBySlug } from '@/lib/api/categories'
+import { getCategoryBySlug, getSuggestedCategories } from '@/lib/api/categories'
 import { getExperienceCards } from '@/lib/api/experiences'
 import { getStayCards } from '@/lib/api/stays'
+import { getArticles } from '@/lib/api/blog'
+import { interpolate } from '@/lib/utils/i18n.utils'
 import CategoryListingsSection from '@/components/category/category-listings-section'
 import ExperienceCardItem from '@/components/experience/experience-card-item'
 import StayCardComponent from '@/components/stay/stay-card'
+import RelatedArticlesSection from '@/components/blog/related-articles-section'
+import SuggestedCategories from '@/components/category/suggested-categories'
 
 type CategoryPageProps = {
   params: Promise<{ lang: string; slug: string }>
@@ -24,9 +28,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     notFound()
   }
 
-  const [experienceCards, stayCards] = await Promise.all([
+  const [experienceCards, stayCards, articlesResult, suggestedCategories] = await Promise.all([
     getExperienceCards({ categoryId: category.id, limit: 12 }),
     getStayCards({ categoryId: category.id, limit: 12 }),
+    getArticles({ categoryId: category.id, limit: 4 }),
+    getSuggestedCategories({ limit: 3, exclude: category.id, lang }),
   ])
 
   return (
@@ -69,6 +75,19 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           <p className="text-center text-muted-foreground">{t.category_coming_soon}</p>
         </section>
       )}
+
+      <RelatedArticlesSection
+        articles={articlesResult.data}
+        lang={lang}
+        title={interpolate(t.category_related_articles_title, { name: category.name })}
+        ctaLabel={t.related_articles_cta}
+      />
+
+      <SuggestedCategories
+        title={t.category_detail_suggested_title}
+        categories={suggestedCategories}
+        lang={lang}
+      />
     </main>
   )
 }

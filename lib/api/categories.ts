@@ -18,6 +18,23 @@ export function getCategoriesAdmin(headers: HeadersInit) {
   return apiServer.get<Category[]>('/categories/admin', { headers })
 }
 
+type GetSuggestedCategoriesParams = {
+  exclude?: string
+  limit?: number
+  lang?: string
+}
+
+export function getSuggestedCategories(params?: GetSuggestedCategoriesParams) {
+  const { exclude, limit, lang } = params || {}
+  const queryParams: Record<string, string> = {}
+  if (exclude) queryParams.exclude = exclude
+  if (limit) queryParams.limit = limit.toString()
+  return apiServer.get<Category[]>('/categories/suggested', {
+    params: queryParams,
+    ...(lang && lang !== 'it' && { lang: lang as SupportedLocale }),
+  })
+}
+
 export function getCategoryById(id: string) {
   return apiServer.get<Category>(`/categories/${id}`)
 }

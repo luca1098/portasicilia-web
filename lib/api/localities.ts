@@ -6,6 +6,7 @@ export type LocalityCard = {
   name: string
   slug: string
   cover: string | null
+  state: string | null
   totalActivities: number
   totalStays: number
 }
@@ -31,15 +32,30 @@ type GetLocalityCardsParams = {
   highlighted?: boolean
   limit?: number
   cursor?: string
+  exclude?: string
 }
 
 export async function getLocalityCards(params?: GetLocalityCardsParams) {
-  const { highlighted, limit, cursor } = params || {}
+  const { highlighted, limit, cursor, exclude } = params || {}
   const queryParams: Record<string, string> = {}
   if (highlighted !== undefined) queryParams.highlighted = highlighted.toString()
   if (limit) queryParams.limit = limit.toString()
   if (cursor) queryParams.cursor = cursor
+  if (exclude) queryParams.exclude = exclude
   return apiServer.get<PaginatedLocalityCards>('/localities/cards', { params: queryParams })
+}
+
+type GetSuggestedLocalitiesParams = {
+  exclude?: string
+  limit?: number
+}
+
+export async function getSuggestedLocalities(params?: GetSuggestedLocalitiesParams) {
+  const { exclude, limit } = params || {}
+  const queryParams: Record<string, string> = {}
+  if (exclude) queryParams.exclude = exclude
+  if (limit) queryParams.limit = limit.toString()
+  return apiServer.get<LocalityCard[]>('/localities/suggested', { params: queryParams })
 }
 
 export function getLocalitiesClient(params?: GetLocalitiesParams) {

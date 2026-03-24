@@ -17,6 +17,8 @@ import {
   ClipboardListIcon,
   CalendarCheck2Icon,
   LayersIcon,
+  NewspaperIcon,
+  UsersIcon,
 } from '@/lib/constants/icons'
 import { Button } from '@/components/ui/button'
 
@@ -47,6 +49,13 @@ const sidebarSections: SidebarSection[] = [
     items: [
       { key: 'admin_sidebar_requests', icon: ClipboardListIcon, href: '/requests' },
       { key: 'admin_sidebar_bookings', icon: CalendarCheck2Icon, href: '/bookings' },
+    ],
+  },
+  {
+    labelKey: 'admin_sidebar_section_content',
+    items: [
+      { key: 'admin_sidebar_articles', icon: NewspaperIcon, href: '/blog' },
+      { key: 'admin_sidebar_authors', icon: UsersIcon, href: '/blog/authors' },
     ],
   },
 ]

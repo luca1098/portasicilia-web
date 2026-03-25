@@ -48,6 +48,7 @@ export default function ExperienceCardItem({ experience, lang, darkBg }: Experie
       priceLabel={priceLabel}
       duration={duration}
       darkBg={darkBg}
+      listingId={experience.id}
     />
   )
 }

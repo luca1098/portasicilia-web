@@ -1092,5 +1092,14 @@
   "category_related_articles_title": "{{name}}: tips e consigli PortaSicilia da non perdere",
   "category_detail_suggested_title": "Lasciati ispirare da",
   "location_related_articles_title": "{{name}}: tips e consigli PortaSicilia da non perdere",
-  "related_articles_cta": "Leggi di più"
+  "related_articles_cta": "Leggi di più",
+  "wishlist_title": "Lista dei desideri",
+  "wishlist_empty": "Non hai ancora salvato nessun elemento",
+  "wishlist_empty_description": "Clicca sul cuore nelle esperienze o alloggi per salvarli qui",
+  "wishlist_stays": "Alloggi",
+  "wishlist_experiences": "Esperienze",
+  "wishlist_added": "Aggiunto ai preferiti",
+  "wishlist_removed": "Rimosso dai preferiti",
+  "wishlist_per_night": "Da {{price}} a notte",
+  "wishlist_per_person": "Da {{price}} a persona"
 }

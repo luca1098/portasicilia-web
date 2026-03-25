@@ -28,6 +28,7 @@ export default function StayCard({ stay, lang, darkBg }: StayCardProps) {
       reviewCount={stay.reviewCount}
       priceLabel={priceLabel}
       darkBg={darkBg}
+      listingId={stay.id}
     />
   )
 }

@@ -1092,5 +1092,14 @@
   "category_related_articles_title": "{{name}}: tips and recommendations from PortaSicilia",
   "category_detail_suggested_title": "Get inspired by",
   "location_related_articles_title": "{{name}}: tips and recommendations from PortaSicilia",
-  "related_articles_cta": "Read more"
+  "related_articles_cta": "Read more",
+  "wishlist_title": "Wishlist",
+  "wishlist_empty": "You haven't saved any items yet",
+  "wishlist_empty_description": "Click the heart on experiences or stays to save them here",
+  "wishlist_stays": "Stays",
+  "wishlist_experiences": "Experiences",
+  "wishlist_added": "Added to favorites",
+  "wishlist_removed": "Removed from favorites",
+  "wishlist_per_night": "From {{price}} per night",
+  "wishlist_per_person": "From {{price}} per person"
 }

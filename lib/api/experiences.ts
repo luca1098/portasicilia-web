@@ -44,16 +44,18 @@ type GetExperienceCardsParams = {
   localityId?: string
   highlighted?: boolean
   categoryId?: string
+  excludeId?: string
   limit?: number
   cursor?: string
 }
 
 export async function getExperienceCards(params?: GetExperienceCardsParams) {
-  const { localityId, highlighted, categoryId, limit, cursor } = params || {}
+  const { localityId, highlighted, categoryId, excludeId, limit, cursor } = params || {}
   const queryParams: Record<string, string> = {}
   if (localityId) queryParams.localityId = localityId
   if (highlighted !== undefined) queryParams.highlighted = highlighted.toString()
   if (categoryId) queryParams.categoryId = categoryId
+  if (excludeId) queryParams.excludeId = excludeId
   if (limit) queryParams.limit = limit.toString()
   if (cursor) queryParams.cursor = cursor
   return apiServer.get<PaginatedExperienceCards>('/experiences/cards', { params: queryParams })

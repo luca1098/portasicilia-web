@@ -86,6 +86,7 @@ export const StaySchema = z.object({
   commissionType: CommissionTypeSchema.nullable(),
   commissionValue: z.number().nullable(),
   depositValue: z.number().nullable().optional(),
+  googleBusinessUrl: z.string().nullable().optional(),
   images: z.array(ExperienceImageSchema).nullish(),
   itinerary: z.array(ExperienceItinerarySchema).nullish(),
   priceLists: z.array(PriceListSchema).nullish(),

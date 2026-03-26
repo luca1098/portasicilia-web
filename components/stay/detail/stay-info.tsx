@@ -8,7 +8,7 @@ import type { Stay } from '@/lib/schemas/entities/stay.entity.schema'
 import StayHighlights from '@/components/stay/detail/stay-highlights'
 import StayExpandableText from '@/components/stay/detail/stay-expandable-text'
 import StayAmenities from '@/components/stay/detail/stay-amenities'
-import StayReviews from '@/components/stay/detail/stay-reviews'
+import ReviewSection from '@/components/review/review-section'
 import StayLocation from '@/components/stay/detail/stay-location'
 import StayHouseRules from '@/components/stay/detail/stay-house-rules'
 import TranslationBadge from '@/components/ui/translation-badge'
@@ -34,7 +34,6 @@ function StayInfoContent({ stay }: StayInfoProps) {
   const detail = stay.stayDetail
   const reviews = stay.reviews ?? []
   const amenities = detail?.amenities ?? stay.amenities ?? []
-  const hasReviews = reviews.length > 0
   const hasAmenities = amenities.length > 0
 
   const maxPeople = detail?.maxPeople ?? stay.maxPeople ?? 0
@@ -100,9 +99,12 @@ function StayInfoContent({ stay }: StayInfoProps) {
       {hasAmenities && <hr className="border-border" />}
 
       {/* Reviews */}
-      {hasReviews && <StayReviews reviews={reviews} />}
-
-      {hasReviews && <hr className="border-border" />}
+      {reviews.length > 0 && (
+        <>
+          <ReviewSection reviews={reviews} listingType="stay" />
+          <hr className="border-border" />
+        </>
+      )}
 
       {/* Location + Map */}
       <StayLocation stay={stay} />

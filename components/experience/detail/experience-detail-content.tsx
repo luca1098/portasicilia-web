@@ -3,6 +3,7 @@ import ExperienceGallery from '@/components/experience/detail/experience-gallery
 import ExperienceInfo from '@/components/experience/detail/experience-info'
 import ExperienceBookingCard from '@/components/experience/detail/experience-booking-card'
 import ExperienceMobileBookingBar from '@/components/experience/detail/experience-mobile-booking-bar'
+import ExperienceSuggestions from '@/components/experience/detail/experience-suggestions'
 import { CheckIcon } from '@/lib/constants/icons'
 import { getTranslations } from '@/lib/configs/locales/i18n'
 import { interpolate } from '@/lib/utils/i18n.utils'
@@ -56,6 +57,15 @@ export default async function ExperienceDetailContent({ experience, lang }: Expe
           </div>
         </aside>
       </section>
+
+      {/* Suggested experiences */}
+      {experience.categories?.[0]?.category.id && (
+        <ExperienceSuggestions
+          experienceId={experience.id}
+          categoryId={experience.categories[0].category.id}
+          lang={lang}
+        />
+      )}
 
       {/* Mobile booking bar */}
       <ExperienceMobileBookingBar experience={experience} />

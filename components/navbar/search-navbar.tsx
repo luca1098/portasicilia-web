@@ -2,8 +2,6 @@
 
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { HeartIcon } from '@/lib/constants/icons'
-import { Button } from '@/components/ui/button'
 import SearchBar from '@/components/search/search-bar'
 import NavbarActions from '@/components/navbar/navbar-actions'
 
@@ -27,11 +25,7 @@ export default function SearchNavbar() {
           </div>
 
           <div className="shrink-0">
-            <NavbarActions>
-              <Button variant="ghost" size="icon" aria-label="Favorites">
-                <HeartIcon className="size-5" />
-              </Button>
-            </NavbarActions>
+            <NavbarActions />
           </div>
         </div>
       </header>

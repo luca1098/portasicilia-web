@@ -8,7 +8,7 @@ import type { Experience } from '@/lib/schemas/entities/experience.entity.schema
 import ExperienceExpandableText from '@/components/experience/detail/experience-expandable-text'
 import ExperienceItinerary from '@/components/experience/detail/experience-itinerary'
 import ExperienceIncluded from '@/components/experience/detail/experience-included'
-import ExperienceReviews from '@/components/experience/detail/experience-reviews'
+import ReviewSection from '@/components/review/review-section'
 import ExperienceMeetingPoint from '@/components/experience/detail/experience-meeting-point'
 import TranslationBadge from '@/components/ui/translation-badge'
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover'
@@ -37,8 +37,6 @@ function ExperienceInfoContent({ experience }: ExperienceInfoProps) {
   const timeSlots = experience.timeSlots ?? []
   const hasItinerary = itinerary.length > 0
   const hasIncluded = experience.included.length > 0 || experience.notIncluded.length > 0
-  const hasReviews = reviews.length > 0
-
   const displayName =
     showingOriginal && isTranslated ? String(originals['name'] ?? experience.name) : experience.name
   const displayDescription =
@@ -160,12 +158,13 @@ function ExperienceInfoContent({ experience }: ExperienceInfoProps) {
       {/* What's included */}
       {hasIncluded && <ExperienceIncluded included={displayIncluded} notIncluded={displayNotIncluded} />}
 
-      {hasIncluded && <hr className="border-border" />}
-
-      {/* Reviews */}
-      {hasReviews && <ExperienceReviews reviews={reviews} />}
-
-      {hasReviews && <hr className="border-border" />}
+      {reviews.length > 0 && (
+        <>
+          <hr className="border-border" />
+          <ReviewSection reviews={reviews} listingType="experience" />
+          <hr className="border-border" />
+        </>
+      )}
 
       {/* Meeting point */}
       <ExperienceMeetingPoint experience={experience} />

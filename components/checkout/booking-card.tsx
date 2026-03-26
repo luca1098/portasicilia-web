@@ -75,8 +75,10 @@ function Header({ variant = 'compact' }: { variant?: 'compact' | 'large' }) {
         </h3>
         {avgRating !== null && (
           <div className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
-            <StarIcon className="size-3.5 fill-yellow-400 text-yellow-400" aria-hidden="true" />
-            <span>{avgRating.toFixed(1)}</span>
+            <StarIcon className="size-3.5 fill-foreground" aria-hidden="true" />
+            <span>
+              {avgRating.toFixed(1)} ({state.reviews?.length})
+            </span>
           </div>
         )}
       </div>

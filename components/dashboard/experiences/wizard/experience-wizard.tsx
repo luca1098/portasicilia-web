@@ -13,9 +13,10 @@ import PricingSetupTab from './tabs/pricing-setup-tab'
 import ImageList from '../image-list'
 import ItineraryList from '../itinerary-list'
 import CommissionForm from '../commission-form'
+import GoogleBusinessTab from '../../google-business-tab'
 
 const CREATE_TABS = ['experience'] as const
-const EDIT_TABS = ['experience', 'schedule', 'pricing', 'gallery', 'itinerary', 'fees'] as const
+const EDIT_TABS = ['experience', 'schedule', 'pricing', 'gallery', 'itinerary', 'reviews', 'fees'] as const
 
 type ExperienceWizardProps = {
   mode: 'create' | 'edit'
@@ -120,6 +121,18 @@ export default function ExperienceWizard({
       <TabsContent value="itinerary" className="mt-6">
         {isEditing ? (
           <ItineraryList experienceId={currentExperience.id} items={currentExperience.itinerary ?? []} />
+        ) : (
+          <EditOnlyPlaceholder message={t.admin_wizard_edit_only_notice} />
+        )}
+      </TabsContent>
+
+      <TabsContent value="reviews" className="mt-6">
+        {isEditing ? (
+          <GoogleBusinessTab
+            listingId={currentExperience.id}
+            listingType="experience"
+            googleBusinessUrl={currentExperience.googleBusinessUrl}
+          />
         ) : (
           <EditOnlyPlaceholder message={t.admin_wizard_edit_only_notice} />
         )}

@@ -107,3 +107,5 @@ export {
   LanguagesIcon,
   LayoutGridIcon,
 } from 'lucide-react'
+
+export { GoogleIcon } from './custom-icons'

@@ -12,10 +12,11 @@ import AvailabilityTab from './tabs/availability-tab'
 import StayPricingSetupTab from './tabs/pricing-setup-tab'
 import ImageList from '../image-list'
 import CommissionForm from '../../experiences/commission-form'
+import GoogleBusinessTab from '../../google-business-tab'
 import { updateStayAction } from '@/lib/actions/stays.actions'
 
 const CREATE_TABS = ['stay'] as const
-const EDIT_TABS = ['stay', 'availability', 'pricing', 'gallery', 'fees'] as const
+const EDIT_TABS = ['stay', 'availability', 'pricing', 'gallery', 'reviews', 'fees'] as const
 
 type StayWizardProps = {
   mode: 'create' | 'edit'
@@ -99,6 +100,18 @@ export default function StayWizard({ mode, stay, localities, categories }: StayW
       <TabsContent value="gallery" className="mt-6">
         {isEditing ? (
           <ImageList stayId={currentStay.id} images={currentStay.images ?? []} />
+        ) : (
+          <EditOnlyPlaceholder message={t.admin_wizard_edit_only_notice} />
+        )}
+      </TabsContent>
+
+      <TabsContent value="reviews" className="mt-6">
+        {isEditing ? (
+          <GoogleBusinessTab
+            listingId={currentStay.id}
+            listingType="stay"
+            googleBusinessUrl={currentStay.googleBusinessUrl}
+          />
         ) : (
           <EditOnlyPlaceholder message={t.admin_wizard_edit_only_notice} />
         )}

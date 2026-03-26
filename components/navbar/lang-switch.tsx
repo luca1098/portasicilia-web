@@ -4,13 +4,18 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { supportedLocales } from '@/lib/configs/locales'
+import { cn } from '@/lib/utils/shadcn.utils'
 
 const flagMap: Record<string, string> = {
   it: 'IT',
   en: 'EN',
 }
 
-export default function LangSwitch() {
+interface LangSwitchProps {
+  isTransparent?: boolean
+}
+
+export default function LangSwitch({ isTransparent }: LangSwitchProps) {
   const pathname = usePathname()
   const router = useRouter()
   const params = useParams()
@@ -23,7 +28,17 @@ export default function LangSwitch() {
   }
 
   return (
-    <Button variant="ghost" size="sm" onClick={handleSwitch} aria-label="Switch language">
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={handleSwitch}
+      aria-label="Switch language"
+      className={cn(
+        'text-xs font-semibold tracking-wider',
+        isTransparent &&
+          'text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.4)] hover:bg-white/10 hover:text-white'
+      )}
+    >
       {flagMap[currentLang] ?? currentLang.toUpperCase()}
     </Button>
   )

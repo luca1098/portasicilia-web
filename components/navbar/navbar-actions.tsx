@@ -7,15 +7,16 @@ import WishlistDrawer from '@/components/wishlist/wishlist-drawer'
 
 interface NavbarActionsProps {
   children?: ReactNode
+  isTransparent?: boolean
 }
 
-export default function NavbarActions({ children }: NavbarActionsProps) {
+export default function NavbarActions({ children, isTransparent }: NavbarActionsProps) {
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-0.5">
       {children}
-      <WishlistDrawer />
-      <AccountMenu />
-      <LangSwitch />
+      <WishlistDrawer isTransparent={isTransparent} />
+      <AccountMenu isTransparent={isTransparent} />
+      <LangSwitch isTransparent={isTransparent} />
     </div>
   )
 }

@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useParams } from 'next/navigation'
 import { Facebook, Instagram, Twitter } from 'lucide-react'
 import { useForm, FormProvider } from 'react-hook-form'
@@ -213,26 +214,12 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-12">
         <div className="flex flex-col items-center gap-8 lg:flex-row lg:justify-between">
           {/* Logo */}
-          <div className="flex items-center gap-3">
-            <div className="flex size-16 items-center justify-center rounded-lg border-2 border-primary bg-transparent">
-              <svg
-                viewBox="0 0 24 24"
-                className="size-10 text-primary"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-              >
-                <path d="M3 21V8a2 2 0 012-2h14a2 2 0 012 2v13" />
-                <path d="M9 6V4a2 2 0 012-2h2a2 2 0 012 2v2" />
-                <path d="M7 21v-4a2 2 0 012-2h6a2 2 0 012 2v4" />
-                <rect x="9" y="9" width="6" height="4" rx="1" />
-              </svg>
-            </div>
-            <div className="hidden flex-col md:flex">
-              <span className="text-2xl font-bold text-primary">Porta</span>
-              <span className="text-2xl font-bold text-primary">Sicilia</span>
-            </div>
-          </div>
+          <Image
+            src="/logo-white.png"
+            alt="Porta Sicilia — Truly Sicilian Experience"
+            width={200}
+            height={100}
+          />
 
           {/* Newsletter Form */}
           <div className="flex flex-col items-center gap-2">

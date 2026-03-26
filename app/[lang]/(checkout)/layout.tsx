@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { PageParamsProps } from '@/lib/types/page.type'
 import { PropsWithChildren } from 'react'
 import { getTranslations } from '@/lib/configs/locales/i18n'
@@ -14,12 +15,8 @@ export default async function CheckoutLayout({ children, params }: CheckoutLayou
     <>
       <header className="border-b">
         <div className="mx-auto flex h-14 max-w-7xl items-center px-4">
-          <Link
-            href={`/${lang}/`}
-            className="text-lg font-bold text-primary"
-            aria-label={t.checkout_back_home}
-          >
-            PortaSicilia
+          <Link href={`/${lang}/`} aria-label={t.checkout_back_home}>
+            <Image src="/logo.png" alt="PortaSicilia" width={32} height={32} />
           </Link>
         </div>
       </header>

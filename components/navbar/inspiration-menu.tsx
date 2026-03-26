@@ -10,7 +10,11 @@ import { api } from '@/lib/api/fetch-client'
 import type { Category } from '@/lib/schemas/entities/category.entity.schema'
 import { cn } from '@/lib/utils/shadcn.utils'
 
-export default function InspirationMenu() {
+interface InspirationMenuProps {
+  isTransparent?: boolean
+}
+
+export default function InspirationMenu({ isTransparent }: InspirationMenuProps) {
   const [open, setOpen] = useState(false)
   const [categories, setCategories] = useState<Category[]>([])
   const params = useParams()
@@ -44,58 +48,77 @@ export default function InspirationMenu() {
   return (
     <div ref={menuRef} className="relative" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <button
-        className="text-md flex items-center gap-1 font-medium transition-colors hover:text-primary"
+        className={cn(
+          'group relative flex items-center gap-1 px-3 py-2 text-sm font-medium tracking-wide transition-colors duration-200',
+          isTransparent
+            ? 'text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.4)] hover:text-white'
+            : 'text-foreground/70 hover:text-foreground'
+        )}
         aria-expanded={open}
         aria-haspopup="true"
       >
         {t.get_inspired}
-        <ChevronDownIcon className={cn('h-4 w-4 transition-transform duration-200', open && 'rotate-180')} />
+        <ChevronDownIcon
+          className={cn('h-3.5 w-3.5 transition-transform duration-300', open && 'rotate-180')}
+        />
+        <span
+          className={cn(
+            'absolute bottom-0 left-3 right-3 h-[2px] rounded-full bg-primary transition-transform duration-300 origin-left',
+            open && !isTransparent ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+          )}
+        />
       </button>
 
-      {open && (
-        <div className="absolute left-1/2 top-full z-50 pt-3 -translate-x-1/2">
-          <div className="w-[520px] overflow-hidden rounded-2xl border bg-background shadow-xl animate-in fade-in slide-in-from-top-2 duration-200">
-            <div className="grid grid-cols-2 gap-2 p-3">
-              {categories.slice(0, 6).map(category => (
-                <Link
-                  key={category.id}
-                  href={`/${lang}/category/${category.slug}`}
-                  onClick={() => setOpen(false)}
-                  className="group relative flex h-28 items-end overflow-hidden rounded-xl"
-                >
-                  {category.cover ? (
-                    <Image
-                      src={category.cover}
-                      alt={category.name}
-                      fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
-                      sizes="250px"
-                      unoptimized
-                    />
-                  ) : (
-                    <div className="absolute inset-0 bg-muted" />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                  <span className="relative z-10 px-3 pb-2.5 text-sm font-semibold text-white drop-shadow-md">
-                    {category.name}
-                  </span>
-                </Link>
-              ))}
-            </div>
-
-            <div className="border-t px-3 py-2.5">
+      <div
+        className={cn(
+          'absolute left-1/2 top-full z-50 pt-2 -translate-x-1/2 transition-all duration-200',
+          open
+            ? 'pointer-events-auto translate-y-0 opacity-100'
+            : 'pointer-events-none -translate-y-1 opacity-0'
+        )}
+      >
+        <div className="w-[540px] overflow-hidden rounded-2xl border border-border/60 bg-background/95 shadow-xl backdrop-blur-xl">
+          <div className="grid grid-cols-2 gap-2 p-3">
+            {categories.slice(0, 6).map((category, index) => (
               <Link
-                href={`/${lang}/categories`}
+                key={category.id}
+                href={`/${lang}/category/${category.slug}`}
                 onClick={() => setOpen(false)}
-                className="flex items-center gap-2 rounded-lg px-2 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                className="group relative flex h-28 items-end overflow-hidden rounded-xl"
+                style={{ animationDelay: open ? `${index * 40}ms` : '0ms' }}
               >
-                <LayoutGridIcon className="h-4 w-4" />
-                {t.explore_all_categories}
+                {category.cover ? (
+                  <Image
+                    src={category.cover}
+                    alt={category.name}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                    sizes="260px"
+                    unoptimized
+                  />
+                ) : (
+                  <div className="absolute inset-0 bg-muted" />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent transition-colors duration-300 group-hover:from-black/80" />
+                <span className="relative z-10 px-3 pb-2.5 text-sm font-semibold text-white drop-shadow-md">
+                  {category.name}
+                </span>
               </Link>
-            </div>
+            ))}
+          </div>
+
+          <div className="border-t border-border/50 px-3 py-2.5">
+            <Link
+              href={`/${lang}/categories`}
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2 rounded-lg px-2 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+            >
+              <LayoutGridIcon className="h-4 w-4" />
+              {t.explore_all_categories}
+            </Link>
           </div>
         </div>
-      )}
+      </div>
     </div>
   )
 }

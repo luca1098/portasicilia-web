@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useParams, usePathname } from 'next/navigation'
 import { useTranslation } from '@/lib/context/translation.context'
 import { cn } from '@/lib/utils/shadcn.utils'
@@ -79,18 +80,15 @@ export default function OwnerSidebar() {
         {/* Sidebar header */}
         <div
           className={cn(
-            'flex h-16 shrink-0 items-center border-b border-sidebar-border px-4',
-            collapsed ? 'justify-center' : 'justify-between'
+            'shrink-0 border-b border-sidebar-border px-4',
+            collapsed
+              ? 'flex flex-col-reverse items-center gap-1 py-3'
+              : 'flex h-16 items-center justify-between'
           )}
         >
-          {!collapsed && (
-            <Link
-              href={`/${lang}/dashboard/owner`}
-              className="text-base font-bold tracking-tight text-sidebar-foreground"
-            >
-              PortaSicilia
-            </Link>
-          )}
+          <Link href={`/${lang}/dashboard/owner`}>
+            <Image src="/logo.png" alt="PortaSicilia" width={32} height={32} className="shrink-0" />
+          </Link>
 
           {/* Collapse toggle — desktop only */}
           <Button

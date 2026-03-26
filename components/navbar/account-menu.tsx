@@ -9,8 +9,13 @@ import { UserIcon, LayoutDashboardIcon, LogOutIcon } from '@/lib/constants/icons
 import { Button } from '@/components/ui/button'
 import { useTranslation } from '@/lib/context/translation.context'
 import LoginPopup from '@/components/auth/login-popup'
+import { cn } from '@/lib/utils/shadcn.utils'
 
-export default function AccountMenu() {
+interface AccountMenuProps {
+  isTransparent?: boolean
+}
+
+export default function AccountMenu({ isTransparent }: AccountMenuProps) {
   const [open, setOpen] = useState(false)
   const [loginOpen, setLoginOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
@@ -49,7 +54,10 @@ export default function AccountMenu() {
     <div ref={ref} className="relative">
       {user ? (
         <button
-          className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full border"
+          className={cn(
+            'flex h-9 w-9 items-center justify-center overflow-hidden rounded-full border-2 transition-all duration-200',
+            open ? 'border-primary ring-2 ring-primary/20' : 'border-border hover:border-primary/50'
+          )}
           aria-label="Account"
           onClick={() => setOpen(prev => !prev)}
         >
@@ -66,38 +74,57 @@ export default function AccountMenu() {
           )}
         </button>
       ) : (
-        <Button variant="outline" size="icon" aria-label="Account" onClick={() => setOpen(prev => !prev)}>
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label="Account"
+          onClick={() => setOpen(prev => !prev)}
+          className={cn(
+            isTransparent &&
+              'text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.4)] hover:bg-white/10 hover:text-white'
+          )}
+        >
           <UserIcon />
         </Button>
       )}
 
-      {open ? (
-        <div className="absolute right-0 mt-2 w-48 rounded-xl border bg-background p-2 shadow-md">
+      <div
+        className={cn(
+          'absolute right-0 top-full z-50 pt-2 transition-all duration-200',
+          open
+            ? 'pointer-events-auto translate-y-0 opacity-100'
+            : 'pointer-events-none -translate-y-1 opacity-0'
+        )}
+      >
+        <div className="w-48 overflow-hidden rounded-xl border border-border/60 bg-background/95 p-1.5 shadow-lg backdrop-blur-xl">
           {user ? (
             <>
-              <Button variant="link" size="default" className="w-full items-start gap-2" asChild>
-                <Link href={`/${lang}/dashboard`}>
-                  <LayoutDashboardIcon className="h-4 w-4" />
-                  {t.dashboard}
-                </Link>
-              </Button>
-              <Button
-                variant="link"
-                size="default"
-                className="w-full items-start gap-2"
-                onClick={handleLogout}
+              <Link
+                href={`/${lang}/dashboard`}
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors hover:bg-accent"
               >
-                <LogOutIcon className="h-4 w-4" />
+                <LayoutDashboardIcon className="h-4 w-4 text-muted-foreground" />
+                {t.dashboard}
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors hover:bg-accent"
+              >
+                <LogOutIcon className="h-4 w-4 text-muted-foreground" />
                 {t.logout}
-              </Button>
+              </button>
             </>
           ) : (
-            <Button variant="link" size="default" className="w-full items-start" onClick={handleLoginClick}>
+            <button
+              onClick={handleLoginClick}
+              className="flex w-full items-center rounded-lg px-3 py-2.5 text-sm font-medium transition-colors hover:bg-accent"
+            >
               {t.login_or_sign_in}
-            </Button>
+            </button>
           )}
         </div>
-      ) : null}
+      </div>
 
       {loginOpen ? <LoginPopup onClose={() => setLoginOpen(false)} /> : null}
     </div>

@@ -1,8 +1,8 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { SupportedLocale } from '@/lib/configs/locales'
 import { getTranslations } from '@/lib/configs/locales/i18n'
 import DashboardHeader from '@/components/dashboard/dashboard-header'
-import { HomeIcon } from '@/lib/constants/icons'
 import type { PageParamsProps } from '@/lib/types/page.type'
 
 export default async function UserDashboardLayout({
@@ -15,12 +15,8 @@ export default async function UserDashboardLayout({
   return (
     <div className="flex h-screen flex-col overflow-hidden">
       <DashboardHeader>
-        <Link
-          href={`/${lang}`}
-          className="flex items-center gap-2 text-sm font-semibold transition-colors hover:text-primary"
-        >
-          <HomeIcon className="size-4" />
-          <span className="hidden sm:inline">PortaSicilia</span>
+        <Link href={`/${lang}`} className="transition-opacity hover:opacity-80">
+          <Image src="/logo.png" alt="PortaSicilia" width={28} height={28} />
         </Link>
       </DashboardHeader>
       <main className="flex-1 overflow-y-auto px-4 py-8 sm:px-6 lg:px-10">{children}</main>

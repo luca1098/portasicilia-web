@@ -48,7 +48,7 @@ export default async function Home({ params }: PageParamsProps) {
     <main>
       {/* Hero */}
       <section
-        className="relative flex min-h-[50vh] flex-col items-center justify-center px-4"
+        className="relative flex min-h-[80vh] flex-col items-center justify-center px-4"
         style={{
           backgroundImage: "url('/images/hero-bg.png')",
           backgroundSize: 'cover',

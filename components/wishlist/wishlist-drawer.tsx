@@ -9,8 +9,13 @@ import { useTranslation } from '@/lib/context/translation.context'
 import { useFavoriteActions } from '@/core/store/favorite.store'
 import { useAction } from '@/lib/hooks/use-action'
 import WishlistContent from './wishlist-content'
+import { cn } from '@/lib/utils/shadcn.utils'
 
-export default function WishlistDrawer() {
+interface WishlistDrawerProps {
+  isTransparent?: boolean
+}
+
+export default function WishlistDrawer({ isTransparent }: WishlistDrawerProps) {
   const [open, setOpen] = useState(false)
   const { data: session } = useSession()
   const t = useTranslation()
@@ -32,6 +37,10 @@ export default function WishlistDrawer() {
         size="icon"
         aria-label={t.wishlist_title}
         onClick={() => handleOpen(true)}
+        className={cn(
+          isTransparent &&
+            'text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.4)] hover:bg-white/10 hover:text-white'
+        )}
       >
         <HeartIcon className="size-5" />
       </Button>

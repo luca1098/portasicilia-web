@@ -14,6 +14,7 @@ import {
   XIcon,
   ClipboardListIcon,
   CalendarCheck2Icon,
+  StarIcon,
 } from '@/lib/constants/icons'
 import { Button } from '@/components/ui/button'
 
@@ -27,6 +28,7 @@ const sidebarItems: SidebarItem[] = [
   { key: 'owner_sidebar_dashboard', icon: LayoutDashboardIcon, href: '' },
   { key: 'owner_sidebar_requests', icon: ClipboardListIcon, href: '/requests' },
   { key: 'owner_sidebar_bookings', icon: CalendarCheck2Icon, href: '/bookings' },
+  { key: 'owner_sidebar_reviews', icon: StarIcon, href: '/reviews' },
 ]
 
 export default function OwnerSidebar() {

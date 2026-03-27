@@ -51,6 +51,7 @@ export default function ReviewSection({ reviews, listingType }: ReviewSectionPro
     anonymous: t[keys.anonymous],
     showMore: t.review_show_more,
     showLess: t.review_show_less,
+    verified: t.review_verified,
   }
 
   if (!reviews.length) return null

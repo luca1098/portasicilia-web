@@ -1,4 +1,25 @@
+import { interpolate } from '@/lib/utils/i18n.utils'
+
 const ROME_TZ = 'Europe/Rome'
+
+type RelativeTimeTranslations = {
+  justNow: string
+  daysAgo: string
+  weeksAgo: string
+  monthsAgo: string
+}
+
+export function getRelativeTime(dateStr: string, translations: RelativeTimeTranslations): string {
+  const date = new Date(dateStr)
+  const now = new Date()
+  const diffMs = now.getTime() - date.getTime()
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+
+  if (diffDays < 1) return translations.justNow
+  if (diffDays < 7) return interpolate(translations.daysAgo, { count: String(diffDays) })
+  if (diffDays < 30) return interpolate(translations.weeksAgo, { count: String(Math.floor(diffDays / 7)) })
+  return interpolate(translations.monthsAgo, { count: String(Math.floor(diffDays / 30)) })
+}
 
 /** Parse a date-only API string (YYYY-MM-DD or ISO with Z) as local midnight, preserving the calendar date. */
 export function parseDate(dateString: string): Date {

@@ -18,6 +18,7 @@ type UserBookingsState = {
 type UserBookingsActions = {
   setRequestFilter: (filter: string) => void
   handleStatusChange: (bookingId: string, newStatus: string) => void
+  markReviewed: (bookingId: string) => void
 }
 
 type UserBookingsContextValue = {
@@ -58,6 +59,9 @@ export default function UserBookingsProvider({
       setRequestFilter,
       handleStatusChange: (bookingId: string, newStatus: string) => {
         setBookings(prev => prev.map(b => (b.id === bookingId ? { ...b, status: newStatus } : b)))
+      },
+      markReviewed: (bookingId: string) => {
+        setBookings(prev => prev.map(b => (b.id === bookingId ? { ...b, hasReview: true } : b)))
       },
     }),
     []

@@ -1,10 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { StarIcon, GoogleIcon } from '@/lib/constants/icons'
-import { interpolate } from '@/lib/utils/i18n.utils'
+import { GoogleIcon, ShieldCheckIcon } from '@/lib/constants/icons'
+import { getRelativeTime } from '@/lib/utils/date.utils'
 import type { Review } from '@/lib/schemas/entities/experience.entity.schema'
 import Image from 'next/image'
+import StarRatingDisplay from '@/components/review/star-rating-display'
 
 type ReviewCardTranslations = {
   justNow: string
@@ -14,28 +15,12 @@ type ReviewCardTranslations = {
   anonymous: string
   showMore: string
   showLess: string
+  verified: string
 }
 
 type ReviewCardProps = {
   review: Review
   translations: ReviewCardTranslations
-}
-
-const STAR_INDICES = [0, 1, 2, 3, 4]
-
-export function getRelativeTime(
-  dateStr: string,
-  translations: Pick<ReviewCardTranslations, 'justNow' | 'daysAgo' | 'weeksAgo' | 'monthsAgo'>
-): string {
-  const date = new Date(dateStr)
-  const now = new Date()
-  const diffMs = now.getTime() - date.getTime()
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
-
-  if (diffDays < 1) return translations.justNow
-  if (diffDays < 7) return interpolate(translations.daysAgo, { count: String(diffDays) })
-  if (diffDays < 30) return interpolate(translations.weeksAgo, { count: String(Math.floor(diffDays / 7)) })
-  return interpolate(translations.monthsAgo, { count: String(Math.floor(diffDays / 30)) })
 }
 
 export default function ReviewCard({ review, translations }: ReviewCardProps) {
@@ -67,19 +52,20 @@ export default function ReviewCard({ review, translations }: ReviewCardProps) {
           <div className="flex items-center gap-1.5">
             <p className="truncate text-sm font-semibold">{displayName}</p>
             {isGoogle && <GoogleIcon className="size-3.5 shrink-0" />}
+            {review.source === 'PORTASICILIA' && (
+              <span className="inline-flex items-center gap-0.5 rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-medium text-primary">
+                <ShieldCheckIcon className="size-3" />
+                {translations.verified}
+              </span>
+            )}
           </div>
           <p className="text-xs text-muted-foreground">{timeAgo}</p>
         </div>
       </div>
 
       {/* Stars */}
-      <div className="mb-2 flex gap-0.5">
-        {STAR_INDICES.map(i => (
-          <StarIcon
-            key={i}
-            className={`size-3 ${i < review.rating ? 'fill-foreground text-foreground' : 'fill-muted text-muted'}`}
-          />
-        ))}
+      <div className="mb-2">
+        <StarRatingDisplay rating={review.rating} />
       </div>
 
       {/* Title */}

@@ -3,6 +3,7 @@ import type { BookingPriceSnapshot, CreateBookingParticipant } from './bookings'
 
 export type UserBookingListing = {
   id: string
+  type: 'EXPERIENCE' | 'STAY'
   name: string
   slug: string
   cover: string | null
@@ -40,6 +41,7 @@ export type UserBooking = {
   listing: UserBookingListing
   priceSnapshot: BookingPriceSnapshot | null
   timeSlot: UserBookingTimeSlot
+  hasReview?: boolean
 }
 
 export function getUserBookings(headers: HeadersInit) {

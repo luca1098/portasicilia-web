@@ -7,10 +7,12 @@ import { StatusBadge } from '@/components/dashboard/bookings/status-badge'
 import { useTranslation } from '@/lib/context/translation.context'
 import {
   CalendarIcon,
+  CheckCircle2Icon,
   ChevronDownIcon,
   ClockIcon,
   ImageIcon,
   MessageSquareIcon,
+  StarIcon,
   UsersIcon,
   XIcon,
 } from '@/lib/constants/icons'
@@ -19,6 +21,7 @@ import { cn } from '@/lib/utils/shadcn.utils'
 import { useUserBookings } from './user-bookings-provider'
 import CancelBookingDialog from './cancel-booking-dialog'
 import AcceptProposalDialog from './accept-proposal-dialog'
+import ReviewDialog from './review-dialog'
 import type { UserBooking } from '@/lib/api/user-bookings'
 
 export default function UserBookingCard({ booking }: { booking: UserBooking }) {
@@ -27,9 +30,14 @@ export default function UserBookingCard({ booking }: { booking: UserBooking }) {
   const [expanded, setExpanded] = useState(false)
   const [cancelOpen, setCancelOpen] = useState(false)
   const [acceptOpen, setAcceptOpen] = useState(false)
+  const [reviewOpen, setReviewOpen] = useState(false)
 
   const isCounterProposed = booking.status === 'COUNTER_PROPOSED'
-  const canCancel = booking.status === 'PENDING_APPROVAL' || booking.status === 'CONFIRMED'
+  const isPast = new Date(booking.date) < new Date(new Date().toDateString())
+  const canCancel = (booking.status === 'PENDING_APPROVAL' || booking.status === 'CONFIRMED') && !isPast
+  const isCompleted = booking.status === 'COMPLETED'
+  const canReview = (isCompleted || (booking.status === 'CONFIRMED' && isPast)) && !booking.hasReview
+  const listingType = booking.listing.type === 'EXPERIENCE' ? 'experience' : 'stay'
   const counterProposals =
     isCounterProposed && booking.counterProposals?.length ? booking.counterProposals : null
 
@@ -44,7 +52,7 @@ export default function UserBookingCard({ booking }: { booking: UserBooking }) {
         {/* Main card row */}
         <button
           type="button"
-          onClick={() => setExpanded(!expanded)}
+          onClick={() => setExpanded(prev => !prev)}
           className="flex w-full items-center gap-4 p-4 text-left transition-colors hover:bg-accent/30"
         >
           {/* Thumbnail */}
@@ -227,12 +235,25 @@ export default function UserBookingCard({ booking }: { booking: UserBooking }) {
               )}
 
               {/* Actions */}
-              {canCancel && (
-                <div className="mt-4 flex justify-end">
-                  <Button variant="outline" size="sm" onClick={() => setCancelOpen(true)}>
-                    <XIcon className="size-4" />
-                    {t.user_cancel_action}
-                  </Button>
+              {(canCancel || canReview || booking.hasReview) && (
+                <div className="mt-4 flex items-center justify-end gap-2">
+                  {booking.hasReview ? (
+                    <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                      <CheckCircle2Icon className="size-4 text-green-500" />
+                      {t.review_submitted}
+                    </div>
+                  ) : canReview ? (
+                    <Button variant="outline" size="sm" onClick={() => setReviewOpen(true)}>
+                      <StarIcon className="size-4" />
+                      {t.review_leave}
+                    </Button>
+                  ) : null}
+                  {canCancel && (
+                    <Button variant="outline" size="sm" onClick={() => setCancelOpen(true)}>
+                      <XIcon className="size-4" />
+                      {t.user_cancel_action}
+                    </Button>
+                  )}
                 </div>
               )}
             </div>
@@ -255,6 +276,17 @@ export default function UserBookingCard({ booking }: { booking: UserBooking }) {
           bookingId={booking.id}
           proposals={counterProposals}
           onSuccess={() => actions.handleStatusChange(booking.id, 'CONFIRMED')}
+        />
+      )}
+
+      {canReview && (
+        <ReviewDialog
+          open={reviewOpen}
+          onOpenChange={setReviewOpen}
+          listingId={booking.listing.id}
+          listingType={listingType}
+          listingName={booking.listing.name}
+          onSuccess={() => actions.markReviewed(booking.id)}
         />
       )}
     </>

@@ -3,14 +3,19 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useParams } from 'next/navigation'
-import { Facebook, Instagram, Twitter } from 'lucide-react'
+import { Facebook, Instagram, TikTokIcon } from '@/lib/constants/icons'
 import { useForm, FormProvider } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import { InputFormField } from '@/components/form/input-form-field'
 import { useTranslation } from '@/lib/context/translation.context'
-import { ReactNode, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
+import { api } from '@/lib/api/fetch-client'
+import type { Locality } from '@/lib/schemas/entities/locality.entity.schema'
+import type { Category } from '@/lib/schemas/entities/category.entity.schema'
+import type { StayCard } from '@/lib/api/stays'
+import type { Article } from '@/lib/schemas/entities/article.entity.schema'
 
 interface NewsletterFormValues {
   email: string
@@ -47,7 +52,7 @@ const SocialButton = ({
   href,
   label,
 }: {
-  icon: typeof Facebook
+  icon: React.ComponentType<{ className?: string }>
   href: string
   label: string
 }) => (
@@ -62,85 +67,14 @@ const SocialButton = ({
   </a>
 )
 
-const PaymentIcon = ({ name }: { name: string }) => {
-  const icons: Record<string, ReactNode> = {
-    paypal: (
-      <svg viewBox="0 0 38 24" className="h-6 w-auto" fill="none">
-        <rect width="38" height="24" rx="3" fill="white" />
-        <path
-          d="M10.5 7.5h2.8c1.7 0 2.5.8 2.4 2.1-.2 2.2-1.6 3.4-3.5 3.4h-.7c-.3 0-.5.2-.5.4l-.4 2.6c0 .1-.1.2-.3.2h-1.5c-.2 0-.3-.1-.3-.3l1.2-8.1c0-.2.2-.3.4-.3z"
-          fill="#003087"
-        />
-        <path
-          d="M23.5 7.3c.8 0 1.7.2 2.2.7.4.4.5 1 .4 1.7-.3 2.2-1.4 3.4-3.5 3.4h-1c-.2 0-.4.2-.4.4l-.3 2.3c0 .1-.1.2-.2.2h-1.2c-.1 0-.2-.1-.2-.2l.1-.6 1-6.3v-.2c0-.8.6-1.4 1.4-1.4h1.7z"
-          fill="#009cde"
-        />
-      </svg>
-    ),
-    mastercard: (
-      <svg viewBox="0 0 38 24" className="h-6 w-auto" fill="none">
-        <rect width="38" height="24" rx="3" fill="white" />
-        <circle cx="15" cy="12" r="6" fill="#EB001B" />
-        <circle cx="23" cy="12" r="6" fill="#F79E1B" />
-        <path d="M19 7.5a6 6 0 0 0 0 9 6 6 0 0 0 0-9z" fill="#FF5F00" />
-      </svg>
-    ),
-    visa: (
-      <svg viewBox="0 0 38 24" className="h-6 w-auto" fill="none">
-        <rect width="38" height="24" rx="3" fill="white" />
-        <path
-          d="M15.5 16h-2l1.3-8h2l-1.3 8zm7.2-8l-1.9 5.5-.2-1.1-.7-3.6s-.1-.8-.9-.8h-3.1l-.1.3s1 .2 2.1.9l1.8 6.8h2.1l3.2-8h-2.3zm5.8 5.5c0-.4.4-.8 1.3-.9.4 0 1 0 1.9.4l.3-1.8s-.9-.3-1.9-.3c-2 0-3.4 1-3.4 2.5 0 1.1 1 1.7 1.8 2 .8.4 1.1.6 1.1 1 0 .5-.7.8-1.3.8-.9 0-1.4-.1-2.1-.5l-.3 1.8c.5.2 1.4.4 2.4.4 2.1 0 3.5-1 3.5-2.6 0-2-2.8-2.1-2.8-2.8h-.5z"
-          fill="#1A1F71"
-        />
-      </svg>
-    ),
-    gpay: (
-      <svg viewBox="0 0 38 24" className="h-6 w-auto" fill="none">
-        <rect width="38" height="24" rx="3" fill="white" />
-        <path
-          d="M18.4 12.4v3h-1V8h2.6c.6 0 1.2.2 1.6.6.5.4.7.9.7 1.5s-.2 1.1-.7 1.5c-.4.4-1 .6-1.6.6h-1.6v.2zm0-3.4v2.4h1.7c.4 0 .7-.1.9-.4.3-.2.4-.5.4-.8s-.1-.6-.4-.8c-.2-.3-.5-.4-.9-.4h-1.7z"
-          fill="#5F6368"
-        />
-        <path
-          d="M25.2 10.4c.7 0 1.3.2 1.7.6.4.4.6 1 .6 1.7v2.8h-1v-.6c-.3.5-.8.7-1.5.7-.4 0-.8-.1-1.1-.3-.3-.2-.5-.4-.6-.7-.1-.3-.2-.5-.2-.8 0-.5.2-.9.5-1.2.4-.3.9-.4 1.5-.4.5 0 .9.1 1.2.3v-.1c0-.4-.1-.6-.3-.8-.2-.2-.5-.3-.9-.3-.5 0-1 .2-1.3.5l-.4-.8c.5-.4 1.1-.6 1.8-.6zm-.6 4c.3.2.6.2 1 .2.3 0 .5-.1.7-.2.2-.2.3-.4.3-.6 0-.3-.1-.5-.3-.6-.2-.2-.5-.2-.8-.2-.3 0-.6.1-.8.2-.2.2-.3.4-.3.6 0 .2.1.4.2.6z"
-          fill="#5F6368"
-        />
-        <path d="M32 10.5l-2.4 5.5h-1.1l.9-1.9-1.6-3.6h1.1l1 2.5 1-2.5H32z" fill="#5F6368" />
-        <path
-          d="M13.9 11.8c0-.2 0-.4-.1-.6h-3.1v1.2h1.8c-.1.4-.3.8-.7 1v.9h1.1c.7-.6 1-1.5 1-2.5z"
-          fill="#4285F4"
-        />
-        <path
-          d="M10.7 15.2c.9 0 1.7-.3 2.3-.8l-1.1-.9c-.3.2-.7.3-1.2.3-.9 0-1.7-.6-2-1.5h-1.1v.9c.6 1.2 1.8 2 3.1 2z"
-          fill="#34A853"
-        />
-        <path
-          d="M8.7 12.3c-.1-.3-.1-.5-.1-.8 0-.3 0-.5.1-.8v-.9H7.6c-.2.5-.4 1.1-.4 1.7 0 .6.1 1.2.4 1.7l1.1-.9z"
-          fill="#FBBC04"
-        />
-        <path
-          d="M10.7 9.2c.5 0 1 .2 1.3.5l1-.9c-.6-.6-1.4-.9-2.3-.9-1.3 0-2.5.8-3.1 2l1.1.9c.3-.9 1.1-1.6 2-1.6z"
-          fill="#EA4335"
-        />
-      </svg>
-    ),
-    applepay: (
-      <svg viewBox="0 0 38 24" className="h-6 w-auto" fill="none">
-        <rect width="38" height="24" rx="3" fill="white" />
-        <path
-          d="M11.2 9.3c-.3.4-.8.7-1.2.6-.1-.5.2-.9.4-1.2.3-.4.8-.6 1.2-.6.1.4-.1.9-.4 1.2zm.4.7c-.7 0-1.2.4-1.6.4-.4 0-.9-.4-1.5-.4-.8 0-1.5.4-1.9 1.1-.8 1.4-.2 3.5.6 4.6.4.6.8 1.2 1.5 1.2.6 0 .8-.4 1.5-.4.7 0 .9.4 1.5.4.6 0 1-.5 1.4-1.1.4-.6.6-1.2.6-1.3-.1-.1-1.2-.5-1.2-1.8 0-1.1.9-1.7 1-1.7-.5-.8-1.4-.9-1.6-.9-.6 0-1.1.3-1.4.3h.1v-.4zm6.2-.4c1.3 0 2.3.9 2.3 2.2 0 1.3-1 2.2-2.4 2.2h-1.5v2.3h-1.1V9.6h2.7zm-1.6 3.5h1.3c.9 0 1.4-.5 1.4-1.3 0-.8-.5-1.3-1.4-1.3h-1.3v2.6zm4.3 1.5c0-.8.6-1.3 1.8-1.4l1.3-.1v-.4c0-.5-.3-.8-1-.8-.5 0-.9.2-1 .6h-1c.1-.9.9-1.5 2-1.5 1.2 0 2 .6 2 1.6v3.3h-1v-.7c-.3.5-.9.8-1.5.8-.9 0-1.6-.6-1.6-1.4zm3.1-.4v-.4l-1.2.1c-.6 0-.9.2-.9.6 0 .4.4.6.8.6.6 0 1.3-.4 1.3-1h0v.1zm2.1 2.4v-.8c.1 0 .3.1.5.1.4 0 .6-.2.8-.6l.1-.2-1.8-5h1.2l1.2 4h0l1.2-4h1.1l-1.9 5.3c-.4 1.1-.9 1.5-1.8 1.5-.2 0-.4 0-.6-.1v-.2z"
-          fill="#000"
-        />
-      </svg>
-    ),
-  }
-
-  return (
-    <div className="flex h-8 w-12 items-center justify-center rounded bg-white px-1">
-      {icons[name] || <span className="text-xs">{name}</span>}
-    </div>
-  )
-}
+const PAYMENT_METHODS = [
+  { name: 'PayPal', src: '/images/payments/paypal.svg' },
+  { name: 'Mastercard', src: '/images/payments/mastercard.svg' },
+  { name: 'Visa', src: '/images/payments/visa.svg' },
+  { name: 'Apple Pay', src: '/images/payments/apple-pay.svg' },
+  { name: 'Google Pay', src: '/images/payments/google-pay.png' },
+  { name: 'Klarna', src: '/images/payments/klarna.png' },
+]
 
 export default function Footer() {
   const params = useParams()
@@ -166,36 +100,49 @@ export default function Footer() {
     // TODO: implement newsletter subscription
   }
 
+  const [localities, setLocalities] = useState<Locality[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
+  const [stays, setStays] = useState<StayCard[]>([])
+  const [articles, setArticles] = useState<Article[]>([])
+
+  useEffect(() => {
+    api
+      .get<Locality[]>('/localities', { params: { limit: 6 } })
+      .then(setLocalities)
+      .catch(() => {})
+    api
+      .get<Category[]>('/categories', {
+        ...(lang && lang !== 'it' && { lang: lang as 'en' }),
+      })
+      .then(data => setCategories(data.slice(0, 6)))
+      .catch(() => {})
+    api
+      .get<{ data: StayCard[]; nextCursor: string | null }>('/stays/cards', { params: { limit: 6 } })
+      .then(res => setStays(res.data))
+      .catch(() => {})
+    api
+      .get<Article[]>('/blog/articles/recent', { params: { limit: 6 } })
+      .then(setArticles)
+      .catch(() => {})
+  }, [lang])
+
   const destinazioniLinks = [
-    { label: t.footer_dest_cefalu, href: '/location/cefalu' },
-    { label: t.footer_dest_palermo, href: '/location/palermo' },
-    { label: t.footer_dest_capo_orlando, href: '/location/capo-orlando' },
-    { label: t.footer_dest_noto, href: '/location/noto' },
+    ...localities.map(l => ({ label: l.name, href: `/location/${l.slug}` })),
     { label: t.footer_discover_more, href: '/location' },
   ]
 
   const ispirazioneLinks = [
-    { label: t.footer_insp_romantic, href: '/category/fuga-romantica' },
-    { label: t.footer_insp_nature, href: '/category/immerso-nella-natura' },
-    { label: t.footer_insp_sea, href: '/category/profumo-di-mare' },
-    { label: t.footer_insp_city, href: '/category/nel-cuore-della-citta' },
-    { label: t.footer_insp_madonie, href: '/category/madonie-segrete' },
-    { label: t.footer_discover_more, href: '/category' },
+    ...categories.map(c => ({ label: c.name, href: `/category/${c.slug}` })),
+    { label: t.footer_discover_more, href: '/categories' },
   ]
 
   const alloggiLinks = [
-    { label: t.footer_insp_romantic, href: '/stays?category=romantic' },
-    { label: t.footer_insp_nature, href: '/stays?category=nature' },
-    { label: t.footer_insp_sea, href: '/stays?category=sea' },
-    { label: t.footer_insp_city, href: '/stays?category=city' },
-    { label: t.footer_insp_madonie, href: '/stays?category=madonie' },
+    ...stays.map(s => ({ label: s.name, href: `/stays/${s.slug}` })),
     { label: t.footer_discover_more, href: '/stays' },
   ]
 
   const pilloleLinks = [
-    { label: t.footer_pill_beaches, href: '/blog/spiagge-sicilia' },
-    { label: t.footer_pill_pistachio, href: '/blog/menu-pistacchio' },
-    { label: t.footer_pill_boat_tours, href: '/blog/tour-barca' },
+    ...articles.map(a => ({ label: a.title, href: `/blog/${a.slug}` })),
     { label: t.footer_discover_more, href: '/blog' },
   ]
 
@@ -226,7 +173,7 @@ export default function Footer() {
             <FormProvider {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="flex w-full max-w-2xl items-start justify-between gap-1"
+                className="flex w-full max-w-2xl items-start justify-between gap-2"
               >
                 <InputFormField<NewsletterFormValues>
                   name="email"
@@ -237,7 +184,7 @@ export default function Footer() {
                 />
                 <Button
                   type="submit"
-                  className="shrink-0 bg-primary px-6 text-sm font-medium text-white hover:bg-primary/90"
+                  className="h-14 shrink-0 rounded-xl bg-primary px-6 text-sm font-medium text-white hover:bg-primary/90"
                 >
                   {t.footer_subscribe_button}
                 </Button>
@@ -258,9 +205,17 @@ export default function Footer() {
 
           {/* Social Links */}
           <div className="flex gap-4">
-            <SocialButton icon={Facebook} href="https://facebook.com" label="Facebook" />
-            <SocialButton icon={Instagram} href="https://instagram.com" label="Instagram" />
-            <SocialButton icon={Twitter} href="https://twitter.com" label="Twitter" />
+            <SocialButton
+              icon={Facebook}
+              href="https://www.facebook.com/p/Porta-Sicilia-61575665175756/"
+              label="Facebook"
+            />
+            <SocialButton
+              icon={Instagram}
+              href="https://www.instagram.com/porta_sicilia/"
+              label="Instagram"
+            />
+            <SocialButton icon={TikTokIcon} href="https://www.tiktok.com/@porta_sicilia" label="TikTok" />
           </div>
         </div>
       </div>
@@ -283,11 +238,17 @@ export default function Footer() {
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-6 md:flex-row">
           <p className="text-sm text-gray-400">{t.footer_copyright}</p>
           <div className="flex flex-wrap items-center justify-center gap-2">
-            <PaymentIcon name="paypal" />
-            <PaymentIcon name="mastercard" />
-            <PaymentIcon name="visa" />
-            <PaymentIcon name="gpay" />
-            <PaymentIcon name="applepay" />
+            {PAYMENT_METHODS.map(pm => (
+              <div key={pm.name} className="flex h-8 w-12 items-center justify-center rounded bg-white p-1">
+                <Image
+                  src={pm.src}
+                  alt={pm.name}
+                  width={38}
+                  height={24}
+                  className="h-full w-full object-contain"
+                />
+              </div>
+            ))}
           </div>
         </div>
       </div>

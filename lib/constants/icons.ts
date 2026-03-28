@@ -109,4 +109,4 @@ export {
   PlayCircleIcon,
 } from 'lucide-react'
 
-export { GoogleIcon } from './custom-icons'
+export { GoogleIcon, TikTokIcon } from './custom-icons'

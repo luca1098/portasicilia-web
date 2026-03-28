@@ -12,19 +12,30 @@ import { getLocalityCards } from '@/lib/api/localities'
 import { getExperienceCards } from '@/lib/api/experiences'
 import { getStayCards } from '@/lib/api/stays'
 import { getHighlightedCategories } from '@/lib/api/categories'
+import { getFeaturedSocialVideos } from '@/lib/api/social-videos'
 import { mockShopCategories } from '@/lib/constants/shop-categories'
 import { Button } from '@/components/ui/button'
+import SocialVideoSection from '@/components/social-video/social-video-section'
 
 export default async function Home({ params }: PageParamsProps) {
   const { lang } = await params
-  const [t, { data: locationCards }, { data: experienceCards }, { data: stayCards }, highlightedCategories] =
-    await Promise.all([
-      getTranslations(lang as SupportedLocale),
-      getLocalityCards({ limit: 6, highlighted: true }),
-      getExperienceCards({ limit: 6, highlighted: true }),
-      getStayCards({ limit: 6, highlighted: true }),
-      getHighlightedCategories(lang),
-    ])
+  const [
+    t,
+    { data: locationCards },
+    { data: experienceCards },
+    { data: stayCards },
+    highlightedCategories,
+    socialVideosData,
+  ] = await Promise.all([
+    getTranslations(lang as SupportedLocale),
+    getLocalityCards({ limit: 6, highlighted: true }),
+    getExperienceCards({ limit: 6, highlighted: true }),
+    getStayCards({ limit: 6, highlighted: true }),
+    getHighlightedCategories(lang),
+    getFeaturedSocialVideos().catch(() => null),
+  ])
+
+  const socialVideos = Array.isArray(socialVideosData) ? socialVideosData : []
 
   const shopCategoryLabels = {
     titles: {
@@ -131,6 +142,11 @@ export default async function Home({ params }: PageParamsProps) {
         <section className="mx-auto max-w-7xl px-4 py-16 md:px-8">
           <CategoryGrid categories={highlightedCategories} lang={lang} />
         </section>
+      )}
+
+      {/* Social Videos */}
+      {socialVideos.length > 0 && (
+        <SocialVideoSection videos={socialVideos} title={t.home_social_videos_title} lang={lang} />
       )}
 
       {/* Shop Categories */}

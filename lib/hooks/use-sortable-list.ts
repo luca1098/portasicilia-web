@@ -16,6 +16,15 @@ export function useSortableList<T extends SortableItem>(initialItems: T[]) {
   const [orderedItems, setOrderedItems] = useState<T[] | null>(null)
   const [activeId, setActiveId] = useState<string | null>(null)
 
+  const initialKey = useMemo(() => initialItems.map(i => `${i.id}:${i.order}`).join(','), [initialItems])
+
+  const [prevKey, setPrevKey] = useState(initialKey)
+  if (prevKey !== initialKey) {
+    setPrevKey(initialKey)
+    setLocalItems(initialItems)
+    setOrderedItems(null)
+  }
+
   const sorted = useMemo(() => [...localItems].sort((a, b) => a.order - b.order), [localItems])
   const displayItems = orderedItems ?? sorted
 

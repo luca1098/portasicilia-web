@@ -17,6 +17,7 @@ import { cn } from '@/lib/utils/shadcn.utils'
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [hidden, setHidden] = useState(false)
   const params = useParams()
   const pathname = usePathname()
   const lang = params.lang as string
@@ -32,8 +33,13 @@ export default function Navbar() {
   }
 
   useEffect(() => {
+    let lastScrollY = window.scrollY
+
     const handleScroll = () => {
-      setScrolled(window.scrollY > 100)
+      const currentY = window.scrollY
+      setScrolled(currentY > 100)
+      setHidden(currentY > 100 && currentY > lastScrollY)
+      lastScrollY = currentY
     }
 
     handleScroll()
@@ -49,6 +55,7 @@ export default function Navbar() {
       <header
         className={cn(
           'fixed top-0 z-40 w-full transition-all duration-500 ease-out',
+          hidden ? '-translate-y-full' : 'translate-y-0',
           isOnTopOfHomePage
             ? 'bg-linear-to-b from-black/50 to-transparent'
             : 'border-b border-border bg-background backdrop-saturate-150'

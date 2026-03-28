@@ -121,3 +121,77 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* ── Toast Styles ── */
+
+.ps-toast {
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.ps-toast-success {
+  background: oklch(0.95 0.04 168);
+  color: oklch(0.28 0.06 168);
+  border-color: oklch(0.88 0.06 168);
+}
+
+.ps-toast-success .ps-toast-icon {
+  color: oklch(0.42 0.1 168);
+}
+
+.ps-toast-error {
+  background: oklch(0.95 0.03 25);
+  color: oklch(0.35 0.1 25);
+  border-color: oklch(0.88 0.06 25);
+}
+
+.ps-toast-error .ps-toast-icon {
+  color: oklch(0.52 0.2 25);
+}
+
+.ps-toast-title {
+  line-height: 1.4;
+}
+
+.ps-toast-close {
+  position: absolute !important;
+  right: 12px !important;
+  top: 50% !important;
+  left: unset !important;
+  transform: translateY(-50%) !important;
+  border: none !important;
+  background: transparent !important;
+  color: currentColor !important;
+  opacity: 0.5;
+  cursor: pointer;
+  padding: 2px !important;
+  width: auto !important;
+  height: auto !important;
+  transition: opacity 0.15s ease;
+}
+
+.ps-toast-close:hover {
+  opacity: 1;
+}
+
+/* Dark mode toast overrides */
+.dark .ps-toast-success {
+  background: oklch(0.25 0.04 168);
+  color: oklch(0.88 0.06 168);
+  border-color: oklch(0.35 0.05 168);
+}
+
+.dark .ps-toast-success .ps-toast-icon {
+  color: oklch(0.72 0.12 168);
+}
+
+.dark .ps-toast-error {
+  background: oklch(0.25 0.04 25);
+  color: oklch(0.88 0.05 25);
+  border-color: oklch(0.35 0.06 25);
+}
+
+.dark .ps-toast-error .ps-toast-icon {
+  color: oklch(0.7 0.18 25);
+}

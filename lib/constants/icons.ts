@@ -106,6 +106,7 @@ export {
   CopyIcon,
   LanguagesIcon,
   LayoutGridIcon,
+  PlayCircleIcon,
 } from 'lucide-react'
 
 export { GoogleIcon } from './custom-icons'

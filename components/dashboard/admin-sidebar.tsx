@@ -21,6 +21,7 @@ import {
   NewspaperIcon,
   UsersIcon,
   StarIcon,
+  PlayCircleIcon,
 } from '@/lib/constants/icons'
 import { Button } from '@/components/ui/button'
 
@@ -59,6 +60,7 @@ const sidebarSections: SidebarSection[] = [
     items: [
       { key: 'admin_sidebar_articles', icon: NewspaperIcon, href: '/blog' },
       { key: 'admin_sidebar_authors', icon: UsersIcon, href: '/blog/authors' },
+      { key: 'admin_sidebar_social_videos', icon: PlayCircleIcon, href: '/social-videos' },
     ],
   },
 ]

@@ -107,6 +107,9 @@ export {
   LanguagesIcon,
   LayoutGridIcon,
   PlayCircleIcon,
+  CreditCardIcon,
+  HandshakeIcon,
+  HelpCircleIcon,
 } from 'lucide-react'
 
 export { GoogleIcon, TikTokIcon } from './custom-icons'

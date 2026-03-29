@@ -150,7 +150,7 @@ export default function Footer() {
     { label: t.footer_privacy_policy, href: '/privacy-policy' },
     { label: t.footer_cookie_policy, href: '/cookie-policy' },
     { label: t.footer_terms, href: '/terms' },
-    { label: 'FAQ', href: '/faq' },
+    { label: t.footer_faq, href: '/faq' },
     { label: t.footer_cancellation, href: '/cancellation-policy' },
     { label: t.footer_become_partner, href: '/partner' },
     { label: t.footer_legal_notice, href: '/legal-notice' },

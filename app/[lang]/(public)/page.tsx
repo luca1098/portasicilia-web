@@ -1,7 +1,12 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
 import { getTranslations } from '@/lib/configs/locales/i18n'
 import { PageParamsProps } from '@/lib/types/page.type'
 import { SupportedLocale } from '@/lib/configs/locales'
+import { buildMetadata } from '@/lib/seo/metadata'
+import JsonLd from '@/lib/seo/json-ld'
+import { organizationSchema, websiteSchema } from '@/lib/seo/schema'
 import SearchBar from '@/components/search/search-bar'
 import LocationCardList from '@/components/location/location-card-list'
 import ExperienceCardList from '@/components/experience/experience-card-list'
@@ -16,6 +21,17 @@ import { getFeaturedSocialVideos } from '@/lib/api/social-videos'
 import { mockShopCategories } from '@/lib/constants/shop-categories'
 import { Button } from '@/components/ui/button'
 import SocialVideoSection from '@/components/social-video/social-video-section'
+
+export async function generateMetadata({ params }: PageParamsProps): Promise<Metadata> {
+  const { lang } = await params
+  const t = await getTranslations(lang as SupportedLocale)
+  return buildMetadata({
+    title: t.seo_home_title,
+    description: t.seo_home_description,
+    path: '',
+    locale: lang,
+  })
+}
 
 export default async function Home({ params }: PageParamsProps) {
   const { lang } = await params
@@ -57,15 +73,18 @@ export default async function Home({ params }: PageParamsProps) {
 
   return (
     <main>
+      <JsonLd data={[organizationSchema(), websiteSchema(lang)]} />
+
       {/* Hero */}
-      <section
-        className="relative flex min-h-[80vh] flex-col items-center justify-center px-4"
-        style={{
-          backgroundImage: "url('/images/hero-bg.png')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'bottom',
-        }}
-      >
+      <section className="relative flex min-h-[80vh] flex-col items-center justify-center px-4">
+        <Image
+          src="/images/hero-bg.png"
+          alt={t.seo_hero_alt}
+          fill
+          className="object-cover object-bottom"
+          priority
+          sizes="100vw"
+        />
         <div className="relative z-10 flex flex-col items-center gap-8">
           <div className="text-center">
             <p className="mb-2 text-sm tracking-widest text-white/80">{t.hero_subtitle}</p>
@@ -92,14 +111,14 @@ export default async function Home({ params }: PageParamsProps) {
       </section>
 
       {/* Experiences */}
-      <section
-        className="relative px-4 py-16 md:px-8 min-h-screen flex items-center"
-        style={{
-          backgroundImage: "url('/images/cover-experience.png')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'top',
-        }}
-      >
+      <section className="relative px-4 py-16 md:px-8 min-h-screen flex items-center">
+        <Image
+          src="/images/cover-experience.png"
+          alt={t.seo_experiences_cover_alt}
+          fill
+          className="object-cover object-top"
+          sizes="100vw"
+        />
         <div className="absolute inset-0 bg-black/40" />
         <div className="relative z-10 mx-auto max-w-7xl w-full">
           <h2 className="mb-10 text-center text-3xl font-bold text-white drop-shadow-lg md:text-4xl">
@@ -115,14 +134,15 @@ export default async function Home({ params }: PageParamsProps) {
       </section>
 
       {/* Stays */}
-      <section
-        className="relative px-4 py-16 md:px-8 min-h-screen flex items-center"
-        style={{
-          backgroundImage: "url('/images/cover-stays.jpg')",
-          backgroundSize: 'cover',
-          backgroundPosition: '70%',
-        }}
-      >
+      <section className="relative px-4 py-16 md:px-8 min-h-screen flex items-center">
+        <Image
+          src="/images/cover-stays.jpg"
+          alt={t.seo_stays_cover_alt}
+          fill
+          className="object-cover"
+          style={{ objectPosition: '70%' }}
+          sizes="100vw"
+        />
         <div className="absolute inset-0 bg-black/40" />
         <div className="relative z-10 mx-auto max-w-7xl w-full">
           <h2 className="mb-10 text-center text-3xl font-bold text-white drop-shadow-lg md:text-4xl">

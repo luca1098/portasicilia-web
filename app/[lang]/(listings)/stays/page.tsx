@@ -1,8 +1,21 @@
+import type { Metadata } from 'next'
 import { getTranslations } from '@/lib/configs/locales/i18n'
 import { PageParamsProps, PageSearchParamsProps } from '@/lib/types/page.type'
 import { SupportedLocale } from '@/lib/configs/locales'
+import { buildMetadata } from '@/lib/seo/metadata'
 import { getStayCards } from '@/lib/api/stays'
 import StayGrid from '@/components/stay/stay-grid'
+
+export async function generateMetadata({ params }: PageParamsProps): Promise<Metadata> {
+  const { lang } = await params
+  const t = await getTranslations(lang as SupportedLocale)
+  return buildMetadata({
+    title: t.seo_stays_title,
+    description: t.seo_stays_description,
+    path: 'stays',
+    locale: lang,
+  })
+}
 
 export default async function StaysPage({ params, searchParams }: PageParamsProps & PageSearchParamsProps) {
   const { lang } = await params

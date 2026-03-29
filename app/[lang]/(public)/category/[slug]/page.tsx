@@ -1,7 +1,12 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { getTranslations } from '@/lib/configs/locales/i18n'
 import type { SupportedLocale } from '@/lib/configs/locales'
+import { buildMetadata } from '@/lib/seo/metadata'
+import JsonLd from '@/lib/seo/json-ld'
+import { breadcrumbSchema } from '@/lib/seo/schema'
+import { SITE_URL } from '@/lib/seo/constants'
 import { getCategoryBySlug, getSuggestedCategories } from '@/lib/api/categories'
 import { getExperienceCards } from '@/lib/api/experiences'
 import { getStayCards } from '@/lib/api/stays'
@@ -15,6 +20,25 @@ import SuggestedCategories from '@/components/category/suggested-categories'
 
 type CategoryPageProps = {
   params: Promise<{ lang: string; slug: string }>
+}
+
+export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
+  const { lang, slug } = await params
+  try {
+    const [t, category] = await Promise.all([
+      getTranslations(lang as SupportedLocale),
+      getCategoryBySlug(slug, lang),
+    ])
+    return buildMetadata({
+      title: `${category.name} ${t.seo_category_suffix}`,
+      description: category.description || t.seo_categories_description,
+      path: `category/${slug}`,
+      locale: lang,
+      image: category.cover || undefined,
+    })
+  } catch {
+    return {}
+  }
 }
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
@@ -37,6 +61,13 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   return (
     <main className="min-h-screen">
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: t.seo_breadcrumb_home, url: `${SITE_URL}/${lang}` },
+          { name: t.seo_breadcrumb_categories, url: `${SITE_URL}/${lang}/categories` },
+          { name: category.name, url: `${SITE_URL}/${lang}/category/${category.slug}` },
+        ])}
+      />
       {category.cover && (
         <section className="relative h-[40vh] w-full overflow-hidden">
           <Image src={category.cover} alt={category.name} fill className="object-cover" priority />

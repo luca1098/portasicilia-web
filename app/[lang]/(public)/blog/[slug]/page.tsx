@@ -4,6 +4,10 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { SupportedLocale } from '@/lib/configs/locales'
 import { getTranslations } from '@/lib/configs/locales/i18n'
+import { buildArticleMetadata } from '@/lib/seo/metadata'
+import JsonLd from '@/lib/seo/json-ld'
+import { articleSchema, breadcrumbSchema } from '@/lib/seo/schema'
+import { SITE_URL } from '@/lib/seo/constants'
 import { getArticleBySlug, getArticles } from '@/lib/api/blog'
 import type { Article } from '@/lib/schemas/entities/article.entity.schema'
 import { interpolate } from '@/lib/utils/i18n.utils'
@@ -18,18 +22,10 @@ type BlogArticlePageProps = {
 }
 
 export async function generateMetadata({ params }: BlogArticlePageProps): Promise<Metadata> {
-  const { slug } = await params
+  const { lang, slug } = await params
   try {
     const article = await getArticleBySlug(slug)
-    return {
-      title: article.title,
-      description: article.excerpt,
-      openGraph: {
-        title: article.title,
-        description: article.excerpt,
-        ...(article.cover && { images: [{ url: article.cover }] }),
-      },
-    }
+    return buildArticleMetadata(article, lang)
   } catch {
     return {}
   }
@@ -59,6 +55,16 @@ export default async function BlogArticlePage({ params }: BlogArticlePageProps) 
 
   return (
     <article className="mx-auto max-w-4xl px-4 py-12 md:px-8">
+      <JsonLd
+        data={[
+          breadcrumbSchema([
+            { name: t.seo_breadcrumb_home, url: `${SITE_URL}/${lang}` },
+            { name: t.seo_breadcrumb_blog, url: `${SITE_URL}/${lang}/blog` },
+            { name: article.title, url: `${SITE_URL}/${lang}/blog/${article.slug}` },
+          ]),
+          articleSchema(article),
+        ]}
+      />
       <Link
         href={`/${lang}/blog`}
         className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"

@@ -1,12 +1,6 @@
-import type { Metadata } from 'next'
 import { PageParamsProps } from '@/lib/types/page.type'
 import { PropsWithChildren } from 'react'
 import Providers from '@/lib/providers'
-
-export const metadata: Metadata = {
-  title: 'Porta Sicilia',
-  description: 'Porta Sicilia',
-}
 
 type RootLayoutProps = PageParamsProps & PropsWithChildren
 

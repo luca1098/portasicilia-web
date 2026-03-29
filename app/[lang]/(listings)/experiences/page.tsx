@@ -1,8 +1,21 @@
+import type { Metadata } from 'next'
 import { getTranslations } from '@/lib/configs/locales/i18n'
 import { PageParamsProps } from '@/lib/types/page.type'
 import { SupportedLocale } from '@/lib/configs/locales'
+import { buildMetadata } from '@/lib/seo/metadata'
 import { getExperienceCards } from '@/lib/api/experiences'
 import ExperienceCardGrid from '@/components/experience/experience-card-grid'
+
+export async function generateMetadata({ params }: PageParamsProps): Promise<Metadata> {
+  const { lang } = await params
+  const t = await getTranslations(lang as SupportedLocale)
+  return buildMetadata({
+    title: t.seo_experiences_title,
+    description: t.seo_experiences_description,
+    path: 'experiences',
+    locale: lang,
+  })
+}
 
 export default async function ExperiencesPage({ params }: PageParamsProps) {
   const { lang } = await params

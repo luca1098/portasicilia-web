@@ -7,6 +7,7 @@ import {
   DollarSignIcon,
   UsersIcon,
   ArrowRight,
+  PackageIcon,
 } from '@/lib/constants/icons'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
@@ -72,6 +73,12 @@ const quickLinks = [
     labelKey: 'owner_sidebar_bookings',
     href: '/bookings',
     icon: CalendarCheck2Icon,
+  },
+  {
+    key: 'orders' as const,
+    labelKey: 'owner_sidebar_orders',
+    href: '/orders',
+    icon: PackageIcon,
   },
 ]
 

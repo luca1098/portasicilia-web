@@ -1,13 +1,16 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { favoriteApi, type FavoriteItem } from '@/lib/api/favorite.api'
+import { favoriteApi, type FavoriteListingItem, type FavoriteProductItem } from '@/lib/api/favorite.api'
 
 type FavoriteStore = {
-  ids: string[]
-  items: FavoriteItem[]
+  listingIds: string[]
+  productIds: string[]
+  listingItems: FavoriteListingItem[]
+  productItems: FavoriteProductItem[]
   loaded: boolean
   actions: {
-    toggle(listingId: string, token: string): Promise<void>
+    toggleListing(listingId: string, token: string): Promise<void>
+    toggleProduct(productId: string, token: string): Promise<void>
     fetchIds(token: string): Promise<void>
     fetchAll(token: string): Promise<void>
     clear(): void
@@ -17,35 +20,67 @@ type FavoriteStore = {
 const useFavoriteStore = create<FavoriteStore>()(
   persist(
     set => ({
-      ids: [],
-      items: [],
+      listingIds: [],
+      productIds: [],
+      listingItems: [],
+      productItems: [],
       loaded: false,
       actions: {
-        toggle: async (listingId: string, token: string) => {
-          const result = await favoriteApi.toggle(listingId, token)
+        toggleListing: async (listingId: string, token: string) => {
+          const result = await favoriteApi.toggleListing(listingId, token)
           if (result.favorited) {
-            set(state => ({ ids: [...state.ids, listingId] }))
+            set(state => ({ listingIds: [...state.listingIds, listingId] }))
           } else {
             set(state => ({
-              ids: state.ids.filter(id => id !== listingId),
-              items: state.items.filter(item => item.listing.id !== listingId),
+              listingIds: state.listingIds.filter(id => id !== listingId),
+              listingItems: state.listingItems.filter(item => item.listing.id !== listingId),
+            }))
+          }
+        },
+        toggleProduct: async (productId: string, token: string) => {
+          const result = await favoriteApi.toggleProduct(productId, token)
+          if (result.favorited) {
+            set(state => ({ productIds: [...state.productIds, productId] }))
+          } else {
+            set(state => ({
+              productIds: state.productIds.filter(id => id !== productId),
+              productItems: state.productItems.filter(item => item.product.id !== productId),
             }))
           }
         },
         fetchIds: async (token: string) => {
-          const ids = await favoriteApi.getIds(token)
-          set({ ids })
+          const [listingIds, productIds] = await Promise.all([
+            favoriteApi.getListingIds(token),
+            favoriteApi.getProductIds(token),
+          ])
+          set({ listingIds, productIds })
         },
         fetchAll: async (token: string) => {
-          const items = await favoriteApi.getAll(token)
-          set({ items, ids: items.map(item => item.listing.id), loaded: true })
+          const [listingItems, productItems] = await Promise.all([
+            favoriteApi.getAllListings(token),
+            favoriteApi.getAllProducts(token),
+          ])
+          set({
+            listingItems,
+            productItems,
+            listingIds: listingItems.map(item => item.listing.id),
+            productIds: productItems.map(item => item.product.id),
+            loaded: true,
+          })
         },
-        clear: () => set({ ids: [], items: [], loaded: false }),
+        clear: () =>
+          set({
+            listingIds: [],
+            productIds: [],
+            listingItems: [],
+            productItems: [],
+            loaded: false,
+          }),
       },
     }),
     {
       name: 'ps-favorites',
-      partialize: state => ({ ids: state.ids }),
+      partialize: state => ({ listingIds: state.listingIds, productIds: state.productIds }),
     }
   )
 )

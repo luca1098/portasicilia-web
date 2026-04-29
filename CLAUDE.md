@@ -74,6 +74,17 @@ npm run format       # Format code with Prettier
 - Reuse icons across components as much as possible - never import icons directly from icon libraries inside components
 - Import icons only from `icons.ts` (e.g., `import { SearchIcon, HeartIcon } from '@/lib/constants/icons'`)
 
+## Agent Best Practices
+
+These rules apply to any agent (Claude Code or others) working in `web/`. See also `web/AGENT.md`.
+
+1. **Reuse first** — Before creating a new component, hook, or util, search `components/`, `lib/utils/`, `lib/hooks/`. Never duplicate existing code. If something is missing, add it in the right shared location and reuse it.
+2. **Forms** — Always use `react-hook-form` with a colocated `<FormProvider>`, and the existing wrappers in `components/form/*-form-field.tsx` (`input`, `select`, `number`, `currency`, `phone`, `textarea`, `combobox`, `radio`, `checkbox`, `rich-text`, `time`, `file-uploader`, `address-autocomplete`). Never build a custom input when a `*-form-field.tsx` already covers it.
+3. **Currency** — Always format monetary values with `formatCurrency` from `lib/utils/format.utils.ts`. Never concatenate `€` + number manually or call `Intl.NumberFormat` inline.
+4. **Formatting in general** — Before writing any formatting logic (dates, numbers, strings, pluralization), check `lib/utils/`. If the util does not exist, create it there and reuse it — never inline ad-hoc formatters in components.
+5. **Clean code** — Small focused functions, explicit names, early returns, no dead code, no obvious comments, no `any`. Respect the component member order documented below (props → state → derived → handlers → `useEffect` → return).
+6. **Icons & libraries** — Icons only from `lib/constants/icons.ts`. Never import directly from `lucide-react` or `@radix-ui/*` in components.
+
 ### Component Structure
 
 - `useEffect` hooks must always be placed **after** all variable declarations, state, and functions, immediately before the component's return/render statement

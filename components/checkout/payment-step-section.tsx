@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils/shadcn.utils'
 import PaymentStep from '@/components/checkout/payment-step'
 
 type PaymentStepSectionProps = {
+  stepNumber?: number
   isActive: boolean
   isEnabled: boolean
   clientSecret: string | null
@@ -14,9 +15,12 @@ type PaymentStepSectionProps = {
   bookingLoading: boolean
   paymentError: boolean
   onDismissError: () => void
+  returnPath?: string
+  payLabelKey?: 'checkout_pay_with_deposit' | 'checkout_pay_full'
 }
 
 export default function PaymentStepSection({
+  stepNumber = 3,
   isActive,
   isEnabled,
   clientSecret,
@@ -25,6 +29,8 @@ export default function PaymentStepSection({
   bookingLoading,
   paymentError,
   onDismissError,
+  returnPath,
+  payLabelKey,
 }: PaymentStepSectionProps) {
   const t = useTranslation()
 
@@ -45,7 +51,7 @@ export default function PaymentStepSection({
           )}
           aria-hidden="true"
         >
-          3
+          {stepNumber}
         </span>
         <h2 className="text-base font-semibold">{t.checkout_step_payment}</h2>
       </div>
@@ -71,6 +77,8 @@ export default function PaymentStepSection({
             clientSecret={clientSecret}
             depositAmount={depositAmount}
             initialError={paymentError ? t.checkout_payment_error : undefined}
+            returnPath={returnPath}
+            payLabelKey={payLabelKey}
           />
         </div>
       )}

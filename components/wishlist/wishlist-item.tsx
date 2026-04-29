@@ -5,12 +5,12 @@ import Link from 'next/link'
 import { StarIcon } from '@/lib/constants/icons'
 import { useTranslation } from '@/lib/context/translation.context'
 import { interpolate } from '@/lib/utils/i18n.utils'
-import type { FavoriteItem } from '@/lib/api/favorite.api'
+import type { FavoriteListingItem } from '@/lib/api/favorite.api'
 import { formatCurrency } from '@/core/utils/currency.utils'
 import { useParams } from 'next/navigation'
 
 type WishlistItemProps = {
-  item: FavoriteItem
+  item: FavoriteListingItem
 }
 
 export default function WishlistItem({ item }: WishlistItemProps) {

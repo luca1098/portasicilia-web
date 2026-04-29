@@ -2,6 +2,7 @@
 
 import { createContext, use, useState, useMemo } from 'react'
 import type { UserBooking } from '@/lib/api/user-bookings'
+import type { UserOrder } from '@/lib/api/user-orders'
 
 const REQUEST_STATUSES = ['PENDING_APPROVAL', 'COUNTER_PROPOSED', 'REJECTED']
 const BOOKING_STATUSES = ['CONFIRMED', 'COMPLETED']
@@ -13,12 +14,14 @@ type UserBookingsState = {
   confirmedBookings: UserBooking[]
   filteredRequests: UserBooking[]
   counterProposedCount: number
+  orders: UserOrder[]
 }
 
 type UserBookingsActions = {
   setRequestFilter: (filter: string) => void
   handleStatusChange: (bookingId: string, newStatus: string) => void
   markReviewed: (bookingId: string) => void
+  updateOrder: (order: UserOrder) => void
 }
 
 type UserBookingsContextValue = {
@@ -36,12 +39,15 @@ export function useUserBookings() {
 
 export default function UserBookingsProvider({
   initialBookings,
+  initialOrders,
   children,
 }: {
   initialBookings: UserBooking[]
+  initialOrders: UserOrder[]
   children: React.ReactNode
 }) {
   const [bookings, setBookings] = useState(initialBookings)
+  const [orders, setOrders] = useState(initialOrders)
   const [requestFilter, setRequestFilter] = useState('ALL')
 
   const state = useMemo(() => {
@@ -51,8 +57,16 @@ export default function UserBookingsProvider({
     const filteredRequests =
       requestFilter === 'ALL' ? requests : requests.filter(b => b.status === requestFilter)
 
-    return { bookings, requestFilter, requests, confirmedBookings, filteredRequests, counterProposedCount }
-  }, [bookings, requestFilter])
+    return {
+      bookings,
+      requestFilter,
+      requests,
+      confirmedBookings,
+      filteredRequests,
+      counterProposedCount,
+      orders,
+    }
+  }, [bookings, requestFilter, orders])
 
   const actions = useMemo<UserBookingsActions>(
     () => ({
@@ -62,6 +76,9 @@ export default function UserBookingsProvider({
       },
       markReviewed: (bookingId: string) => {
         setBookings(prev => prev.map(b => (b.id === bookingId ? { ...b, hasReview: true } : b)))
+      },
+      updateOrder: (order: UserOrder) => {
+        setOrders(prev => prev.map(o => (o.id === order.id ? order : o)))
       },
     }),
     []

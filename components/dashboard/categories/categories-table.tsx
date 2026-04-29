@@ -71,20 +71,24 @@ export default function CategoriesTable({ categories }: CategoriesTableProps) {
                       unoptimized
                     />
                   ) : (
-                    <div className="flex size-10 items-center justify-center rounded-lg bg-muted">
-                      {category.icon && categoryIconMap[category.icon] ? (
-                        (() => {
-                          const Icon = categoryIconMap[category.icon]
-                          return <Icon className="size-4 text-muted-foreground" />
-                        })()
-                      ) : (
-                        <ImageIcon className="size-4 text-muted-foreground" />
-                      )}
+                    <div className="flex size-10 items-center justify-center rounded-lg bg-muted text-xl">
+                      {(() => {
+                        if (!category.icon) {
+                          return <ImageIcon className="size-4 text-muted-foreground" />
+                        }
+                        const LegacyIcon = categoryIconMap[category.icon]
+                        if (LegacyIcon) return <LegacyIcon className="size-4 text-muted-foreground" />
+                        return category.icon
+                      })()}
                     </div>
                   )}
                 </TableCell>
                 <TableCell className="font-medium">
-                  <span>{category.name}</span>
+                  <span>
+                    {category.icon && !categoryIconMap[category.icon]
+                      ? `${category.icon} ${category.name}`
+                      : category.name}
+                  </span>
                   {category.highlighted && (
                     <span className="ml-2 rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
                       {t.admin_cat_highlighted}

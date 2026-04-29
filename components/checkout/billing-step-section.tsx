@@ -15,6 +15,7 @@ import {
 } from '@/lib/schemas/forms/billing.form.schema'
 
 type BillingStepSectionProps = {
+  stepNumber?: number
   isActive: boolean
   isEnabled: boolean
   isComplete: boolean
@@ -26,6 +27,7 @@ type BillingStepSectionProps = {
 }
 
 export default function BillingStepSection({
+  stepNumber = 2,
   isActive,
   isEnabled,
   isComplete,
@@ -90,7 +92,7 @@ export default function BillingStepSection({
                 )}
                 aria-hidden="true"
               >
-                2
+                {stepNumber}
               </span>
               <h2 className="text-base font-semibold">{t.checkout_step_billing}</h2>
             </div>

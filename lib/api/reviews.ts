@@ -28,20 +28,20 @@ export function submitReviewFromToken(token: string, data: SubmitReviewPayload) 
 }
 
 export function submitReview(
-  listingType: 'experience' | 'stay',
+  listingType: 'experience' | 'stay' | 'product',
   listingId: string,
   data: SubmitReviewPayload,
   headers: HeadersInit
 ) {
-  const prefix = listingType === 'experience' ? 'experiences' : 'stays'
+  const prefix = listingType === 'experience' ? 'experiences' : listingType === 'stay' ? 'stays' : 'products'
   return apiServer.post<void>(`/${prefix}/${listingId}/reviews`, data, { headers })
 }
 
 export function syncGoogleReviews(
-  listingType: 'experience' | 'stay',
+  listingType: 'experience' | 'stay' | 'product',
   listingId: string,
   headers: HeadersInit
 ) {
-  const prefix = listingType === 'experience' ? 'experiences' : 'stays'
+  const prefix = listingType === 'experience' ? 'experiences' : listingType === 'stay' ? 'stays' : 'products'
   return apiServer.post<SyncResult>(`/${prefix}/${listingId}/reviews/sync-google`, {}, { headers })
 }

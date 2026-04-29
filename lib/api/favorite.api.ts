@@ -1,6 +1,6 @@
 import { api, apiServer } from './fetch-client'
 
-export interface FavoriteItem {
+export interface FavoriteListingItem {
   id: string
   createdAt: string
   listing: {
@@ -18,14 +18,46 @@ export interface FavoriteItem {
   }
 }
 
+export interface FavoriteProductItem {
+  id: string
+  createdAt: string
+  product: {
+    id: string
+    name: string
+    slug: string
+    cover: string | null
+    shortDescription: string | null
+    category: { id: string; name: string; slug: string } | null
+    reviews: Array<{ rating: number }>
+    variants: Array<{
+      id: string
+      price: string
+      compareAtPrice: string | null
+      volume: string
+      unitOfMeasurement: string
+    }>
+  }
+}
+
+/** @deprecated use FavoriteListingItem */
+export type FavoriteItem = FavoriteListingItem
+
 function authOpts(token: string) {
   return { headers: { Authorization: `Bearer ${token}` } }
 }
 
 export const favoriteApi = {
-  toggle: (listingId: string, token: string) =>
-    api.post<{ favorited: boolean }>(`/favorites/${listingId}/toggle`, undefined, authOpts(token)),
-  getAll: (token: string) => api.get<FavoriteItem[]>('/favorites', authOpts(token)),
-  getAllServer: (token: string) => apiServer.get<FavoriteItem[]>('/favorites', authOpts(token)),
-  getIds: (token: string) => api.get<string[]>('/favorites/ids', authOpts(token)),
+  // Listings
+  toggleListing: (listingId: string, token: string) =>
+    api.post<{ favorited: boolean }>(`/favorites/listings/${listingId}/toggle`, undefined, authOpts(token)),
+  getAllListings: (token: string) => api.get<FavoriteListingItem[]>('/favorites/listings', authOpts(token)),
+  getAllListingsServer: (token: string) =>
+    apiServer.get<FavoriteListingItem[]>('/favorites/listings', authOpts(token)),
+  getListingIds: (token: string) => api.get<string[]>('/favorites/listings/ids', authOpts(token)),
+
+  // Products
+  toggleProduct: (productId: string, token: string) =>
+    api.post<{ favorited: boolean }>(`/favorites/products/${productId}/toggle`, undefined, authOpts(token)),
+  getAllProducts: (token: string) => api.get<FavoriteProductItem[]>('/favorites/products', authOpts(token)),
+  getProductIds: (token: string) => api.get<string[]>('/favorites/products/ids', authOpts(token)),
 }

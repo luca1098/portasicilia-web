@@ -167,6 +167,7 @@ export default function Footer() {
             alt="Porta Sicilia — Truly Sicilian Experience"
             width={200}
             height={100}
+            style={{ width: 'auto', height: 'auto' }}
           />
 
           {/* Newsletter Form */}
@@ -246,6 +247,7 @@ export default function Footer() {
                   alt={pm.name}
                   width={38}
                   height={24}
+                  style={{ width: 'auto', height: 'auto' }}
                   className="h-full w-full object-contain"
                 />
               </div>

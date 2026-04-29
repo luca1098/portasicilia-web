@@ -2,11 +2,12 @@
 
 import { useTranslation } from '@/lib/context/translation.context'
 import { interpolate } from '@/lib/utils/i18n.utils'
-import { CalendarCheck2Icon, ClipboardListIcon, InboxIcon } from '@/lib/constants/icons'
+import { CalendarCheck2Icon, ClipboardListIcon, InboxIcon, PackageIcon } from '@/lib/constants/icons'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { cn } from '@/lib/utils/shadcn.utils'
 import { useUserBookings } from './user-bookings-provider'
 import UserBookingCard from './user-booking-card'
+import UserOrderCard, { UserOrdersEmptyState } from './user-order-card'
 
 const REQUEST_FILTERS = [
   { key: 'ALL', labelKey: 'user_filter_all' },
@@ -119,6 +120,26 @@ function BookingsTab() {
   )
 }
 
+function OrdersTab() {
+  const t = useTranslation() as Record<string, string>
+  const { state, actions } = useUserBookings()
+
+  return (
+    <TabsContent value="orders" className="mt-0 space-y-5">
+      <h2 className="text-lg font-semibold tracking-tight">{t.user_section_orders}</h2>
+      {state.orders.length === 0 ? (
+        <UserOrdersEmptyState />
+      ) : (
+        <div className="space-y-3">
+          {state.orders.map(order => (
+            <UserOrderCard key={order.id} order={order} onUpdated={actions.updateOrder} />
+          ))}
+        </div>
+      )}
+    </TabsContent>
+  )
+}
+
 const TAB_TRIGGER_CLASS = cn(
   'group relative h-auto justify-start gap-3 rounded-xl px-4 py-3 text-sm font-medium',
   'transition-all duration-200 data-[state=active]:bg-primary/8 data-[state=active]:shadow-none',
@@ -181,12 +202,26 @@ export default function UserDashboardContent({ title, welcome }: { title: string
               {state.confirmedBookings.length}
             </span>
           </TabsTrigger>
+
+          <TabsTrigger value="orders" className={TAB_TRIGGER_CLASS}>
+            <PackageIcon className="size-[18px] shrink-0" />
+            <span className="hidden sm:inline">{t.user_section_orders}</span>
+            <span
+              className={cn(
+                'ml-auto inline-flex size-5 items-center justify-center rounded-full text-[11px] font-semibold tabular-nums',
+                state.orders.length > 0 ? 'bg-primary/15 text-primary' : 'bg-muted text-muted-foreground/60'
+              )}
+            >
+              {state.orders.length}
+            </span>
+          </TabsTrigger>
         </TabsList>
 
         {/* Content area */}
         <div className="min-w-0 flex-1 md:pl-6">
           <RequestsTab />
           <BookingsTab />
+          <OrdersTab />
         </div>
       </Tabs>
     </div>

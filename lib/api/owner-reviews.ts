@@ -4,7 +4,7 @@ import type { Review } from '@/lib/schemas/entities/experience.entity.schema'
 export type OwnerReview = Review & {
   listingId: string
   listingName: string
-  listingType: 'experience' | 'stay'
+  listingType: 'experience' | 'stay' | 'product'
   listingCover: string | null
 }
 
@@ -32,15 +32,12 @@ export function getOwnerReviews(headers: HeadersInit, filters?: GetOwnerReviewsP
 }
 
 export function replyToReview(
-  listingType: 'experience' | 'stay',
+  listingType: 'experience' | 'stay' | 'product',
   listingId: string,
   reviewId: string,
   reply: string,
   headers: HeadersInit
 ) {
-  const endpoint =
-    listingType === 'experience'
-      ? `/experiences/${listingId}/reviews/${reviewId}/reply`
-      : `/stays/${listingId}/reviews/${reviewId}/reply`
-  return apiServer.patch<Review>(endpoint, { reply }, { headers })
+  const prefix = listingType === 'experience' ? 'experiences' : listingType === 'stay' ? 'stays' : 'products'
+  return apiServer.patch<Review>(`/${prefix}/${listingId}/reviews/${reviewId}/reply`, { reply }, { headers })
 }

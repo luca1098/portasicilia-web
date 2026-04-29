@@ -38,5 +38,5 @@ export function usePaginatedList<T>(initialItems: T[], initialCursor: string | n
     executeLoadMore(() => action())
   }
 
-  return { items, nextCursor, filtering, filter, loadingMore, loadMore }
+  return { items, setItems, nextCursor, filtering, filter, loadingMore, loadMore }
 }

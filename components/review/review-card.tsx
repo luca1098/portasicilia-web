@@ -27,7 +27,8 @@ export default function ReviewCard({ review, translations }: ReviewCardProps) {
   const [expanded, setExpanded] = useState(false)
 
   const timeAgo = getRelativeTime(review.createdAt, translations)
-  const displayName = review.userName ?? translations.anonymous
+  const displayName = review.userName ?? review.authorName ?? translations.anonymous
+  const displayImage = review.userImage ?? review.authorImage
   const initial = displayName[0].toUpperCase()
   const isGoogle = review.source === 'GOOGLE'
 
@@ -35,9 +36,9 @@ export default function ReviewCard({ review, translations }: ReviewCardProps) {
     <div>
       {/* Header */}
       <div className="mb-3 flex items-center gap-3">
-        {review.userImage ? (
+        {displayImage ? (
           <Image
-            src={review.userImage}
+            src={displayImage}
             alt={displayName}
             width={40}
             height={40}

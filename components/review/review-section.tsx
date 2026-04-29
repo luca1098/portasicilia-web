@@ -29,11 +29,20 @@ const TRANSLATION_KEYS = {
     showAll: 'stay_detail_show_all_reviews',
     reviewsCount: 'stay_detail_reviews_count',
   },
+  product: {
+    justNow: 'shop_product_time_just_now',
+    daysAgo: 'shop_product_time_days_ago',
+    weeksAgo: 'shop_product_time_weeks_ago',
+    monthsAgo: 'shop_product_time_months_ago',
+    anonymous: 'shop_product_anonymous',
+    showAll: 'shop_product_reviews_show_all',
+    reviewsCount: 'shop_product_reviews_count',
+  },
 } as const
 
 type ReviewSectionProps = {
   reviews: Review[]
-  listingType: 'experience' | 'stay'
+  listingType: 'experience' | 'stay' | 'product'
 }
 
 export default function ReviewSection({ reviews, listingType }: ReviewSectionProps) {

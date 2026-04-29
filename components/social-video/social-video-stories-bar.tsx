@@ -21,6 +21,7 @@ export default function SocialVideoStoriesBar() {
 
   const isHomePage = pathname === `/${lang}` || pathname === `/${lang}/`
   const isOnTopOfHomePage = isHomePage && !scrolled
+  const isShopPage = pathname === `/${lang}/shop` || pathname.startsWith(`/${lang}/shop/`)
 
   useEffect(() => {
     let lastScrollY = window.scrollY
@@ -43,7 +44,7 @@ export default function SocialVideoStoriesBar() {
       .catch(() => {})
   }, [])
 
-  const visible = !isOnTopOfHomePage && navbarHidden && videos.length > 0
+  const visible = !isOnTopOfHomePage && !isShopPage && navbarHidden && videos.length > 0
 
   return (
     <>

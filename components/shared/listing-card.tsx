@@ -37,8 +37,8 @@ export default function ListingCard({
 }: ListingCardProps) {
   const [loginOpen, setLoginOpen] = useState(false)
   const { data: session } = useSession()
-  const isFavorited = useFavoriteStore(state => (listingId ? state.ids.includes(listingId) : false))
-  const { toggle } = useFavoriteActions()
+  const isFavorited = useFavoriteStore(state => (listingId ? state.listingIds.includes(listingId) : false))
+  const { toggleListing } = useFavoriteActions()
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -47,7 +47,7 @@ export default function ListingCard({
       setLoginOpen(true)
       return
     }
-    toggle(listingId, session.accessToken)
+    toggleListing(listingId, session.accessToken)
   }
 
   return (

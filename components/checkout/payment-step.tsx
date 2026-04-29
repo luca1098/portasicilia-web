@@ -52,9 +52,11 @@ const appearance: Appearance = {
 type PaymentFormProps = {
   depositAmount: number
   initialError?: string | null
+  returnPath?: string
+  payLabelKey?: 'checkout_pay_with_deposit' | 'checkout_pay_full'
 }
 
-function PaymentForm({ depositAmount, initialError }: PaymentFormProps) {
+function PaymentForm({ depositAmount, initialError, returnPath, payLabelKey }: PaymentFormProps) {
   const t = useTranslation()
   const { lang } = useParams<{ lang: string }>()
   const stripe = useStripe()
@@ -62,6 +64,7 @@ function PaymentForm({ depositAmount, initialError }: PaymentFormProps) {
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(initialError ?? null)
+  const labelKey = payLabelKey ?? 'checkout_pay_with_deposit'
 
   const handleSubmit = async () => {
     if (!stripe || !elements) return
@@ -69,10 +72,11 @@ function PaymentForm({ depositAmount, initialError }: PaymentFormProps) {
     setLoading(true)
     setError(null)
 
+    const path = returnPath ?? `/${lang}/checkout/confirm`
     const { error: stripeError } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${window.location.origin}/${lang}/checkout/confirm`,
+        return_url: `${window.location.origin}${path}`,
       },
     })
 
@@ -117,7 +121,7 @@ function PaymentForm({ depositAmount, initialError }: PaymentFormProps) {
         {loading ? (
           <LoaderIcon className="size-5 animate-spin" />
         ) : (
-          interpolate(t.checkout_pay_with_deposit, {
+          interpolate(t[labelKey], {
             amount: Math.round(depositAmount),
           })
         )}
@@ -132,15 +136,28 @@ type PaymentStepProps = {
   clientSecret: string
   depositAmount: number
   initialError?: string | null
+  returnPath?: string
+  payLabelKey?: 'checkout_pay_with_deposit' | 'checkout_pay_full'
 }
 
-export default function PaymentStep({ clientSecret, depositAmount, initialError }: PaymentStepProps) {
+export default function PaymentStep({
+  clientSecret,
+  depositAmount,
+  initialError,
+  returnPath,
+  payLabelKey,
+}: PaymentStepProps) {
   const { lang } = useParams<{ lang: string }>()
   const locale = lang === 'en' ? 'en' : 'it'
 
   return (
     <Elements stripe={stripePromise} options={{ clientSecret, appearance, locale }}>
-      <PaymentForm depositAmount={depositAmount} initialError={initialError} />
+      <PaymentForm
+        depositAmount={depositAmount}
+        initialError={initialError}
+        returnPath={returnPath}
+        payLabelKey={payLabelKey}
+      />
     </Elements>
   )
 }

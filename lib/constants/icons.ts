@@ -110,6 +110,13 @@ export {
   CreditCardIcon,
   HandshakeIcon,
   HelpCircleIcon,
+  ShoppingBagIcon,
+  PackageIcon,
+  ShoppingCartIcon,
+  TruckIcon,
+  ReceiptIcon,
+  LeafIcon,
+  MapPinIcon,
 } from 'lucide-react'
 
 export { GoogleIcon, TikTokIcon } from './custom-icons'

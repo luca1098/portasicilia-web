@@ -5,16 +5,20 @@ import { useTranslation } from '@/lib/context/translation.context'
 import useFavoriteStore from '@/core/store/favorite.store'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import WishlistItem from './wishlist-item'
-import type { FavoriteItem } from '@/lib/api/favorite.api'
+import WishlistProductItem from './wishlist-product-item'
+import type { FavoriteListingItem } from '@/lib/api/favorite.api'
 
 export default function WishlistContent() {
   const t = useTranslation()
-  const items = useFavoriteStore(state => state.items)
+  const listingItems = useFavoriteStore(state => state.listingItems)
+  const productItems = useFavoriteStore(state => state.productItems)
 
-  const stays = items.filter((item: FavoriteItem) => item.listing.type === 'STAY')
-  const experiences = items.filter((item: FavoriteItem) => item.listing.type === 'EXPERIENCE')
+  const stays = listingItems.filter((item: FavoriteListingItem) => item.listing.type === 'STAY')
+  const experiences = listingItems.filter((item: FavoriteListingItem) => item.listing.type === 'EXPERIENCE')
 
-  if (items.length === 0) {
+  const isEmpty = listingItems.length === 0 && productItems.length === 0
+
+  if (isEmpty) {
     return (
       <div className="flex flex-1 flex-col items-center justify-center gap-3 px-6 py-12 text-center">
         <HeartIcon className="size-10 text-muted-foreground/40" />
@@ -33,7 +37,7 @@ export default function WishlistContent() {
               {t.wishlist_stays}
             </h3>
             <div className="flex flex-col gap-2">
-              {stays.map((item: FavoriteItem) => (
+              {stays.map(item => (
                 <WishlistItem key={item.id} item={item} />
               ))}
             </div>
@@ -41,13 +45,26 @@ export default function WishlistContent() {
         )}
 
         {experiences.length > 0 && (
-          <section>
+          <section className="mb-2">
             <h3 className="py-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               {t.wishlist_experiences}
             </h3>
             <div className="flex flex-col gap-2">
-              {experiences.map((item: FavoriteItem) => (
+              {experiences.map(item => (
                 <WishlistItem key={item.id} item={item} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {productItems.length > 0 && (
+          <section>
+            <h3 className="py-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              {t.wishlist_products}
+            </h3>
+            <div className="flex flex-col gap-2">
+              {productItems.map(item => (
+                <WishlistProductItem key={item.id} item={item} />
               ))}
             </div>
           </section>

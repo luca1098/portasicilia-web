@@ -22,6 +22,9 @@ import {
   UsersIcon,
   StarIcon,
   PlayCircleIcon,
+  ShoppingBagIcon,
+  PackageIcon,
+  ReceiptIcon,
 } from '@/lib/constants/icons'
 import { Button } from '@/components/ui/button'
 
@@ -61,6 +64,15 @@ const sidebarSections: SidebarSection[] = [
       { key: 'admin_sidebar_articles', icon: NewspaperIcon, href: '/blog' },
       { key: 'admin_sidebar_authors', icon: UsersIcon, href: '/blog/authors' },
       { key: 'admin_sidebar_social_videos', icon: PlayCircleIcon, href: '/social-videos' },
+    ],
+  },
+  {
+    labelKey: 'admin_sidebar_section_shop',
+    items: [
+      { key: 'admin_sidebar_products', icon: PackageIcon, href: '/products' },
+      { key: 'admin_sidebar_orders', icon: ReceiptIcon, href: '/orders' },
+      { key: 'admin_sidebar_shop_categories', icon: ShoppingBagIcon, href: '/shop-categories' },
+      { key: 'admin_sidebar_shop_reviews', icon: StarIcon, href: '/shop-reviews' },
     ],
   },
 ]

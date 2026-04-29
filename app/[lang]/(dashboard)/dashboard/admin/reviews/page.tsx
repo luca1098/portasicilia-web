@@ -21,7 +21,7 @@ export default async function AdminReviewsPage({ params }: PageParamsProps) {
 
   let reviews = { data: [] as AdminReview[], nextCursor: null as string | null }
   try {
-    reviews = await getAdminReviews(headers, { limit: 20 })
+    reviews = await getAdminReviews(headers, { limit: 20, source: 'PORTASICILIA' })
   } catch {
     // Reviews endpoint may not be available yet; show empty state
   }

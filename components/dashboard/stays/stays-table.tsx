@@ -16,7 +16,7 @@ import { useTranslation } from '@/lib/context/translation.context'
 import { HomeIcon, MoreHorizontalIcon, PencilIcon, Trash2Icon, ImageIcon } from '@/lib/constants/icons'
 import type { Stay } from '@/lib/schemas/entities/stay.entity.schema'
 import StayDeleteDialog from './stay-delete-dialog'
-import TranslationStatusPopover from '@/components/dashboard/translation-status-popover'
+import { ListingTranslationStatusPopover } from '@/components/dashboard/translation-status-popover'
 
 type StaysTableProps = {
   stays: Stay[]
@@ -95,7 +95,7 @@ export default function StaysTable({ stays }: StaysTableProps) {
                 <TableCell className="text-muted-foreground">{stay.stayDetail?.bedNumber}</TableCell>
                 <TableCell className="text-muted-foreground">{stay.city}</TableCell>
                 <TableCell>
-                  <TranslationStatusPopover
+                  <ListingTranslationStatusPopover
                     listingId={stay.id}
                     status={stay.translationStatus}
                     onTranslationComplete={() => router.refresh()}

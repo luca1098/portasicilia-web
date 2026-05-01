@@ -30,7 +30,7 @@ type TranslationDetails = {
   stayDetail: TranslationFieldStatus[] | null
 }
 
-type CategoryTranslationDetails = {
+type FlatTranslationDetails = {
   fields: TranslationFieldStatus[]
 }
 
@@ -46,12 +46,54 @@ type TranslationStatusValue = {
   >
 }
 
+type RequestAuth = { headers?: HeadersInit }
+
+type TranslationSource = {
+  fetchDetails: (id: string, locale: string, auth: RequestAuth) => Promise<TranslationDetails>
+  requestComplete: (id: string, locale: string | null, auth: RequestAuth) => Promise<void>
+  sectionLabelKey: string
+}
+
 type TranslationStatusPopoverProps = {
   listingId: string
-  entityType?: 'listing' | 'category'
+  source: TranslationSource
   status: TranslationStatusValue | undefined
   onTranslationComplete?: () => void
 }
+
+type VariantProps = Omit<TranslationStatusPopoverProps, 'source'>
+
+// ==================== SOURCES ====================
+
+const listingSource: TranslationSource = {
+  fetchDetails: (id, locale, auth) =>
+    api.get<TranslationDetails>(`/translations/listing/${id}/details?locale=${locale}`, auth),
+  async requestComplete(id, locale, auth) {
+    const qs = locale ? `?locale=${locale}` : ''
+    await api.post(`/translations/listing/${id}/complete${qs}`, undefined, auth)
+  },
+  sectionLabelKey: 'admin_translation_listing_section',
+}
+
+function makeFlatSource(entity: 'category' | 'product', sectionLabelKey: string): TranslationSource {
+  return {
+    async fetchDetails(id, locale, auth) {
+      const data = await api.get<FlatTranslationDetails>(
+        `/translations/${entity}/${id}/details?locale=${locale}`,
+        auth
+      )
+      return { listing: data.fields, itineraries: [], stayDetail: null }
+    },
+    async requestComplete(id, locale, auth) {
+      const qs = locale ? `?locale=${locale}` : ''
+      await api.post(`/translations/${entity}/${id}/complete${qs}`, undefined, auth)
+    },
+    sectionLabelKey,
+  }
+}
+
+const categorySource = makeFlatSource('category', 'admin_translation_category_section')
+const productSource = makeFlatSource('product', 'admin_translation_product_section')
 
 // ==================== CONSTANTS ====================
 
@@ -92,9 +134,9 @@ function SectionHeader({ children }: { children: React.ReactNode }) {
 
 // ==================== MAIN COMPONENT ====================
 
-export default function TranslationStatusPopover({
+function TranslationStatusPopover({
   listingId,
-  entityType = 'listing',
+  source,
   status,
   onTranslationComplete,
 }: TranslationStatusPopoverProps) {
@@ -108,7 +150,7 @@ export default function TranslationStatusPopover({
 
   const { data: session } = useSession()
   const t = useTranslation() as Record<string, string>
-  const authHeaders = session?.accessToken
+  const authHeaders: RequestAuth = session?.accessToken
     ? { headers: { Authorization: `Bearer ${session.accessToken}` } }
     : {}
 
@@ -176,19 +218,8 @@ export default function TranslationStatusPopover({
   async function fetchDetailsForLocale(locale: string): Promise<TranslationDetails | null> {
     setLoadingDetails(true)
     setFetchError(false)
-    const detailsPath =
-      entityType === 'category'
-        ? `/translations/category/${listingId}/details`
-        : `/translations/listing/${listingId}/details`
     try {
-      let normalizedData: TranslationDetails
-      if (entityType === 'category') {
-        const data = await api.get<CategoryTranslationDetails>(`${detailsPath}?locale=${locale}`, authHeaders)
-        normalizedData = { listing: data.fields, itineraries: [], stayDetail: null }
-      } else {
-        const data = await api.get<TranslationDetails>(`${detailsPath}?locale=${locale}`, authHeaders)
-        normalizedData = data
-      }
+      const normalizedData = await source.fetchDetails(listingId, locale, authHeaders)
       setDetailsCache(prev => ({ ...prev, [locale]: normalizedData }))
       return normalizedData
     } catch {
@@ -231,16 +262,8 @@ export default function TranslationStatusPopover({
   }
 
   function handleTranslate() {
-    const completePath =
-      entityType === 'category'
-        ? `/translations/category/${listingId}/complete`
-        : `/translations/listing/${listingId}/complete`
     executeTranslate(async () => {
-      await api.post(
-        `${completePath}${activeLocale ? `?locale=${activeLocale}` : ''}`,
-        undefined,
-        authHeaders
-      )
+      await source.requestComplete(listingId, activeLocale, authHeaders)
       return { success: true }
     })
   }
@@ -304,11 +327,7 @@ export default function TranslationStatusPopover({
           <div>
             {activeDetails.listing.length > 0 && (
               <>
-                <SectionHeader>
-                  {entityType === 'category'
-                    ? t.admin_translation_category_section
-                    : t.admin_translation_listing_section}
-                </SectionHeader>
+                <SectionHeader>{t[source.sectionLabelKey]}</SectionHeader>
                 {activeDetails.listing.map(f => (
                   <FieldRow key={f.field} field={f.field} status={f.status} />
                 ))}
@@ -357,4 +376,18 @@ export default function TranslationStatusPopover({
       </PopoverContent>
     </Popover>
   )
+}
+
+// ==================== EXPLICIT VARIANTS ====================
+
+export function ListingTranslationStatusPopover(props: VariantProps) {
+  return <TranslationStatusPopover {...props} source={listingSource} />
+}
+
+export function CategoryTranslationStatusPopover(props: VariantProps) {
+  return <TranslationStatusPopover {...props} source={categorySource} />
+}
+
+export function ProductTranslationStatusPopover(props: VariantProps) {
+  return <TranslationStatusPopover {...props} source={productSource} />
 }

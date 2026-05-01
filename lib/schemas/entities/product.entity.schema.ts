@@ -60,6 +60,19 @@ export const ProductSchema = z.object({
   googleBusinessUrl: z.string().nullish(),
   createdAt: z.string(),
   updatedAt: z.string(),
+  translationStatus: z
+    .object({
+      status: z.enum(['complete', 'partial', 'pending', 'failed', 'none']),
+      locales: z.record(
+        z.string(),
+        z.object({
+          status: z.enum(['complete', 'partial', 'pending', 'failed', 'none']),
+          completed: z.number(),
+          total: z.number(),
+        })
+      ),
+    })
+    .optional(),
 })
 
 export type Product = z.infer<typeof ProductSchema>

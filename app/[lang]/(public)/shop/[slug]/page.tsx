@@ -16,7 +16,7 @@ type ProductDetailPageProps = PageParamsProps & {
 
 export async function generateMetadata({ params }: ProductDetailPageProps): Promise<Metadata> {
   const { lang, slug } = await params
-  const product = await getProductBySlug(slug).catch(() => null)
+  const product = await getProductBySlug(slug, lang).catch(() => null)
   if (!product) {
     const t = await getTranslations(lang as SupportedLocale)
     return buildMetadata({
@@ -38,8 +38,8 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
   const { lang, slug } = await params
 
   const [product, highlightedProducts] = await Promise.all([
-    getProductBySlug(slug).catch((): null => null),
-    getHighlightedProducts().catch((): Product[] => []),
+    getProductBySlug(slug, lang).catch((): null => null),
+    getHighlightedProducts(lang).catch((): Product[] => []),
   ])
 
   if (!product) {

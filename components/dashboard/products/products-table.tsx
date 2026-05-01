@@ -15,6 +15,7 @@ import {
 import { useTranslation } from '@/lib/context/translation.context'
 import { PackageIcon, MoreHorizontalIcon, PencilIcon, Trash2Icon, ImageIcon } from '@/lib/constants/icons'
 import AdminEmptyState from '@/components/dashboard/admin-empty-state'
+import { ProductTranslationStatusPopover } from '@/components/dashboard/translation-status-popover'
 import type { Product } from '@/lib/schemas/entities/product.entity.schema'
 import { formatCurrency } from '@/lib/utils/format.utils'
 import ProductDeleteDialog from './product-delete-dialog'
@@ -55,6 +56,7 @@ export default function ProductsTable({ products }: ProductsTableProps) {
               <TableHead>{t.admin_product_col_category}</TableHead>
               <TableHead>{t.admin_product_col_variants}</TableHead>
               <TableHead>{t.admin_product_col_price}</TableHead>
+              <TableHead>{t.admin_col_translations}</TableHead>
               <TableHead className="w-16" />
             </TableRow>
           </TableHeader>
@@ -101,6 +103,13 @@ export default function ProductsTable({ products }: ProductsTableProps) {
                 </TableCell>
                 <TableCell className="text-muted-foreground">{product.variants.length}</TableCell>
                 <TableCell className="text-muted-foreground">{getPriceRange(product)}</TableCell>
+                <TableCell onClick={e => e.stopPropagation()}>
+                  <ProductTranslationStatusPopover
+                    listingId={product.id}
+                    status={product.translationStatus}
+                    onTranslationComplete={() => router.refresh()}
+                  />
+                </TableCell>
                 <TableCell onClick={e => e.stopPropagation()}>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>

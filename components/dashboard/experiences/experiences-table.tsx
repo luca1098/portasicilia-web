@@ -16,7 +16,7 @@ import { useTranslation } from '@/lib/context/translation.context'
 import { Compass, MoreHorizontalIcon, PencilIcon, Trash2Icon, ImageIcon } from '@/lib/constants/icons'
 import type { Experience } from '@/lib/schemas/entities/experience.entity.schema'
 import ExperienceDeleteDialog from './experience-delete-dialog'
-import TranslationStatusPopover from '@/components/dashboard/translation-status-popover'
+import { ListingTranslationStatusPopover } from '@/components/dashboard/translation-status-popover'
 
 type ExperiencesTableProps = {
   experiences: Experience[]
@@ -91,7 +91,7 @@ export default function ExperiencesTable({ experiences }: ExperiencesTableProps)
                 </TableCell>
                 <TableCell className="text-muted-foreground">{experience.city}</TableCell>
                 <TableCell>
-                  <TranslationStatusPopover
+                  <ListingTranslationStatusPopover
                     listingId={experience.id}
                     status={experience.translationStatus}
                     onTranslationComplete={() => router.refresh()}

@@ -16,7 +16,7 @@ import { useTranslation } from '@/lib/context/translation.context'
 import { LayersIcon, MoreHorizontalIcon, PencilIcon, Trash2Icon, ImageIcon } from '@/lib/constants/icons'
 import { categoryIconMap } from '@/lib/constants/category-icons'
 import type { Category } from '@/lib/schemas/entities/category.entity.schema'
-import TranslationStatusPopover from '@/components/dashboard/translation-status-popover'
+import { CategoryTranslationStatusPopover } from '@/components/dashboard/translation-status-popover'
 import CategoryDeleteDialog from './category-delete-dialog'
 
 type CategoriesTableProps = {
@@ -97,9 +97,8 @@ export default function CategoriesTable({ categories }: CategoriesTableProps) {
                 </TableCell>
                 <TableCell className="text-muted-foreground">{category.slug}</TableCell>
                 <TableCell>
-                  <TranslationStatusPopover
+                  <CategoryTranslationStatusPopover
                     listingId={category.id}
-                    entityType="category"
                     status={category.translationStatus}
                     onTranslationComplete={() => router.refresh()}
                   />

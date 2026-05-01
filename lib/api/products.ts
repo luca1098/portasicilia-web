@@ -1,14 +1,18 @@
 import type { Product, ShopCategory } from '@/lib/schemas/entities/product.entity.schema'
+import type { SupportedLocale } from '@/lib/configs/locales'
 import { apiServer } from './fetch-client'
 
-export function getProducts(categoryId?: string) {
+export function getProducts(categoryId?: string, lang?: string) {
   return apiServer.get<Product[]>('/products', {
     ...(categoryId && { params: { categoryId } }),
+    ...(lang && lang !== 'it' && { lang: lang as SupportedLocale }),
   })
 }
 
-export function getHighlightedProducts() {
-  return apiServer.get<Product[]>('/products/highlighted')
+export function getHighlightedProducts(lang?: string) {
+  return apiServer.get<Product[]>('/products/highlighted', {
+    ...(lang && lang !== 'it' && { lang: lang as SupportedLocale }),
+  })
 }
 
 export function getProductsAdmin(headers: HeadersInit) {
@@ -19,8 +23,10 @@ export function getProductById(id: string) {
   return apiServer.get<Product>(`/products/${id}`)
 }
 
-export function getProductBySlug(slug: string) {
-  return apiServer.get<Product>(`/products/slug/${slug}`)
+export function getProductBySlug(slug: string, lang?: string) {
+  return apiServer.get<Product>(`/products/slug/${slug}`, {
+    ...(lang && lang !== 'it' && { lang: lang as SupportedLocale }),
+  })
 }
 
 export function createProduct(data: FormData, headers: HeadersInit) {

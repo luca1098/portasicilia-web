@@ -25,7 +25,7 @@ export default async function ShopPage({ params }: PageParamsProps) {
   const { lang } = await params
 
   const [products, categories] = await Promise.all([
-    getProducts().catch((): Product[] => []),
+    getProducts(undefined, lang).catch((): Product[] => []),
     getShopCategories().catch((): ShopCategory[] => []),
   ])
 

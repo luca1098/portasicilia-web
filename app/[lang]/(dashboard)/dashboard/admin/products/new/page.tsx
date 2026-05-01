@@ -7,6 +7,7 @@ import { redirect } from 'next/navigation'
 import { getShopCategoriesAdmin } from '@/lib/api/products'
 import ProductCreateForm from '@/components/dashboard/products/product-create-form'
 import AdminDetailHeader from '@/components/dashboard/admin-detail-header'
+import { DashboardFormPage } from '@/components/dashboard/dashboard-page'
 
 export default async function NewProductPage({ params }: PageParamsProps) {
   const { lang } = await params
@@ -21,10 +22,10 @@ export default async function NewProductPage({ params }: PageParamsProps) {
   const shopCategories = await getShopCategoriesAdmin(headers)
 
   return (
-    <div className="mx-auto max-w-2xl space-y-8">
+    <DashboardFormPage>
       <AdminDetailHeader backHref={`/${lang}/dashboard/admin/products`} title={t.admin_product_add} />
 
       <ProductCreateForm shopCategories={shopCategories} />
-    </div>
+    </DashboardFormPage>
   )
 }

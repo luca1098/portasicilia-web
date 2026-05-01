@@ -6,6 +6,7 @@ import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
 import { getArticlesAdmin } from '@/lib/api/blog'
 import ArticlesTable from '@/components/dashboard/blog/articles-table'
+import { DashboardListPage } from '@/components/dashboard/dashboard-page'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { PlusIcon } from '@/lib/constants/icons'
@@ -23,7 +24,7 @@ export default async function BlogArticlesPage({ params }: PageParamsProps) {
   const articles = await getArticlesAdmin(headers)
 
   return (
-    <div className="mx-auto max-w-5xl space-y-8">
+    <DashboardListPage>
       <div className="flex flex-col gap-4 rounded-2xl bg-gradient-to-br from-primary/8 via-primary/5 to-transparent p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
         <div>
           <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{t.admin_articles_title}</h1>
@@ -38,6 +39,6 @@ export default async function BlogArticlesPage({ params }: PageParamsProps) {
       </div>
 
       <ArticlesTable articles={articles} />
-    </div>
+    </DashboardListPage>
   )
 }

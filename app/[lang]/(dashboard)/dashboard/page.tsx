@@ -3,12 +3,7 @@ import { defaultLocale } from '@/lib/configs/locales'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
 import { PageParamsProps } from '@/lib/types/page.type'
-
-const ROLE_PATHS: Record<string, string> = {
-  ADMIN: 'admin',
-  OWNER: 'owner',
-  USER: 'user',
-}
+import { dashboardPathForRole } from '@/lib/utils/auth.utils'
 
 export default async function DashboardPage({ params }: PageParamsProps) {
   const { lang } = await params
@@ -18,6 +13,5 @@ export default async function DashboardPage({ params }: PageParamsProps) {
     redirect(`/${lang || defaultLocale}`)
   }
 
-  const rolePath = ROLE_PATHS[session.user.role] || 'user'
-  redirect(`/${lang}/dashboard/${rolePath}`)
+  redirect(dashboardPathForRole(lang, session.user.role))
 }

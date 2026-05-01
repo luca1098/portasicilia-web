@@ -6,6 +6,7 @@ import { redirect, notFound } from 'next/navigation'
 import { getLocalityById } from '@/lib/api/localities'
 import LocalityForm from '@/components/dashboard/localities/locality-form'
 import TipList from '@/components/dashboard/localities/tip-list'
+import { DashboardFormPage } from '@/components/dashboard/dashboard-page'
 import Link from 'next/link'
 import { ArrowLeft } from '@/lib/constants/icons'
 
@@ -31,7 +32,7 @@ export default async function EditLocalityPage({ params }: EditLocalityPageProps
   }
 
   return (
-    <div className="mx-auto max-w-2xl space-y-8">
+    <DashboardFormPage>
       <div className="flex items-center gap-4">
         <Link
           href={`/${lang}/dashboard/admin/locations`}
@@ -47,6 +48,6 @@ export default async function EditLocalityPage({ params }: EditLocalityPageProps
       <LocalityForm mode="edit" locality={locality} />
 
       <TipList localityId={locality.id} tips={locality.tips ?? []} />
-    </div>
+    </DashboardFormPage>
   )
 }

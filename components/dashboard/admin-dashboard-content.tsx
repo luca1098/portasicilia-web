@@ -13,6 +13,7 @@ import {
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { cn } from '@/lib/utils/shadcn.utils'
+import { DashboardListPage } from '@/components/dashboard/dashboard-page'
 
 type StatsLabels = {
   locations: string
@@ -100,7 +101,7 @@ export default function AdminDashboardContent({ title, welcome, stats, values }:
   const basePath = `/${lang}/dashboard/admin`
 
   return (
-    <div className="mx-auto max-w-5xl space-y-8">
+    <DashboardListPage>
       {/* Welcome */}
       <div className="rounded-2xl bg-gradient-to-br from-primary/8 via-primary/5 to-transparent p-6 sm:p-8">
         <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{title}</h1>
@@ -144,6 +145,6 @@ export default function AdminDashboardContent({ title, welcome, stats, values }:
           </Link>
         ))}
       </div>
-    </div>
+    </DashboardListPage>
   )
 }

@@ -1,8 +1,13 @@
 import AdminSidebar from '@/components/dashboard/admin-sidebar'
 import DashboardHeader from '@/components/dashboard/dashboard-header'
+import { requireRole } from '@/lib/utils/auth.utils'
+import type { PageParamsProps } from '@/lib/types/page.type'
 import { PropsWithChildren } from 'react'
 
-export default function AdminLayout({ children }: PropsWithChildren) {
+export default async function AdminLayout({ children, params }: PageParamsProps & PropsWithChildren) {
+  const { lang } = await params
+  await requireRole(lang, ['ADMIN'])
+
   return (
     <div className="flex h-screen overflow-hidden">
       <AdminSidebar />

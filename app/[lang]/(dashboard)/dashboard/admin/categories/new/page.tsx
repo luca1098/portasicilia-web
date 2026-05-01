@@ -5,6 +5,7 @@ import { PageParamsProps } from '@/lib/types/page.type'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
 import CategoryForm from '@/components/dashboard/categories/category-form'
+import { DashboardFormPage } from '@/components/dashboard/dashboard-page'
 import Link from 'next/link'
 import { ArrowLeft } from '@/lib/constants/icons'
 
@@ -19,7 +20,7 @@ export default async function NewCategoryPage({ params }: PageParamsProps) {
   const t = await getTranslations(lang as SupportedLocale)
 
   return (
-    <div className="mx-auto max-w-2xl space-y-8">
+    <DashboardFormPage>
       <div className="flex items-center gap-4">
         <Link
           href={`/${lang}/dashboard/admin/categories`}
@@ -33,6 +34,6 @@ export default async function NewCategoryPage({ params }: PageParamsProps) {
       </div>
 
       <CategoryForm mode="create" />
-    </div>
+    </DashboardFormPage>
   )
 }

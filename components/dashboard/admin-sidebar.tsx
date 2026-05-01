@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useParams, usePathname } from 'next/navigation'
@@ -12,6 +12,7 @@ import {
   Compass,
   HomeIcon,
   ChevronLeftIcon,
+  ChevronDownIcon,
   ExternalLinkIcon,
   PanelLeftIcon,
   XIcon,
@@ -78,8 +79,6 @@ const sidebarSections: SidebarSection[] = [
 ]
 
 export default function AdminSidebar() {
-  const [collapsed, setCollapsed] = useState(false)
-  const [mobileOpen, setMobileOpen] = useState(false)
   const params = useParams()
   const pathname = usePathname()
   const lang = params.lang as string
@@ -93,6 +92,22 @@ export default function AdminSidebar() {
       return pathname === fullPath || pathname === `${fullPath}/`
     }
     return pathname.startsWith(fullPath)
+  }
+
+  const activeSectionKey = useMemo(() => {
+    const match = sidebarSections.find(section => section.items.some(item => isActive(item.href)))
+    return match?.labelKey ?? sidebarSections[0].labelKey
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname, lang])
+
+  const [collapsed, setCollapsed] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>(() => ({
+    [activeSectionKey]: true,
+  }))
+
+  const toggleSection = (labelKey: string) => {
+    setOpenSections(prev => ({ ...prev, [labelKey]: !prev[labelKey] }))
   }
 
   const renderItem = (item: SidebarItem) => {
@@ -120,6 +135,10 @@ export default function AdminSidebar() {
       </Link>
     )
   }
+
+  useEffect(() => {
+    setOpenSections(prev => (prev[activeSectionKey] ? prev : { ...prev, [activeSectionKey]: true }))
+  }, [activeSectionKey])
 
   return (
     <>
@@ -190,22 +209,55 @@ export default function AdminSidebar() {
         </div>
 
         {/* Navigation */}
-        <nav className={cn('flex-1 overflow-y-auto px-3', collapsed && 'pt-4')}>
-          {sidebarSections.map(section => (
-            <div key={section.labelKey}>
-              {!collapsed && (
-                <div className="px-1 pt-6 pb-2">
-                  <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-sidebar-foreground/40">
-                    {t[section.labelKey]}
-                  </span>
+        <nav className={cn('flex-1 overflow-y-auto px-3 pb-4', collapsed && 'pt-4')}>
+          {sidebarSections.map((section, index) => {
+            const isOpen = collapsed ? true : (openSections[section.labelKey] ?? false)
+            const sectionHasActive = section.items.some(item => isActive(item.href))
+            return (
+              <div key={section.labelKey}>
+                {!collapsed && (
+                  <button
+                    type="button"
+                    onClick={() => toggleSection(section.labelKey)}
+                    className={cn(
+                      'group/header mt-4 flex w-full items-center justify-between rounded-md px-1 py-2 transition-colors',
+                      'hover:text-sidebar-foreground/70'
+                    )}
+                    aria-expanded={isOpen}
+                  >
+                    <span
+                      className={cn(
+                        'text-[11px] font-semibold uppercase tracking-[0.15em] transition-colors',
+                        sectionHasActive ? 'text-sidebar-foreground/70' : 'text-sidebar-foreground/40',
+                        'group-hover/header:text-sidebar-foreground/70'
+                      )}
+                    >
+                      {t[section.labelKey]}
+                    </span>
+                    <ChevronDownIcon
+                      className={cn(
+                        'size-3.5 text-sidebar-foreground/40 transition-transform duration-200 group-hover/header:text-sidebar-foreground/70',
+                        !isOpen && '-rotate-90'
+                      )}
+                    />
+                  </button>
+                )}
+                {collapsed && index !== 0 && <div className="mx-2 my-3 border-t border-sidebar-border" />}
+                <div
+                  className={cn(
+                    'grid transition-[grid-template-rows] duration-200 ease-out',
+                    isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+                  )}
+                >
+                  <div className="overflow-hidden">
+                    <div className={cn('space-y-1', !collapsed && 'pt-1')}>
+                      {section.items.map(renderItem)}
+                    </div>
+                  </div>
                 </div>
-              )}
-              {collapsed && section !== sidebarSections[0] && (
-                <div className="mx-2 my-3 border-t border-sidebar-border" />
-              )}
-              <div className="space-y-1">{section.items.map(renderItem)}</div>
-            </div>
-          ))}
+              </div>
+            )
+          })}
         </nav>
 
         {/* Sidebar footer */}

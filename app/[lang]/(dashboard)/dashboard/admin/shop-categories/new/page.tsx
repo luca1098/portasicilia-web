@@ -6,6 +6,7 @@ import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
 import ShopCategoryCreateForm from '@/components/dashboard/shop-categories/shop-category-create-form'
 import AdminDetailHeader from '@/components/dashboard/admin-detail-header'
+import { DashboardFormPage } from '@/components/dashboard/dashboard-page'
 
 export default async function NewShopCategoryPage({ params }: PageParamsProps) {
   const { lang } = await params
@@ -18,10 +19,10 @@ export default async function NewShopCategoryPage({ params }: PageParamsProps) {
   const t = await getTranslations(lang as SupportedLocale)
 
   return (
-    <div className="mx-auto max-w-2xl space-y-8">
+    <DashboardFormPage>
       <AdminDetailHeader backHref={`/${lang}/dashboard/admin/shop-categories`} title={t.admin_shop_cat_add} />
 
       <ShopCategoryCreateForm />
-    </div>
+    </DashboardFormPage>
   )
 }

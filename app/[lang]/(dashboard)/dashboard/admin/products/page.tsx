@@ -7,6 +7,7 @@ import { redirect } from 'next/navigation'
 import { getProductsAdmin } from '@/lib/api/products'
 import ProductsTable from '@/components/dashboard/products/products-table'
 import AdminListHeader from '@/components/dashboard/admin-list-header'
+import { DashboardListPage } from '@/components/dashboard/dashboard-page'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { PlusIcon } from '@/lib/constants/icons'
@@ -24,7 +25,7 @@ export default async function ProductsAdminPage({ params }: PageParamsProps) {
   const products = await getProductsAdmin(headers)
 
   return (
-    <div className="mx-auto max-w-5xl space-y-8">
+    <DashboardListPage>
       <AdminListHeader title={t.admin_products_title} subtitle={t.admin_products_subtitle}>
         <Button asChild size="default" className="shrink-0">
           <Link href={`/${lang}/dashboard/admin/products/new`}>
@@ -35,6 +36,6 @@ export default async function ProductsAdminPage({ params }: PageParamsProps) {
       </AdminListHeader>
 
       <ProductsTable products={products} />
-    </div>
+    </DashboardListPage>
   )
 }

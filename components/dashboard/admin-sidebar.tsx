@@ -26,6 +26,7 @@ import {
   ShoppingBagIcon,
   PackageIcon,
   ReceiptIcon,
+  StoreIcon,
 } from '@/lib/constants/icons'
 import { Button } from '@/components/ui/button'
 
@@ -49,6 +50,7 @@ const sidebarSections: SidebarSection[] = [
       { key: 'admin_sidebar_categories', icon: LayersIcon, href: '/categories' },
       { key: 'admin_sidebar_experiences', icon: Compass, href: '/experiences' },
       { key: 'admin_sidebar_stays', icon: HomeIcon, href: '/stays' },
+      { key: 'admin_sidebar_owners', icon: StoreIcon, href: '/owners' },
     ],
   },
   {

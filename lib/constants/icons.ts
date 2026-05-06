@@ -117,6 +117,8 @@ export {
   ReceiptIcon,
   LeafIcon,
   MapPinIcon,
+  UserCheckIcon,
+  StoreIcon,
 } from 'lucide-react'
 
 export { GoogleIcon, TikTokIcon } from './custom-icons'

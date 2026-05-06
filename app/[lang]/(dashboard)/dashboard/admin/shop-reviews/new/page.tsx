@@ -6,6 +6,7 @@ import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
 import AdminDetailHeader from '@/components/dashboard/admin-detail-header'
 import AdminProductReviewCreateForm from '@/components/dashboard/admin/admin-product-review-create-form'
+import { DashboardFormPage } from '@/components/dashboard/dashboard-page'
 
 export default async function NewAdminShopReviewPage({ params }: PageParamsProps) {
   const { lang } = await params
@@ -18,7 +19,7 @@ export default async function NewAdminShopReviewPage({ params }: PageParamsProps
   const t = await getTranslations(lang as SupportedLocale)
 
   return (
-    <div className="mx-auto max-w-2xl space-y-8">
+    <DashboardFormPage>
       <AdminDetailHeader
         backHref={`/${lang}/dashboard/admin/shop-reviews`}
         title={t.admin_product_review_create_title}
@@ -29,6 +30,6 @@ export default async function NewAdminShopReviewPage({ params }: PageParamsProps
       <div className="rounded-xl border border-border bg-card p-6">
         <AdminProductReviewCreateForm />
       </div>
-    </div>
+    </DashboardFormPage>
   )
 }

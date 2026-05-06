@@ -6,6 +6,7 @@ import { redirect, notFound } from 'next/navigation'
 import { getShopCategoryById } from '@/lib/api/products'
 import ShopCategoryEditForm from '@/components/dashboard/shop-categories/shop-category-edit-form'
 import AdminDetailHeader from '@/components/dashboard/admin-detail-header'
+import { DashboardFormPage } from '@/components/dashboard/dashboard-page'
 
 type EditShopCategoryPageProps = {
   params: Promise<{ lang: string; id: string }>
@@ -29,13 +30,13 @@ export default async function EditShopCategoryPage({ params }: EditShopCategoryP
   }
 
   return (
-    <div className="mx-auto max-w-2xl space-y-8">
+    <DashboardFormPage>
       <AdminDetailHeader
         backHref={`/${lang}/dashboard/admin/shop-categories`}
         title={t.admin_shop_cat_edit}
       />
 
       <ShopCategoryEditForm category={category} />
-    </div>
+    </DashboardFormPage>
   )
 }

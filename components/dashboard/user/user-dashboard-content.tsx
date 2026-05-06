@@ -5,6 +5,7 @@ import { interpolate } from '@/lib/utils/i18n.utils'
 import { CalendarCheck2Icon, ClipboardListIcon, InboxIcon, PackageIcon } from '@/lib/constants/icons'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { cn } from '@/lib/utils/shadcn.utils'
+import { DashboardWidePage } from '@/components/dashboard/dashboard-page'
 import { useUserBookings } from './user-bookings-provider'
 import UserBookingCard from './user-booking-card'
 import UserOrderCard, { UserOrdersEmptyState } from './user-order-card'
@@ -152,7 +153,7 @@ export default function UserDashboardContent({ title, welcome }: { title: string
   const { state } = useUserBookings()
 
   return (
-    <div className="mx-auto max-w-5xl space-y-8">
+    <DashboardWidePage>
       {/* Welcome */}
       <div className="rounded-2xl bg-gradient-to-br from-primary/8 via-primary/5 to-transparent p-6 sm:p-8">
         <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{title}</h1>
@@ -224,6 +225,6 @@ export default function UserDashboardContent({ title, welcome }: { title: string
           <OrdersTab />
         </div>
       </Tabs>
-    </div>
+    </DashboardWidePage>
   )
 }

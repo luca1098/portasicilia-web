@@ -1,8 +1,13 @@
 import OwnerSidebar from '@/components/dashboard/owner-sidebar'
 import DashboardHeader from '@/components/dashboard/dashboard-header'
+import { requireRole } from '@/lib/utils/auth.utils'
+import type { PageParamsProps } from '@/lib/types/page.type'
 import { PropsWithChildren } from 'react'
 
-export default function OwnerLayout({ children }: PropsWithChildren) {
+export default async function OwnerLayout({ children, params }: PageParamsProps & PropsWithChildren) {
+  const { lang } = await params
+  await requireRole(lang, ['OWNER'])
+
   return (
     <div className="flex h-screen overflow-hidden">
       <OwnerSidebar />

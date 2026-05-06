@@ -12,14 +12,13 @@ import LocationCardList from '@/components/location/location-card-list'
 import ExperienceCardList from '@/components/experience/experience-card-list'
 import StayList from '@/components/stay/stay-list'
 import CategoryGrid from '@/components/category/category-grid'
-import ShopCategoryGrid from '@/components/shop/shop-category-grid'
 import { getLocalityCards } from '@/lib/api/localities'
 import { getExperienceCards } from '@/lib/api/experiences'
 import { getStayCards } from '@/lib/api/stays'
 import { getHighlightedCategories } from '@/lib/api/categories'
 import { getFeaturedSocialVideos } from '@/lib/api/social-videos'
-import { mockShopCategories } from '@/lib/constants/shop-categories'
 import { Button } from '@/components/ui/button'
+import { ArrowRight } from '@/lib/constants/icons'
 import SocialVideoSection from '@/components/social-video/social-video-section'
 
 export async function generateMetadata({ params }: PageParamsProps): Promise<Metadata> {
@@ -52,24 +51,6 @@ export default async function Home({ params }: PageParamsProps) {
   ])
 
   const socialVideos = Array.isArray(socialVideosData) ? socialVideosData : []
-
-  const shopCategoryLabels = {
-    titles: {
-      shop_cat_oro_verde_title: t.shop_cat_oro_verde_title,
-      shop_cat_kit_cannolo_title: t.shop_cat_kit_cannolo_title,
-      shop_cat_mistery_box_title: t.shop_cat_mistery_box_title,
-    },
-    descriptions: {
-      shop_cat_oro_verde_description: t.shop_cat_oro_verde_description,
-      shop_cat_kit_cannolo_description: t.shop_cat_kit_cannolo_description,
-      shop_cat_mistery_box_description: t.shop_cat_mistery_box_description,
-    },
-    ctas: {
-      shop_cat_oro_verde_cta: t.shop_cat_oro_verde_cta,
-      shop_cat_kit_cannolo_cta: t.shop_cat_kit_cannolo_cta,
-      shop_cat_mistery_box_cta: t.shop_cat_mistery_box_cta,
-    },
-  }
 
   return (
     <main>
@@ -169,17 +150,35 @@ export default async function Home({ params }: PageParamsProps) {
         <SocialVideoSection videos={socialVideos} title={t.home_social_videos_title} lang={lang} />
       )}
 
-      {/* Shop Categories */}
-      <section className="mx-auto max-w-7xl px-4 py-16 md:px-8">
-        <h2 className="mb-10 text-center text-3xl font-bold text-gray-800 md:text-4xl">
-          {t.home_shop_title}
-        </h2>
-        <ShopCategoryGrid categories={mockShopCategories} lang={lang} labels={shopCategoryLabels} />
-        <div className="mt-10 flex justify-center">
-          <Button asChild className="bg-primary hover:bg-primary/90">
-            <Link href={`/${lang}/shop`}>{t.home_shop_cta}</Link>
-          </Button>
-        </div>
+      {/* Shop banner */}
+      <section className="mx-auto max-w-7xl px-4 py-4 md:px-8 my-12">
+        <Link
+          href={`/${lang}/shop`}
+          aria-label={t.shop_cat_oro_verde_title}
+          className="group relative block h-[400px] rounded-3xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-4 overflow-hidden"
+        >
+          <Image
+            src="/images/oil-banner-home.png"
+            alt={t.shop_cat_oro_verde_title}
+            fill
+            sizes="(min-width: 1280px) 1216px, 100vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+          />
+          <div className="absolute inset-0 flex flex-col justify-center gap-4 p-8 md:max-w-[55%] md:gap-6 md:p-14 lg:p-16">
+            <h2 className="text-balance text-3xl font-bold leading-tight text-foreground md:text-4xl lg:text-5xl">
+              {t.shop_cat_oro_verde_title}
+            </h2>
+            <p className="max-w-xl text-sm leading-relaxed text-foreground/80 md:text-base">
+              {t.shop_cat_oro_verde_description}
+            </p>
+            <div>
+              <span className="inline-flex items-center gap-2 rounded-md border border-foreground bg-transparent px-5 py-2.5 text-sm font-medium text-foreground transition-all group-hover:gap-3 group-hover:bg-white/10 md:text-base">
+                {t.shop_cat_oro_verde_cta}
+                <ArrowRight className="size-4" />
+              </span>
+            </div>
+          </div>
+        </Link>
       </section>
     </main>
   )

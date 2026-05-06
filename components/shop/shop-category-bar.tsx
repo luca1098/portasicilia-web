@@ -16,16 +16,16 @@ export default function ShopCategoryBar({ categories, selectedId, onSelect }: Sh
 
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="text-2xl font-bold text-gray-900">{t.shop_categories_title}</h2>
-      <div className="flex gap-3 overflow-x-auto pb-2">
-        {/* All categories pill */}
+      <h2 className="text-2xl font-semibold tracking-tight text-foreground">{t.shop_categories_title}</h2>
+      <div className="-mx-1 flex gap-3 overflow-x-auto px-1 pb-1">
         <button
+          type="button"
           onClick={() => onSelect(null)}
           className={cn(
-            'flex shrink-0 items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium transition-all',
+            'flex shrink-0 items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-medium transition-colors',
             selectedId === null
-              ? 'border-primary bg-primary text-white shadow-sm'
-              : 'border-gray-200 bg-white text-gray-700 hover:border-primary/40 hover:bg-primary/5'
+              ? 'border-primary bg-primary text-primary-foreground'
+              : 'border-border bg-card text-foreground hover:border-primary/40 hover:bg-primary/5'
           )}
         >
           {t.shop_product_all_categories}
@@ -34,12 +34,13 @@ export default function ShopCategoryBar({ categories, selectedId, onSelect }: Sh
         {categories.map(category => (
           <button
             key={category.id}
+            type="button"
             onClick={() => onSelect(category.id)}
             className={cn(
-              'flex shrink-0 items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium transition-all',
+              'flex shrink-0 items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-medium transition-colors',
               selectedId === category.id
-                ? 'border-primary bg-primary text-white shadow-sm'
-                : 'border-gray-200 bg-white text-gray-700 hover:border-primary/40 hover:bg-primary/5'
+                ? 'border-primary bg-primary text-primary-foreground'
+                : 'border-border bg-card text-foreground hover:border-primary/40 hover:bg-primary/5'
             )}
           >
             {category.cover && (

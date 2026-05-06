@@ -7,6 +7,7 @@ import { getStayById } from '@/lib/api/stays'
 import { getLocalities } from '@/lib/api/localities'
 import { getCategories } from '@/lib/api/categories'
 import StayWizard from '@/components/dashboard/stays/wizard/stay-wizard'
+import { DashboardWidePage } from '@/components/dashboard/dashboard-page'
 import Link from 'next/link'
 import { ArrowLeft } from '@/lib/constants/icons'
 
@@ -34,7 +35,7 @@ export default async function EditStayPage({ params }: EditStayPageProps) {
   }
 
   return (
-    <div className="mx-auto max-w-5xl space-y-8">
+    <DashboardWidePage>
       <div className="flex items-center gap-4">
         <Link
           href={`/${lang}/dashboard/admin/stays`}
@@ -48,6 +49,6 @@ export default async function EditStayPage({ params }: EditStayPageProps) {
       </div>
 
       <StayWizard mode="edit" stay={stay} localities={localities} categories={categories} />
-    </div>
+    </DashboardWidePage>
   )
 }

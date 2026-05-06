@@ -5,6 +5,7 @@ import { getServerSession } from 'next-auth'
 import { redirect, notFound } from 'next/navigation'
 import { getAuthorsAdmin } from '@/lib/api/blog'
 import AuthorForm from '@/components/dashboard/blog/author-form'
+import { DashboardFormPage } from '@/components/dashboard/dashboard-page'
 import Link from 'next/link'
 import { ArrowLeft } from '@/lib/constants/icons'
 
@@ -31,7 +32,7 @@ export default async function EditAuthorPage({ params }: EditAuthorPageProps) {
   }
 
   return (
-    <div className="mx-auto max-w-2xl space-y-8">
+    <DashboardFormPage>
       <div className="flex items-center gap-4">
         <Link
           href={`/${lang}/dashboard/admin/blog/authors`}
@@ -45,6 +46,6 @@ export default async function EditAuthorPage({ params }: EditAuthorPageProps) {
       </div>
 
       <AuthorForm mode="edit" author={author} />
-    </div>
+    </DashboardFormPage>
   )
 }

@@ -7,6 +7,7 @@ import { redirect } from 'next/navigation'
 import { getLocalities } from '@/lib/api/localities'
 import { getCategories } from '@/lib/api/categories'
 import ExperienceWizard from '@/components/dashboard/experiences/wizard/experience-wizard'
+import { DashboardWidePage } from '@/components/dashboard/dashboard-page'
 import Link from 'next/link'
 import { ArrowLeft } from '@/lib/constants/icons'
 
@@ -25,7 +26,7 @@ export default async function NewExperiencePage({ params }: PageParamsProps) {
   ])
 
   return (
-    <div className="mx-auto max-w-5xl space-y-8">
+    <DashboardWidePage>
       <div className="flex items-center gap-4">
         <Link
           href={`/${lang}/dashboard/admin/experiences`}
@@ -39,6 +40,6 @@ export default async function NewExperiencePage({ params }: PageParamsProps) {
       </div>
 
       <ExperienceWizard mode="create" localities={localities} categories={categories} />
-    </div>
+    </DashboardWidePage>
   )
 }

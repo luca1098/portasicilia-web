@@ -8,6 +8,7 @@ import { getAuthorsAdmin } from '@/lib/api/blog'
 import { getCategoriesAdmin } from '@/lib/api/categories'
 import { getLocalities } from '@/lib/api/localities'
 import ArticleForm from '@/components/dashboard/blog/article-form'
+import { DashboardFormPage } from '@/components/dashboard/dashboard-page'
 import Link from 'next/link'
 import { ArrowLeft } from '@/lib/constants/icons'
 
@@ -29,7 +30,7 @@ export default async function NewArticlePage({ params }: PageParamsProps) {
   ])
 
   return (
-    <div className="mx-auto max-w-2xl space-y-8">
+    <DashboardFormPage>
       <div className="flex items-center gap-4">
         <Link
           href={`/${lang}/dashboard/admin/blog`}
@@ -43,6 +44,6 @@ export default async function NewArticlePage({ params }: PageParamsProps) {
       </div>
 
       <ArticleForm mode="create" authors={authors} categories={categories} localities={localities} />
-    </div>
+    </DashboardFormPage>
   )
 }

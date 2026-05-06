@@ -6,6 +6,7 @@ import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
 import { getOwnerReviews } from '@/lib/api/owner-reviews'
 import OwnerReviewsContent from '@/components/dashboard/owner/owner-reviews-content'
+import { DashboardListPage } from '@/components/dashboard/dashboard-page'
 
 export default async function OwnerReviewsPage({ params }: PageParamsProps) {
   const { lang } = await params
@@ -29,13 +30,13 @@ export default async function OwnerReviewsPage({ params }: PageParamsProps) {
   }
 
   return (
-    <div className="mx-auto max-w-6xl space-y-8">
+    <DashboardListPage>
       <div className="rounded-2xl bg-gradient-to-br from-primary/8 via-primary/5 to-transparent p-6 sm:p-8">
         <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{t.owner_reviews_title}</h1>
         <p className="mt-1.5 text-sm text-muted-foreground sm:text-base">{t.owner_reviews_subtitle}</p>
       </div>
 
       <OwnerReviewsContent initialReviews={reviews.data} initialNextCursor={reviews.nextCursor} />
-    </div>
+    </DashboardListPage>
   )
 }

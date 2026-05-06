@@ -5,7 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import type { Product } from '@/lib/schemas/entities/product.entity.schema'
-import { HeartIcon, ShoppingCartIcon } from '@/lib/constants/icons'
+import { HeartIcon, ShoppingCartIcon, PackageIcon } from '@/lib/constants/icons'
 import { formatCurrency } from '@/lib/utils/format.utils'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils/shadcn.utils'
@@ -68,28 +68,26 @@ export default function ProductCard({ product, lang }: ProductCardProps) {
 
   return (
     <>
-      <Link href={`/${lang}/shop/${product.slug}`} className="group flex flex-col gap-2">
-        {/* Image container */}
-        <div className="relative aspect-square overflow-hidden rounded-2xl bg-gray-100">
+      <Link href={`/${lang}/shop/${product.slug}`} className="group flex flex-col gap-3">
+        <div className="relative aspect-square overflow-hidden rounded-2xl bg-muted">
           {product.cover ? (
             <Image
               src={product.cover}
               alt={product.name}
               fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+              className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+              sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
               unoptimized
             />
           ) : (
-            <div className="flex size-full items-center justify-center bg-gradient-to-br from-amber-50 to-orange-100">
-              <div className="size-12 rounded-full bg-amber-200/60" />
+            <div className="flex size-full items-center justify-center bg-gradient-to-br from-muted to-secondary">
+              <PackageIcon className="size-10 text-muted-foreground/40" />
             </div>
           )}
 
-          {/* Discount badge */}
           {discountPercent !== null && (
-            <div className="absolute left-2 top-2">
-              <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-semibold text-red-600">
+            <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
+              <span className="rounded-full bg-destructive/95 px-2.5 py-0.5 text-[11px] font-semibold text-background">
                 -{discountPercent}%
               </span>
             </div>
@@ -97,37 +95,39 @@ export default function ProductCard({ product, lang }: ProductCardProps) {
 
           <Button
             type="button"
-            className="absolute right-2 top-2 rounded-full p-1 text-white transition-colors hover:text-primary"
+            className="absolute right-2 top-2 rounded-full bg-background/70 text-foreground backdrop-blur-sm transition-colors hover:bg-background/90"
             onClick={handleFavoriteClick}
             aria-label="Save"
             size="icon"
             variant="ghost"
           >
-            <HeartIcon className={cn('size-5', isFavorited && 'fill-red-500 text-red-500')} />
+            <HeartIcon
+              className={cn('size-5 transition-colors', isFavorited && 'fill-destructive text-destructive')}
+            />
           </Button>
         </div>
 
-        {/* Info */}
-        <div className="flex flex-col gap-1 px-0.5">
-          <p className="line-clamp-2 text-sm font-medium text-gray-900 leading-tight">{product.name}</p>
+        <div className="flex flex-col gap-1.5 px-0.5">
+          <p className="line-clamp-2 text-sm font-semibold leading-tight text-foreground">{product.name}</p>
 
           {firstVariant && (
-            <div className="flex items-end justify-between gap-2">
+            <div className="mt-1 flex items-end justify-between gap-2">
               <div className="flex flex-col">
                 {compareAtPrice && compareAtPrice > price && (
-                  <span className="text-xs text-gray-400 line-through">
+                  <span className="text-xs text-muted-foreground line-through">
                     {formatCurrency(String(compareAtPrice))}
                   </span>
                 )}
-                <span className="text-sm font-bold text-gray-900">
+                <span className="text-base font-bold text-foreground">
                   {formatCurrency(String(price))}
-                  {unit && <span className="ml-0.5 text-xs font-normal text-gray-500"> / {unit}</span>}
+                  {unit && <span className="ml-1 text-xs font-normal text-muted-foreground">/ {unit}</span>}
                 </span>
               </div>
 
               <button
+                type="button"
                 onClick={handleAddToCart}
-                className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary text-white shadow-sm transition-opacity hover:opacity-90"
+                className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm transition-opacity hover:opacity-90"
                 aria-label="Add to cart"
               >
                 <ShoppingCartIcon className="size-5" />

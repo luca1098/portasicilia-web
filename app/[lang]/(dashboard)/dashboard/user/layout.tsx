@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { SupportedLocale } from '@/lib/configs/locales'
 import { getTranslations } from '@/lib/configs/locales/i18n'
 import DashboardHeader from '@/components/dashboard/dashboard-header'
+import { requireRole } from '@/lib/utils/auth.utils'
 import type { PageParamsProps } from '@/lib/types/page.type'
 
 export default async function UserDashboardLayout({
@@ -10,6 +11,7 @@ export default async function UserDashboardLayout({
   params,
 }: PageParamsProps & { children: React.ReactNode }) {
   const { lang } = await params
+  await requireRole(lang, ['USER'])
   const t = await getTranslations(lang as SupportedLocale)
 
   return (

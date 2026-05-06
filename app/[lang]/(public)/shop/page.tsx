@@ -4,11 +4,11 @@ import { getTranslations } from '@/lib/configs/locales/i18n'
 import { PageParamsProps } from '@/lib/types/page.type'
 import { buildMetadata } from '@/lib/seo/metadata'
 import { getProducts, getShopCategories } from '@/lib/api/products'
+import { getExperienceCards, type ExperienceCard } from '@/lib/api/experiences'
 import type { Product, ShopCategory } from '@/lib/schemas/entities/product.entity.schema'
-import PageWrapper from '@/components/layout/page-wrapper'
 import ShopHero from '@/components/shop/shop-hero'
 import ProductGrid from '@/components/shop/product-grid'
-import TrustBadges from '@/components/shop/trust-badges'
+import ShopExperiencesCrossSell from '@/components/shop/shop-experiences-cross-sell'
 
 export async function generateMetadata({ params }: PageParamsProps): Promise<Metadata> {
   const { lang } = await params
@@ -24,20 +24,25 @@ export async function generateMetadata({ params }: PageParamsProps): Promise<Met
 export default async function ShopPage({ params }: PageParamsProps) {
   const { lang } = await params
 
-  const [products, categories] = await Promise.all([
+  const [products, categories, experiencesPage] = await Promise.all([
     getProducts(undefined, lang).catch((): Product[] => []),
     getShopCategories().catch((): ShopCategory[] => []),
+    getExperienceCards({ highlighted: true, limit: 4 }).catch(() => ({
+      data: [] as ExperienceCard[],
+      nextCursor: null,
+    })),
   ])
 
-  return (
-    <PageWrapper>
-      <ShopHero lang={lang} />
+  const featuredCategory = categories.length === 1 ? categories[0] : null
 
-      <section className="mx-auto max-w-7xl px-4 py-12 md:px-8">
+  return (
+    <>
+      <ShopHero lang={lang} category={featuredCategory} />
+
+      <section className="mx-auto max-w-7xl px-4 py-12 md:px-8 md:py-16">
         <ProductGrid products={products} categories={categories} lang={lang} />
       </section>
-
-      <TrustBadges lang={lang} />
-    </PageWrapper>
+      <ShopExperiencesCrossSell lang={lang} experiences={experiencesPage.data} />
+    </>
   )
 }

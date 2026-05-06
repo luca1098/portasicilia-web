@@ -6,6 +6,7 @@ import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
 import { getOwnerBookings } from '@/lib/api/owner-bookings'
 import OwnerRequestsTable from '@/components/dashboard/owner/owner-requests-table'
+import { DashboardListPage } from '@/components/dashboard/dashboard-page'
 
 const ALL_STATUSES = 'PENDING_APPROVAL,REJECTED,COUNTER_PROPOSED'
 
@@ -32,7 +33,7 @@ export default async function OwnerRequestsPage({
   const result = await getOwnerBookings(headers, fetchParams)
 
   return (
-    <div className="mx-auto max-w-5xl space-y-8">
+    <DashboardListPage>
       <div className="rounded-2xl bg-gradient-to-br from-primary/8 via-primary/5 to-transparent p-6 sm:p-8">
         <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{t.owner_requests_title}</h1>
         <p className="mt-1.5 text-sm text-muted-foreground sm:text-base">{t.owner_requests_subtitle}</p>
@@ -44,6 +45,6 @@ export default async function OwnerRequestsPage({
         fetchParams={fetchParams}
         activeStatus={statusFilter || 'ALL'}
       />
-    </div>
+    </DashboardListPage>
   )
 }

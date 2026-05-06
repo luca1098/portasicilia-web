@@ -35,9 +35,6 @@ export default function ProductCard({ product, lang }: ProductCardProps) {
   const compareAtPrice = firstVariant?.compareAtPrice ? Number(firstVariant.compareAtPrice) : null
   const discountPercent = getDiscountPercent(price, compareAtPrice)
   const unit = firstVariant ? `${Number(firstVariant.volume)} ${firstVariant.unitOfMeasurement}` : null
-  const producerName = product.owner
-    ? [product.owner.firstName, product.owner.lastName].filter(Boolean).join(' ').trim() || null
-    : null
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -88,18 +85,13 @@ export default function ProductCard({ product, lang }: ProductCardProps) {
             </div>
           )}
 
-          <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
-            {product.highlighted && (
-              <span className="rounded-full bg-foreground/85 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-background backdrop-blur-sm">
-                ★
-              </span>
-            )}
-            {discountPercent !== null && (
+          {discountPercent !== null && (
+            <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
               <span className="rounded-full bg-destructive/95 px-2.5 py-0.5 text-[11px] font-semibold text-background">
                 -{discountPercent}%
               </span>
-            )}
-          </div>
+            </div>
+          )}
 
           <Button
             type="button"
@@ -116,12 +108,6 @@ export default function ProductCard({ product, lang }: ProductCardProps) {
         </div>
 
         <div className="flex flex-col gap-1.5 px-0.5">
-          {producerName && (
-            <p className="truncate text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
-              {producerName}
-            </p>
-          )}
-
           <p className="line-clamp-2 text-sm font-semibold leading-tight text-foreground">{product.name}</p>
 
           {firstVariant && (

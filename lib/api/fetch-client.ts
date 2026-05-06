@@ -1,7 +1,7 @@
 import type { ApiError as ApiErrorType } from '@/lib/schemas/api-response.schema'
 import type { SupportedLocale } from '@/lib/configs/locales'
 
-const BACKEND_URL = process.env.API_URL || 'http://localhost:7002'
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:7002'
 
 export class ApiError extends Error {
   status: number

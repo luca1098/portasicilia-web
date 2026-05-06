@@ -1,18 +1,11 @@
-import Navbar from '@/components/navbar/navbar'
-import Footer from '@/components/footer/footer'
+import PublicShell from '@/components/layout/public-shell'
 import { PageParamsProps } from '@/lib/types/page.type'
 import { PropsWithChildren } from 'react'
 
 type PublicLayoutProps = PageParamsProps & PropsWithChildren
 
 const PublicLayout = ({ children }: PublicLayoutProps) => {
-  return (
-    <>
-      <Navbar />
-      {children}
-      <Footer />
-    </>
-  )
+  return <PublicShell>{children}</PublicShell>
 }
 
 export default PublicLayout

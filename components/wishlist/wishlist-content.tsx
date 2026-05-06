@@ -1,0 +1,75 @@
+'use client'
+
+import { HeartIcon } from '@/lib/constants/icons'
+import { useTranslation } from '@/lib/context/translation.context'
+import useFavoriteStore from '@/core/store/favorite.store'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import WishlistItem from './wishlist-item'
+import WishlistProductItem from './wishlist-product-item'
+import type { FavoriteListingItem } from '@/lib/api/favorite.api'
+
+export default function WishlistContent() {
+  const t = useTranslation()
+  const listingItems = useFavoriteStore(state => state.listingItems)
+  const productItems = useFavoriteStore(state => state.productItems)
+
+  const stays = listingItems.filter((item: FavoriteListingItem) => item.listing.type === 'STAY')
+  const experiences = listingItems.filter((item: FavoriteListingItem) => item.listing.type === 'EXPERIENCE')
+
+  const isEmpty = listingItems.length === 0 && productItems.length === 0
+
+  if (isEmpty) {
+    return (
+      <div className="flex flex-1 flex-col items-center justify-center gap-3 px-6 py-12 text-center">
+        <HeartIcon className="size-10 text-muted-foreground/40" />
+        <p className="text-sm font-medium">{t.wishlist_empty}</p>
+        <p className="text-xs text-muted-foreground">{t.wishlist_empty_description}</p>
+      </div>
+    )
+  }
+
+  return (
+    <ScrollArea className="flex-1">
+      <div className="px-4 pb-6">
+        {stays.length > 0 && (
+          <section className="mb-2">
+            <h3 className="py-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              {t.wishlist_stays}
+            </h3>
+            <div className="flex flex-col gap-2">
+              {stays.map(item => (
+                <WishlistItem key={item.id} item={item} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {experiences.length > 0 && (
+          <section className="mb-2">
+            <h3 className="py-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              {t.wishlist_experiences}
+            </h3>
+            <div className="flex flex-col gap-2">
+              {experiences.map(item => (
+                <WishlistItem key={item.id} item={item} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {productItems.length > 0 && (
+          <section>
+            <h3 className="py-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              {t.wishlist_products}
+            </h3>
+            <div className="flex flex-col gap-2">
+              {productItems.map(item => (
+                <WishlistProductItem key={item.id} item={item} />
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
+    </ScrollArea>
+  )
+}

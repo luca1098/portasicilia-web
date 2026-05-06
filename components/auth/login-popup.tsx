@@ -1,8 +1,11 @@
 'use client'
 
-import { X } from 'lucide-react'
+import { createPortal } from 'react-dom'
+import { X } from '@/lib/constants/icons'
 import { Button } from '@/components/ui/button'
 import { useTranslation } from '@/lib/context/translation.context'
+import { signIn } from 'next-auth/react'
+import { usePathname } from 'next/navigation'
 
 interface LoginPopupProps {
   onClose: () => void
@@ -40,19 +43,10 @@ function AppleIcon({ className }: { className?: string }) {
 }
 
 export default function LoginPopup({ onClose }: LoginPopupProps) {
+  const pathname = usePathname()
   const t = useTranslation()
 
-  const handleGoogleLogin = () => {
-    // TODO: Implement Google OAuth
-    console.warn('Google login not implemented')
-  }
-
-  const handleAppleLogin = () => {
-    // TODO: Implement Apple OAuth
-    console.warn('Apple login not implemented')
-  }
-
-  return (
+  return createPortal(
     <>
       {/* Backdrop */}
       <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm" onClick={onClose} />
@@ -81,7 +75,7 @@ export default function LoginPopup({ onClose }: LoginPopupProps) {
               variant="outline"
               size="lg"
               className="w-full justify-center gap-3"
-              onClick={handleGoogleLogin}
+              onClick={() => signIn('google', { callbackUrl: pathname })}
             >
               <GoogleIcon className="size-5" />
               {t.login_with_google}
@@ -91,7 +85,7 @@ export default function LoginPopup({ onClose }: LoginPopupProps) {
               variant="outline"
               size="lg"
               className="w-full justify-center gap-3"
-              onClick={handleAppleLogin}
+              // onClick={handleAppleLogin}
             >
               <AppleIcon className="size-5" />
               {t.login_with_apple}
@@ -111,6 +105,7 @@ export default function LoginPopup({ onClose }: LoginPopupProps) {
           </p>
         </div>
       </div>
-    </>
+    </>,
+    document.body
   )
 }

@@ -45,7 +45,7 @@ function SelectFormField<TFieldValues extends FieldValues, TOption>({
           hasValue={!!field.value}
           required={required}
         >
-          <Select value={field.value} onValueChange={field.onChange} disabled={disabled}>
+          <Select value={field.value ?? ''} onValueChange={field.onChange} disabled={disabled}>
             <SelectTrigger id={name} aria-invalid={!!error}>
               <SelectValue />
             </SelectTrigger>

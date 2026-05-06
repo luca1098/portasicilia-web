@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@plugin '@tailwindcss/typography';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -52,7 +53,7 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
   --primary: oklch(0.649 0.1064 205.4);
-  --primary-foreground: oklch(0.985 0 0);
+  --primary-foreground: oklch(0.9814 0.019 204.85);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
@@ -68,14 +69,14 @@
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
+  --sidebar: oklch(1 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary: oklch(0.649 0.1064 205.4);
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-accent-foreground: oklch(0.145 0 0);
   --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar-ring: oklch(0.649 0.1064 205.4);
 }
 
 .dark {
@@ -102,14 +103,14 @@
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
+  --sidebar: oklch(0.175 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-primary: oklch(0.75 0.09 205.4);
+  --sidebar-primary-foreground: oklch(0.145 0 0);
+  --sidebar-accent: oklch(0.245 0 0);
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --sidebar-ring: oklch(0.75 0.09 205.4);
 }
 
 @layer base {
@@ -119,4 +120,78 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* ── Toast Styles ── */
+
+.ps-toast {
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.ps-toast-success {
+  background: oklch(0.95 0.04 168);
+  color: oklch(0.28 0.06 168);
+  border-color: oklch(0.88 0.06 168);
+}
+
+.ps-toast-success .ps-toast-icon {
+  color: oklch(0.42 0.1 168);
+}
+
+.ps-toast-error {
+  background: oklch(0.95 0.03 25);
+  color: oklch(0.35 0.1 25);
+  border-color: oklch(0.88 0.06 25);
+}
+
+.ps-toast-error .ps-toast-icon {
+  color: oklch(0.52 0.2 25);
+}
+
+.ps-toast-title {
+  line-height: 1.4;
+}
+
+.ps-toast-close {
+  position: absolute !important;
+  right: 12px !important;
+  top: 50% !important;
+  left: unset !important;
+  transform: translateY(-50%) !important;
+  border: none !important;
+  background: transparent !important;
+  color: currentColor !important;
+  opacity: 0.5;
+  cursor: pointer;
+  padding: 2px !important;
+  width: auto !important;
+  height: auto !important;
+  transition: opacity 0.15s ease;
+}
+
+.ps-toast-close:hover {
+  opacity: 1;
+}
+
+/* Dark mode toast overrides */
+.dark .ps-toast-success {
+  background: oklch(0.25 0.04 168);
+  color: oklch(0.88 0.06 168);
+  border-color: oklch(0.35 0.05 168);
+}
+
+.dark .ps-toast-success .ps-toast-icon {
+  color: oklch(0.72 0.12 168);
+}
+
+.dark .ps-toast-error {
+  background: oklch(0.25 0.04 25);
+  color: oklch(0.88 0.05 25);
+  border-color: oklch(0.35 0.06 25);
+}
+
+.dark .ps-toast-error .ps-toast-icon {
+  color: oklch(0.7 0.18 25);
 }

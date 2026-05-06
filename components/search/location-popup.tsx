@@ -1,22 +1,31 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { Compass } from 'lucide-react'
-import { Location, mockLocations } from '@/lib/constants/locations'
 import { useTranslation } from '@/lib/context/translation.context'
+import { Locality } from '@/lib/schemas/entities/locality.entity.schema'
+import { getLocalitiesClient } from '@/lib/api/localities'
 
 type LocationPopupProps = {
-  onSelect: (location: Location | null) => void
+  onSelect: (location: Locality | null) => void
   onClose: () => void
 }
 
 export default function LocationPopup({ onSelect, onClose }: LocationPopupProps) {
   const t = useTranslation()
+  const [locations, setLocations] = useState<Locality[]>([])
+
+  useEffect(() => {
+    getLocalitiesClient()
+      .then(setLocations)
+      .catch(() => {})
+  }, [])
 
   return (
     <>
       <div className="fixed inset-0 z-40" onClick={onClose} />
-      <div className="absolute left-0 top-full z-50 mt-2 w-80 rounded-2xl bg-white p-4 shadow-xl">
+      <div className="absolute left-0 top-full z-50 mt-2 max-h-80 w-80 overflow-y-auto rounded-2xl bg-white p-4 shadow-xl">
         <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
           {t.search_suggested_destinations}
         </p>
@@ -32,7 +41,7 @@ export default function LocationPopup({ onSelect, onClose }: LocationPopupProps)
           <span className="text-sm font-medium">{t.search_everywhere}</span>
         </button>
 
-        {mockLocations.map(location => (
+        {locations.map(location => (
           <button
             key={location.id}
             type="button"
@@ -40,15 +49,12 @@ export default function LocationPopup({ onSelect, onClose }: LocationPopupProps)
             onClick={() => onSelect(location)}
           >
             <div className="relative size-12 shrink-0 overflow-hidden rounded-xl">
-              <Image src={location.image} alt={location.name} fill className="object-cover" sizes="48px" />
+              {location.cover && (
+                <Image src={location.cover} alt={location.name} fill className="object-cover" sizes="48px" />
+              )}
             </div>
             <div className="text-left">
-              <p className="text-sm font-medium">
-                {location.name}, {location.province}
-              </p>
-              <p className="text-xs text-muted-foreground">
-                {location.activitiesCount}+ {t.location_activities_subtitle}
-              </p>
+              <p className="text-sm font-medium">{location.name}</p>
             </div>
           </button>
         ))}

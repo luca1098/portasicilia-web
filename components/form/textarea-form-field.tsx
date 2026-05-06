@@ -19,6 +19,7 @@ function TextareaFormField<TFieldValues extends FieldValues>({
   label,
   description,
   required,
+  maxLength,
   className,
   ...textareaProps
 }: TextareaFormFieldProps<TFieldValues>) {
@@ -34,6 +35,8 @@ function TextareaFormField<TFieldValues extends FieldValues>({
           className={className}
           hasValue={!!field.value}
           required={required}
+          maxLength={maxLength}
+          currentLength={typeof field.value === 'string' ? field.value.length : 0}
         >
           <Textarea
             id={name}

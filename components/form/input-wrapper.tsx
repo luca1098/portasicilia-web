@@ -14,6 +14,8 @@ interface InputWrapperProps {
   className?: string
   hasValue?: boolean
   required?: boolean
+  maxLength?: number
+  currentLength?: number
 }
 
 function InputWrapper({
@@ -25,6 +27,8 @@ function InputWrapper({
   className,
   hasValue,
   required,
+  maxLength,
+  currentLength = 0,
 }: InputWrapperProps) {
   return (
     <div className={cn('grid gap-1', className)}>
@@ -46,11 +50,22 @@ function InputWrapper({
           </label>
         )}
       </div>
-      {error ? (
-        <p className="text-destructive text-sm">{error.message}</p>
-      ) : description ? (
-        <p className="text-muted-foreground text-sm">{description}</p>
-      ) : null}
+      {(error || description || maxLength) && (
+        <div className="flex items-start justify-between gap-2">
+          <div className="min-w-0">
+            {error ? (
+              <p className="text-destructive text-sm">{error.message}</p>
+            ) : description ? (
+              <p className="text-muted-foreground text-sm">{description}</p>
+            ) : null}
+          </div>
+          {maxLength && (
+            <p className="text-muted-foreground shrink-0 text-sm">
+              {currentLength}/{maxLength}
+            </p>
+          )}
+        </div>
+      )}
     </div>
   )
 }

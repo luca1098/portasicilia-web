@@ -1,4 +1,5 @@
 import SearchNavbar from '@/components/navbar/search-navbar'
+import Footer from '@/components/footer/footer'
 import { PageParamsProps } from '@/lib/types/page.type'
 import { PropsWithChildren } from 'react'
 
@@ -9,6 +10,7 @@ const ListingsLayout = ({ children }: ListingsLayoutProps) => {
     <>
       <SearchNavbar />
       {children}
+      <Footer />
     </>
   )
 }

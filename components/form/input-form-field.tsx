@@ -22,8 +22,10 @@ function InputFormField<TFieldValues extends FieldValues>({
   label,
   description,
   required,
-
+  maxLength,
   className,
+  normalize,
+  onChange: onChangeProp,
   ...inputProps
 }: InputFormFieldProps<TFieldValues>) {
   return (
@@ -38,6 +40,8 @@ function InputFormField<TFieldValues extends FieldValues>({
           className={className}
           hasValue={!!field.value}
           required={required}
+          maxLength={maxLength}
+          currentLength={typeof field.value === 'string' ? field.value.length : 0}
         >
           <Input
             id={name}
@@ -51,9 +55,9 @@ function InputFormField<TFieldValues extends FieldValues>({
             }}
             onChange={event => {
               const { value } = event.target || {}
-              const normalizedValue = inputProps.normalize ? inputProps.normalize(value) : (value ?? '')
+              const normalizedValue = normalize ? normalize(value) : (value ?? '')
               field.onChange(normalizedValue)
-              inputProps.onChange && inputProps.onChange(normalizedValue)
+              onChangeProp && onChangeProp(normalizedValue)
             }}
           />
         </InputWrapper>

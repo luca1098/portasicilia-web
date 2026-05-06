@@ -1,17 +1,16 @@
 'use client'
 
-import { Location } from '@/lib/constants/locations'
 import LocationCard from '@/components/location/location-card'
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel'
+import { LocalityCard } from '@/lib/api/localities'
 
 type LocationListProps = {
-  locations: Location[]
+  locations: LocalityCard[]
   lang: string
-  subtitle: string
   darkBg?: boolean
 }
 
-export default function LocationList({ locations, lang, subtitle, darkBg }: LocationListProps) {
+export default function LocationList({ locations, lang, darkBg }: LocationListProps) {
   return (
     <>
       {/* Mobile/Tablet carousel */}
@@ -20,7 +19,7 @@ export default function LocationList({ locations, lang, subtitle, darkBg }: Loca
           <CarouselContent className="-ml-2">
             {locations.map(location => (
               <CarouselItem key={location.id} className="pl-2 basis-[45%] md:basis-[30%]">
-                <LocationCard location={location} lang={lang} subtitle={subtitle} darkBg={darkBg} />
+                <LocationCard location={location} lang={lang} darkBg={darkBg} />
               </CarouselItem>
             ))}
           </CarouselContent>
@@ -29,13 +28,7 @@ export default function LocationList({ locations, lang, subtitle, darkBg }: Loca
       {/* Desktop grid */}
       <div className="hidden lg:grid lg:grid-cols-6 gap-4">
         {locations.map(location => (
-          <LocationCard
-            key={location.id}
-            location={location}
-            lang={lang}
-            subtitle={subtitle}
-            darkBg={darkBg}
-          />
+          <LocationCard key={location.id} location={location} lang={lang} darkBg={darkBg} />
         ))}
       </div>
     </>

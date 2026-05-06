@@ -1,19 +1,18 @@
 'use client'
 
-import { Location } from '@/lib/constants/locations'
 import LocationCard from '@/components/location/location-card'
+import { LocalityCard } from '@/lib/api/localities'
 
 type LocationGridProps = {
-  locations: Location[]
+  locations: LocalityCard[]
   lang: string
-  subtitle: string
 }
 
-export default function LocationGrid({ locations, lang, subtitle }: LocationGridProps) {
+export default function LocationGrid({ locations, lang }: LocationGridProps) {
   return (
-    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+    <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
       {locations.map(location => (
-        <LocationCard key={location.id} location={location} lang={lang} subtitle={subtitle} />
+        <LocationCard key={location.id} location={location} lang={lang} />
       ))}
     </div>
   )

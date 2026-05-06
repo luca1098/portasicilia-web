@@ -1,28 +1,34 @@
 'use client'
-import { Stay } from '@/lib/constants/stays'
+
+import type { StayCard as StayCardType } from '@/lib/api/stays'
 import { formatCurrency } from '@/core/utils/currency.utils'
 import { useTranslation } from '@/lib/context/translation.context'
 import { interpolate } from '@/lib/utils/i18n.utils'
 import ListingCard from '@/components/shared/listing-card'
 
 type StayCardProps = {
-  stay: Stay
+  stay: StayCardType
   lang: string
-  categoryLabel?: string
   darkBg?: boolean
 }
 
-export default function StayCard({ stay, lang, categoryLabel, darkBg }: StayCardProps) {
+export default function StayCard({ stay, lang, darkBg }: StayCardProps) {
   const t = useTranslation()
+
+  const priceLabel = stay.nightlyPrice
+    ? interpolate(t.stay_price, { price: formatCurrency(stay.nightlyPrice) })
+    : ''
+
   return (
     <ListingCard
-      title={stay.title}
-      image={stay.image}
-      href={`/${lang}/stays/${stay.id}`}
-      rating={stay.rating}
-      priceLabel={interpolate(t.stay_price, { price: formatCurrency(stay.price) })}
-      categoryLabel={categoryLabel}
+      title={stay.name}
+      image={stay.cover ?? ''}
+      href={`/${lang}/stays/${stay.slug}`}
+      rating={stay.avgRating ?? 0}
+      reviewCount={stay.reviewCount}
+      priceLabel={priceLabel}
       darkBg={darkBg}
+      listingId={stay.id}
     />
   )
 }

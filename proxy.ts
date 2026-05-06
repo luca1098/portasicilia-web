@@ -1,32 +1,20 @@
-import { match } from '@formatjs/intl-localematcher'
-import Negotiator from 'negotiator'
 import { NextRequest, NextResponse } from 'next/server'
-import { defaultLocale, supportedLocales } from './lib/configs/locales'
-
-function getLocale(request: NextRequest) {
-  const languages = new Negotiator({
-    headers: { 'accept-language': request.headers.get('accept-language') || '' },
-  }).languages()
-
-  return match(languages, supportedLocales, defaultLocale)
-}
+import { defaultLocale, supportedLocales } from '@/lib/configs/locales'
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
-  const pathnameHasLocale = supportedLocales.some(
-    locale => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
+
+  const hasLocale = supportedLocales.some(
+    locale => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`)
   )
 
-  if (pathnameHasLocale) return
-
-  const locale = getLocale(request)
-  request.nextUrl.pathname = `/${locale}`
-  return NextResponse.redirect(request.nextUrl)
+  if (!hasLocale) {
+    const url = request.nextUrl.clone()
+    url.pathname = `/${defaultLocale}${pathname}`
+    return NextResponse.redirect(url)
+  }
 }
 
 export const config = {
-  matcher: [
-    // Skip internal paths (_next) and static files
-    '/((?!_next|images|favicon.ico).*)',
-  ],
+  matcher: ['/((?!api|_next|favicon\\.ico|.*\\..*).*)'],
 }

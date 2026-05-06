@@ -36,7 +36,16 @@ const eslintConfig = [
       'no-unused-expressions': 'off',
       '@typescript-eslint/no-unused-expressions': 'off',
       '@typescript-eslint/no-non-null-assertion': 'warn',
-      '@typescript-eslint/no-unused-vars': ['error', { ignoreRestSiblings: true }],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          ignoreRestSiblings: true,
+          vars: 'all', // conta tutte le variabili
+          args: 'after-used',
+          varsIgnorePattern: '^_', // ignora variabili che iniziano con "_"
+          argsIgnorePattern: '^_',
+        },
+      ],
       'no-restricted-imports': [
         'error',
         {

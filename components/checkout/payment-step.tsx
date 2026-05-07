@@ -2,9 +2,10 @@
 
 import { useState } from 'react'
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js'
-import type { Appearance } from '@stripe/stripe-js'
+import type { Appearance, StripeElementLocale } from '@stripe/stripe-js'
 import { useParams } from 'next/navigation'
 import { stripePromise } from '@/lib/stripe'
+import { supportedLocales } from '@/lib/configs/locales'
 import { useTranslation } from '@/lib/context/translation.context'
 import { interpolate } from '@/lib/utils/i18n.utils'
 import { AlertCircleIcon, LoaderIcon } from '@/lib/constants/icons'
@@ -148,10 +149,12 @@ export default function PaymentStep({
   payLabelKey,
 }: PaymentStepProps) {
   const { lang } = useParams<{ lang: string }>()
-  const locale = lang === 'en' ? 'en' : 'it'
+  const locale: StripeElementLocale = (supportedLocales as readonly string[]).includes(lang)
+    ? (lang as StripeElementLocale)
+    : 'auto'
 
   return (
-    <Elements stripe={stripePromise} options={{ clientSecret, appearance, locale }}>
+    <Elements key={locale} stripe={stripePromise} options={{ clientSecret, appearance, locale }}>
       <PaymentForm
         depositAmount={depositAmount}
         initialError={initialError}

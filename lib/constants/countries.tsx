@@ -1,8 +1,11 @@
 import { getCountries, type Country } from 'react-phone-number-input'
 import flags from 'react-phone-number-input/flags'
+import deLabels from 'react-phone-number-input/locale/de.json'
 import enLabels from 'react-phone-number-input/locale/en.json'
+import esLabels from 'react-phone-number-input/locale/es.json'
+import frLabels from 'react-phone-number-input/locale/fr.json'
 import itLabels from 'react-phone-number-input/locale/it.json'
-import type { SupportedLocale } from '@/lib/configs/locales'
+import { defaultLocale, type SupportedLocale } from '@/lib/configs/locales'
 
 type CountryOption = {
   value: Country
@@ -12,10 +15,14 @@ type CountryOption = {
 const labelsByLocale: Record<SupportedLocale, Record<string, string>> = {
   en: enLabels,
   it: itLabels,
+  es: esLabels,
+  fr: frLabels,
+  de: deLabels,
 }
 
-function getCountryOptions(locale: SupportedLocale): CountryOption[] {
-  const labels = labelsByLocale[locale]
+function getCountryOptions(locale: string | undefined): CountryOption[] {
+  const resolvedLocale = (locale && locale in labelsByLocale ? locale : defaultLocale) as SupportedLocale
+  const labels = labelsByLocale[resolvedLocale]
   const countries = getCountries()
 
   const options: CountryOption[] = countries.map(code => ({
@@ -23,7 +30,7 @@ function getCountryOptions(locale: SupportedLocale): CountryOption[] {
     label: labels[code] || enLabels[code] || code,
   }))
 
-  options.sort((a, b) => a.label.localeCompare(b.label, locale))
+  options.sort((a, b) => a.label.localeCompare(b.label, resolvedLocale))
 
   // Move Italy to the top
   const italyIndex = options.findIndex(o => o.value === 'IT')

@@ -119,6 +119,7 @@ export {
   MapPinIcon,
   UserCheckIcon,
   StoreIcon,
+  GlobeIcon,
 } from 'lucide-react'
 
 export { GoogleIcon, TikTokIcon } from './custom-icons'

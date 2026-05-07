@@ -2,19 +2,18 @@
 
 import { createContext, useContext, useCallback, useRef } from 'react'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { StarIcon, XIcon, LoaderIcon, InfoIcon } from '@/lib/constants/icons'
 import { useTranslation } from '@/lib/context/translation.context'
 import { interpolate } from '@/lib/utils/i18n.utils'
 import { formatCurrency } from '@/core/utils/currency.utils'
-import useLocaleStore from '@/core/store/locale.store'
 import { Button } from '@/components/ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Calendar, CalendarDayButton } from '@/components/ui/calendar'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import { it, enUS } from 'date-fns/locale'
 import { format } from 'date-fns'
+import { getDateFnsLocale } from '@/lib/utils/date-locale.utils'
 import { today as getToday } from '@/lib/utils/date.utils'
 import { useStayBooking } from './use-stay-booking'
 import type { DayButton } from 'react-day-picker'
@@ -42,14 +41,14 @@ type StayBookingCardProps = {
 
 export default function StayBookingCard({ stay }: StayBookingCardProps) {
   const t = useTranslation()
-  const lang = useLocaleStore(s => s.lang)
+  const { lang } = useParams<{ lang: string }>()
   const router = useRouter()
   const booking = useStayBooking(stay)
   const guestsRef = useRef<HTMLInputElement>(null)
 
   const maxGuests = stay.stayDetail?.maxPeople ?? stay.maxPeople ?? 10
 
-  const dateLocale = lang === 'it' ? it : enUS
+  const dateLocale = getDateFnsLocale(lang)
   const reviews = stay.reviews ?? []
   const avgRating =
     reviews.length > 0 ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1) : null

@@ -78,6 +78,7 @@ const eslintConfig = [
     'eslint.config.mjs',
     '*.config.js',
     '*.config.mjs',
+    'scripts/**',
   ]),
 ]
 //override rules for components

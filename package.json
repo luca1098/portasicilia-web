@@ -8,6 +8,7 @@
     "start": "next start -p 3003",
     "lint": "eslint",
     "format": "prettier --write",
+    "i18n:translate": "node scripts/translate-i18n.mjs",
     "prepare": "husky"
   },
   "lint-staged": {

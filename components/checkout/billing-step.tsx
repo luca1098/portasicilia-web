@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { useParams } from 'next/navigation'
 import { useFormContext, useWatch } from 'react-hook-form'
 
 import { ComboboxFormField } from '@/components/form/combobox-form-field'
@@ -9,7 +10,6 @@ import { PhoneFormField } from '@/components/form/phone-form-field'
 import { RadioFormField } from '@/components/form/radio-form-field'
 import { useTranslation } from '@/lib/context/translation.context'
 import { getCountryOptions, CountryFlag, type CountryOption } from '@/lib/constants/countries'
-import useLocaleStore from '@/core/store/locale.store'
 import { cn } from '@/lib/utils/shadcn.utils'
 import type { BillingFormValues } from '@/lib/schemas/forms/billing.form.schema'
 
@@ -29,7 +29,7 @@ function BillingStep() {
   const t = useTranslation()
   const { control } = useFormContext<BillingFormValues>()
   const billingType = useWatch({ control, name: 'billingType' })
-  const lang = useLocaleStore(s => s.lang)
+  const { lang } = useParams<{ lang: string }>()
   const countryOptions = React.useMemo(() => getCountryOptions(lang), [lang])
   const isCompany = billingType === 'COMPANY'
 

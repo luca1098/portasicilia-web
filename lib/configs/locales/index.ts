@@ -1,4 +1,4 @@
-export const supportedLocales = ['it', 'en'] as const
+export const supportedLocales = ['it', 'en', 'es', 'fr', 'de'] as const
 
 export const defaultLocale = 'it' as const
 

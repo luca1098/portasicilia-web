@@ -12,6 +12,7 @@ import ReviewSection from '@/components/review/review-section'
 import StayLocation from '@/components/stay/detail/stay-location'
 import StayHouseRules from '@/components/stay/detail/stay-house-rules'
 import TranslationBadge from '@/components/ui/translation-badge'
+import PopularBadge from '@/components/shared/popular-badge'
 
 type StayInfoProps = {
   stay: Stay
@@ -60,7 +61,10 @@ function StayInfoContent({ stay }: StayInfoProps) {
       </div>
 
       {/* Title */}
-      <h1 className="text-2xl font-bold md:text-3xl">{displayName}</h1>
+      <div className="space-y-2">
+        {stay.popular && <PopularBadge className="bg-white shadow-none ring-border" />}
+        <h1 className="text-2xl font-bold md:text-3xl">{displayName}</h1>
+      </div>
 
       {/* Translation badge */}
       <TranslationBadge />

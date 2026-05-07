@@ -18,6 +18,7 @@ export type ExperienceCard = {
   price: number | null
   pricingMode: string | null
   assetLabel: string | null
+  popular: boolean
 }
 
 type PaginatedExperienceCards = {

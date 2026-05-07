@@ -117,6 +117,7 @@ export const ExperienceSchema = z.object({
   languages: z.array(z.string()),
   status: ListingStatusSchema,
   highlighted: z.boolean().optional(),
+  popular: z.boolean().optional(),
   googleBusinessUrl: z.string().nullable().optional(),
   ownerId: z.string(),
   owner: OwnerSchema.nullish(),

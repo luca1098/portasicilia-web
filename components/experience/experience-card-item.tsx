@@ -49,6 +49,8 @@ export default function ExperienceCardItem({ experience, lang, darkBg }: Experie
       duration={duration}
       darkBg={darkBg}
       listingId={experience.id}
+      freeCancellationLabel={t.exp_detail_free_cancellation}
+      popular={experience.popular}
     />
   )
 }

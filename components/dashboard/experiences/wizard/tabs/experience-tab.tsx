@@ -134,6 +134,7 @@ export default function ExperienceTab({
       assetLabel: experience?.assetLabel ?? '',
       status: experience?.status || null,
       highlighted: experience?.highlighted ?? false,
+      popular: experience?.popular ?? false,
     },
   })
   const categoriesSelectedIds = useWatch({ control: form.control, name: 'categoryIds' })
@@ -201,6 +202,11 @@ export default function ExperienceTab({
             name="highlighted"
             label={t.admin_exp_highlighted}
             description={t.admin_exp_highlighted_hint}
+          />
+          <CheckboxFormField<ExperienceTabValues>
+            name="popular"
+            label={t.admin_exp_popular}
+            description={t.admin_exp_popular_hint}
           />
         </div>
 

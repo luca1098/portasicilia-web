@@ -61,6 +61,7 @@ export const StaySchema = z.object({
   cancellationTerms: z.array(z.string()),
   status: ListingStatusSchema,
   highlighted: z.boolean().optional(),
+  popular: z.boolean().optional(),
   ownerId: z.string(),
   owner: OwnerSchema.nullish(),
   localityId: z.string(),

@@ -8,7 +8,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
@@ -70,13 +69,8 @@ export default function DashboardHeader({ children }: { children?: React.ReactNo
             <ChevronDownIcon className="hidden size-4 text-muted-foreground md:block" />
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-52">
-          <DropdownMenuLabel className="text-xs uppercase tracking-wider text-muted-foreground">
-            {t.dashboard_menu_language}
-          </DropdownMenuLabel>
-          <LanguageMenu.Provider>
-            <LanguageMenu.Items />
-          </LanguageMenu.Provider>
+        <DropdownMenuContent align="end" className="w-56">
+          <LanguageMenu.SubMenu label={t.dashboard_menu_language} />
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onSelect={handleLogout}

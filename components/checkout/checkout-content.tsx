@@ -130,12 +130,12 @@ export default function CheckoutContent({
       {/* Two-column layout */}
       <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_380px]">
         {/* Left: steps */}
-        <div className="order-2 lg:order-1">
+        <div className="order-2 min-w-0 lg:order-1">
           <CheckoutSteps />
         </div>
 
         {/* Right: recap */}
-        <div className="order-1 lg:sticky lg:top-24 lg:order-2 lg:self-start">
+        <div className="order-1 min-w-0 lg:sticky lg:top-24 lg:order-2 lg:self-start">
           <BookingRecap />
         </div>
       </div>

@@ -3,8 +3,13 @@
 import { createContext, use, type ReactNode } from 'react'
 import { usePathname, useRouter, useParams } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
-import { CheckIcon } from '@/lib/constants/icons'
+import {
+  DropdownMenuItem,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+} from '@/components/ui/dropdown-menu'
+import { CheckIcon, LanguagesIcon } from '@/lib/constants/icons'
 import { supportedLocales, type SupportedLocale } from '@/lib/configs/locales'
 import { api } from '@/lib/api/fetch-client'
 import { cn } from '@/lib/utils/shadcn.utils'
@@ -114,8 +119,44 @@ function LanguageMenuTriggerLabel() {
   )
 }
 
+interface LanguageMenuSubMenuProps {
+  label: string
+}
+
+function LanguageMenuSubMenu({ label }: LanguageMenuSubMenuProps) {
+  return (
+    <LanguageMenuProvider>
+      <DropdownMenuSub>
+        <DropdownMenuSubTrigger className="flex items-center gap-2 text-sm">
+          <LanguagesIcon className="size-4" />
+          <span>{label}</span>
+          <SubTriggerCurrent />
+        </DropdownMenuSubTrigger>
+        <DropdownMenuSubContent className="w-40">
+          <LanguageMenuItems />
+        </DropdownMenuSubContent>
+      </DropdownMenuSub>
+    </LanguageMenuProvider>
+  )
+}
+
+function SubTriggerCurrent() {
+  const {
+    state: { currentLang },
+  } = useLanguageMenuContext('SubTriggerCurrent')
+  const config = localeConfig[currentLang]
+
+  return (
+    <span className="ml-auto flex items-center gap-1 text-xs text-muted-foreground">
+      <span className="text-sm leading-none">{config?.flag}</span>
+      <span>{config?.label ?? currentLang.toUpperCase()}</span>
+    </span>
+  )
+}
+
 export const LanguageMenu = {
   Provider: LanguageMenuProvider,
   Items: LanguageMenuItems,
   TriggerLabel: LanguageMenuTriggerLabel,
+  SubMenu: LanguageMenuSubMenu,
 }

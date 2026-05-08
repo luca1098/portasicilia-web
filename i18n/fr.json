@@ -39,6 +39,7 @@
   "dashboard_admin_title": "Tableau de bord d'administration",
   "dashboard_owner_title": "Tableau de bord du propriétaire",
   "logout": "Vous sortez",
+  "dashboard_menu_language": "Langue",
   "admin_sidebar_dashboard": "Tableau de bord",
   "admin_sidebar_locations": "Emplacement",
   "admin_sidebar_title": "Administration",

@@ -167,26 +167,26 @@ export default function Footer() {
             alt="Porta Sicilia — Truly Sicilian Experience"
             width={200}
             height={100}
-            style={{ width: 'auto', height: 'auto' }}
+            className="h-14 w-auto"
           />
 
           {/* Newsletter Form */}
-          <div className="flex flex-col items-center gap-2">
+          <div className="flex w-full max-w-2xl flex-col items-center gap-2">
             <FormProvider {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="flex w-full max-w-2xl items-start justify-between gap-2"
+                className="flex w-full flex-col items-stretch gap-2 sm:flex-row sm:items-start"
               >
                 <InputFormField<NewsletterFormValues>
                   name="email"
                   label={t.footer_email_placeholder}
                   type="email"
                   required
-                  className="flex-1"
+                  className="w-full sm:flex-1"
                 />
                 <Button
                   type="submit"
-                  className="h-14 shrink-0 rounded-xl bg-primary px-6 text-sm font-medium text-white hover:bg-primary/90"
+                  className="h-14 w-full shrink-0 rounded-xl bg-primary px-6 text-sm font-medium text-white hover:bg-primary/90 sm:w-auto"
                 >
                   {t.footer_subscribe_button}
                 </Button>
@@ -241,14 +241,17 @@ export default function Footer() {
           <p className="text-sm text-gray-400">{t.footer_copyright}</p>
           <div className="flex flex-wrap items-center justify-center gap-2">
             {PAYMENT_METHODS.map(pm => (
-              <div key={pm.name} className="flex h-8 w-12 items-center justify-center rounded bg-white p-1">
+              <div
+                key={pm.name}
+                className="flex h-8 w-12 shrink-0 items-center justify-center overflow-hidden rounded bg-white p-1"
+              >
                 <Image
                   src={pm.src}
                   alt={pm.name}
                   width={38}
                   height={24}
+                  className="max-h-full max-w-full object-contain"
                   style={{ width: 'auto', height: 'auto' }}
-                  className="h-full w-full object-contain"
                 />
               </div>
             ))}

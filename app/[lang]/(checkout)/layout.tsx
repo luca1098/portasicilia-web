@@ -21,7 +21,7 @@ export default async function CheckoutLayout({ children, params }: CheckoutLayou
         </div>
       </header>
 
-      <main className="min-h-[calc(100vh-8rem)]">{children}</main>
+      <main className="min-h-[calc(100vh-8rem)] overflow-x-clip">{children}</main>
 
       <footer className="border-t bg-[#0a1628]">
         <nav

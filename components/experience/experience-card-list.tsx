@@ -16,7 +16,7 @@ export default function ExperienceCardList({ experiences, lang, darkBg = false }
       {/* Mobile/Tablet carousel */}
       <div className="lg:hidden">
         <Carousel opts={{ align: 'start', loop: false }}>
-          <CarouselContent className="-ml-2">
+          <CarouselContent className="-ml-2 pt-2 pl-2">
             {experiences.map(experience => (
               <CarouselItem key={experience.id} className="pl-2 basis-[45%] md:basis-[30%]">
                 <ExperienceCardItem experience={experience} lang={lang} darkBg={darkBg} />

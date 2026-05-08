@@ -4,11 +4,12 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
-import { HeartIcon, StarIcon } from '@/lib/constants/icons'
+import { CheckIcon, HeartIcon, StarIcon } from '@/lib/constants/icons'
 import { Button } from '../ui/button'
 import { cn } from '@/lib/utils/shadcn.utils'
 import useFavoriteStore, { useFavoriteActions } from '@/core/store/favorite.store'
 import LoginPopup from '@/components/auth/login-popup'
+import PopularBadge from './popular-badge'
 
 export type ListingCardProps = {
   title: string
@@ -21,6 +22,8 @@ export type ListingCardProps = {
   duration?: string
   darkBg?: boolean
   listingId?: string
+  freeCancellationLabel?: string
+  popular?: boolean
 }
 
 export default function ListingCard({
@@ -34,6 +37,8 @@ export default function ListingCard({
   duration,
   darkBg,
   listingId,
+  freeCancellationLabel,
+  popular,
 }: ListingCardProps) {
   const [loginOpen, setLoginOpen] = useState(false)
   const { data: session } = useSession()
@@ -53,17 +58,26 @@ export default function ListingCard({
   return (
     <>
       <Link href={href} className="group w-full shrink-0">
-        <div className="relative aspect-square w-full overflow-hidden rounded-2xl">
-          <Image
-            src={image}
-            alt={title}
-            fill
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
-            sizes="(max-width: 768px) 50vw, 208px"
-          />
+        <div className="relative w-full ">
+          <div className="overflow-hidden relative rounded-2xl aspect-square">
+            <Image
+              src={image}
+              alt={title}
+              fill
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              sizes="(max-width: 768px) 50vw, 208px"
+            />
+          </div>
+
+          {popular && <PopularBadge className="absolute -left-1 -top-1" />}
 
           {categoryLabel && (
-            <span className="absolute left-2 top-2 rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-semibold">
+            <span
+              className={cn(
+                'absolute left-2 rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-semibold',
+                popular ? 'top-10' : 'top-2'
+              )}
+            >
               {categoryLabel}
             </span>
           )}
@@ -101,6 +115,13 @@ export default function ListingCard({
           <p className={`mt-0.5 text-xs ${darkBg ? 'text-white/70' : 'text-muted-foreground'}`}>
             {priceLabel}
           </p>
+          {freeCancellationLabel && (
+            <p
+              className={`mt-0.5 text-xs font-medium flex items-center gap-1 ${darkBg ? 'text-white/80' : 'text-emerald-600'}`}
+            >
+              <CheckIcon className="size-3.5" /> {freeCancellationLabel}
+            </p>
+          )}
         </div>
       </Link>
 

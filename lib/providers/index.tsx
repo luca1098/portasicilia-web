@@ -5,6 +5,7 @@ import { getTranslations } from '../configs/locales/i18n'
 import { SupportedLocale } from '../configs/locales'
 import ClientSessionProvider from './ClientSessionProvider'
 import FavoriteSync from '@/core/store/favorite-sync'
+import LocaleSync from '@/core/store/locale-sync'
 import { Toaster } from '@/components/ui/sonner'
 
 type ProviderProps = PageParamsProps & PropsWithChildren
@@ -15,6 +16,7 @@ export default async function Providers({ children, params }: ProviderProps) {
   return (
     <TranslationContext t={t}>
       <ClientSessionProvider>
+        <LocaleSync />
         <FavoriteSync />
         {children}
         <Toaster />

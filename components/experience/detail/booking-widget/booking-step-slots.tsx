@@ -7,10 +7,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import BookingDaySlotGroup from './booking-day-slot-group'
 import BookingSlotsSkeleton from './booking-slots-skeleton'
 import { formatMonthYear } from './booking.utils'
-import { it, enUS } from 'react-day-picker/locale'
+import { getDayPickerLocale } from '@/lib/utils/date-locale.utils'
 import { useBookingContext } from './booking-context'
-
-const calendarLocales = { it, en: enUS } as const
 
 export default function BookingStepSlots() {
   const {
@@ -91,7 +89,7 @@ export default function BookingStepSlots() {
                       selected={selectedDate}
                       onSelect={handleDateSelect}
                       disabled={disabledCalendarDays}
-                      locale={calendarLocales[lang as keyof typeof calendarLocales] ?? it}
+                      locale={getDayPickerLocale(lang)}
                     />
                     <p className="px-4 pb-3 text-center text-xs text-muted-foreground">
                       {t.checkout_timezone}

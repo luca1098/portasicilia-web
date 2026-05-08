@@ -1,6 +1,9 @@
 import { z } from 'zod'
 import { UserRoleSchemas } from './entities/user.entity.schema'
 
+export const UserLanguageSchemas = z.enum(['IT', 'EN', 'ES', 'FR', 'DE'])
+export type UserLanguage = z.infer<typeof UserLanguageSchemas>
+
 const _AuthResponseSchemas = z.object({
   accessToken: z.string(),
   user: z.object({
@@ -10,6 +13,7 @@ const _AuthResponseSchemas = z.object({
     lastName: z.string().nullable(),
     role: UserRoleSchemas,
     avatar: z.string().nullable(),
+    lang: UserLanguageSchemas.optional(),
   }),
 })
 

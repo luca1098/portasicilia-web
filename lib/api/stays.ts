@@ -18,6 +18,7 @@ export type StayCard = {
   bedNumber: number | null
   nightlyPrice: number | null
   pricingMode: string | null
+  popular: boolean
 }
 
 type PaginatedStayCards = {

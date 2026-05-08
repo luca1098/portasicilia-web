@@ -175,6 +175,7 @@ export default function StayTab({ mode, stay, localities, categories, onCreated 
       cin: detail?.cin ?? stay?.cin ?? '',
       status: stay?.status || null,
       highlighted: stay?.highlighted ?? false,
+      popular: stay?.popular ?? false,
     },
   })
   const categoriesSelectedIds = useWatch({ control: form.control, name: 'categoryIds' })
@@ -240,6 +241,11 @@ export default function StayTab({ mode, stay, localities, categories, onCreated 
             name="highlighted"
             label={t.admin_exp_highlighted}
             description={t.admin_exp_highlighted_hint}
+          />
+          <CheckboxFormField<StayTabValues>
+            name="popular"
+            label={t.admin_exp_popular}
+            description={t.admin_exp_popular_hint}
           />
         </div>
 

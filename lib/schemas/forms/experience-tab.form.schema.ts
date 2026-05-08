@@ -35,6 +35,9 @@ export const ExperienceTabSchema = z.object({
 
   // Highlighted
   highlighted: z.boolean(),
+
+  // Popular (sells out fast)
+  popular: z.boolean(),
 })
 
 export type ExperienceTabValues = z.infer<typeof ExperienceTabSchema>

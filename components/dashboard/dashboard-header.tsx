@@ -1,11 +1,18 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
 import { useSession, signOut } from 'next-auth/react'
 import Image from 'next/image'
 import { useTranslation } from '@/lib/context/translation.context'
 import { BellIcon, ChevronDownIcon, LogOutIcon } from '@/lib/constants/icons'
-import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { LanguageMenu } from '@/components/language-menu'
+import { cn } from '@/lib/utils/shadcn.utils'
 
 const ROLE_KEYS: Record<string, string> = {
   ADMIN: 'role_admin',
@@ -14,8 +21,6 @@ const ROLE_KEYS: Record<string, string> = {
 }
 
 export default function DashboardHeader({ children }: { children?: React.ReactNode }) {
-  const [open, setOpen] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
   const { data: session } = useSession()
   const t = useTranslation() as Record<string, string>
 
@@ -27,21 +32,8 @@ export default function DashboardHeader({ children }: { children?: React.ReactNo
   const roleLabel = user ? (t[ROLE_KEYS[user.role]] ?? user.role) : ''
 
   const handleLogout = () => {
-    setOpen(false)
     signOut()
   }
-
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false)
-      }
-    }
-    if (open) {
-      document.addEventListener('mousedown', handleClickOutside)
-    }
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [open])
 
   return (
     <header className="flex h-16 shrink-0 items-center border-b border-border bg-background px-6 lg:px-10">
@@ -54,50 +46,43 @@ export default function DashboardHeader({ children }: { children?: React.ReactNo
       </button>
 
       {/* User card */}
-      <div ref={ref} className="relative">
-        <button
-          className="flex items-center gap-3 rounded-lg px-2 py-1.5 transition-colors hover:bg-accent"
-          onClick={() => setOpen(prev => !prev)}
-        >
-          {/* Avatar */}
-          <div className="flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary/10">
-            {user?.avatar ? (
-              <Image
-                src={user.avatar}
-                alt={displayName}
-                width={36}
-                height={36}
-                className="size-full object-cover"
-              />
-            ) : (
-              <span className="text-xs font-semibold text-primary">{initials}</span>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button className="flex items-center gap-3 rounded-lg px-2 py-1.5 transition-colors hover:bg-accent">
+            <div className="flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary/10">
+              {user?.avatar ? (
+                <Image
+                  src={user.avatar}
+                  alt={displayName}
+                  width={36}
+                  height={36}
+                  className="size-full object-cover"
+                />
+              ) : (
+                <span className="text-xs font-semibold text-primary">{initials}</span>
+              )}
+            </div>
+            <div className="hidden text-left md:block">
+              <p className="text-sm font-medium leading-tight">{displayName}</p>
+              <p className="text-xs leading-tight text-muted-foreground">{roleLabel}</p>
+            </div>
+            <ChevronDownIcon className="hidden size-4 text-muted-foreground md:block" />
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-56">
+          <LanguageMenu.SubMenu label={t.dashboard_menu_language} />
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            onSelect={handleLogout}
+            className={cn(
+              'flex items-center gap-2 text-sm font-normal text-destructive focus:text-destructive'
             )}
-          </div>
-
-          {/* Name + role */}
-          <div className="hidden text-left md:block">
-            <p className="text-sm font-medium leading-tight">{displayName}</p>
-            <p className="text-xs leading-tight text-muted-foreground">{roleLabel}</p>
-          </div>
-
-          <ChevronDownIcon className="hidden size-4 text-muted-foreground md:block" />
-        </button>
-
-        {/* Dropdown */}
-        {open && (
-          <div className="absolute right-0 z-50 mt-2 w-48 rounded-xl border border-border bg-background p-1.5 shadow-lg">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="w-full justify-start gap-2 text-sm font-normal text-destructive hover:text-destructive"
-              onClick={handleLogout}
-            >
-              <LogOutIcon className="size-4" />
-              {t.logout}
-            </Button>
-          </div>
-        )}
-      </div>
+          >
+            <LogOutIcon className="size-4" />
+            {t.logout}
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </header>
   )
 }

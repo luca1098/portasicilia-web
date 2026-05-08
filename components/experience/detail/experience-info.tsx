@@ -12,6 +12,7 @@ import ReviewSection from '@/components/review/review-section'
 import ExperienceMeetingPoint from '@/components/experience/detail/experience-meeting-point'
 import TranslationBadge from '@/components/ui/translation-badge'
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover'
+import PopularBadge from '@/components/shared/popular-badge'
 
 type ExperienceInfoProps = {
   experience: Experience
@@ -102,7 +103,12 @@ function ExperienceInfoContent({ experience }: ExperienceInfoProps) {
       </div>
 
       {/* Title */}
-      <h1 className="text-2xl font-bold md:text-3xl">{displayName}</h1>
+      {experience.popular ? (
+        <div className="space-y-2">
+          <PopularBadge className="bg-white shadow-none ring-border" />
+          <h1 className="text-2xl font-bold md:text-3xl">{displayName}</h1>
+        </div>
+      ) : null}
 
       {/* Translation badge */}
       <TranslationBadge />

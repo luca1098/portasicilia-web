@@ -16,7 +16,7 @@ export default function StayList({ stays, lang, darkBg = false }: StayListProps)
       {/* Mobile/Tablet carousel */}
       <div className="lg:hidden">
         <Carousel opts={{ align: 'start', loop: false }}>
-          <CarouselContent className="-ml-2">
+          <CarouselContent className="-ml-2 pt-2 pl-2">
             {stays.map(stay => (
               <CarouselItem key={stay.id} className="pl-2 basis-[45%] md:basis-[30%]">
                 <StayCard stay={stay} lang={lang} darkBg={darkBg} />

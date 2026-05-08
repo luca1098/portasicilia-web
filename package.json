@@ -1,6 +1,6 @@
 {
   "name": "nextjs-starter-template",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "dev": "next dev -p 3003",
@@ -8,6 +8,7 @@
     "start": "next start -p 3003",
     "lint": "eslint",
     "format": "prettier --write",
+    "i18n:translate": "node scripts/translate-i18n.mjs",
     "prepare": "husky"
   },
   "lint-staged": {

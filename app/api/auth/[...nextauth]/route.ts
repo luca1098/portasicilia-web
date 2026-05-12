@@ -1,8 +1,11 @@
 import { apiServer } from '@/lib/api/fetch-client'
+import { generateAppleClientSecret } from '@/lib/auth/apple-client-secret'
 import { supportedLocales, defaultLocale, type SupportedLocale } from '@/lib/configs/locales'
 import { AuthResponse } from '@/lib/schemas/auth.schemas'
 import { cookies, headers } from 'next/headers'
 import NextAuth, { NextAuthOptions } from 'next-auth'
+import AppleProvider from 'next-auth/providers/apple'
+import CredentialsProvider from 'next-auth/providers/credentials'
 import GoogleProvider from 'next-auth/providers/google'
 
 const LOCALE_COOKIE = 'ps-lang'
@@ -44,10 +47,41 @@ export const authOptions: NextAuthOptions = {
         },
       },
     }),
+    AppleProvider({
+      clientId: process.env.APPLE_CLIENT_ID || '',
+      clientSecret: generateAppleClientSecret(),
+      authorization: {
+        params: {
+          scope: 'name email',
+          response_mode: 'form_post',
+        },
+      },
+    }),
+    CredentialsProvider({
+      id: 'magic-link',
+      name: 'Magic Link',
+      credentials: {
+        token: { label: 'Token', type: 'text' },
+      },
+      async authorize(credentials) {
+        if (!credentials?.token) return null
+        const lang = (await resolveRequestLocale()).toUpperCase()
+        const res = await apiServer.post<AuthResponse>(`/auth/magic-link/verify`, {
+          token: credentials.token,
+          lang,
+        })
+        return {
+          id: res.user.id,
+          email: res.user.email,
+          accessToken: res.accessToken,
+          user: res.user,
+        } as unknown as { id: string; email: string }
+      },
+    }),
   ],
   callbacks: {
-    async jwt({ token, account }) {
-      if (account) {
+    async jwt({ token, account, user, profile }) {
+      if (account?.provider === 'google') {
         const lang = (await resolveRequestLocale()).toUpperCase()
         const res = await apiServer.post<AuthResponse>(`/auth/google`, {
           idToken: account?.id_token,
@@ -55,6 +89,24 @@ export const authOptions: NextAuthOptions = {
         })
         token.accessToken = res.accessToken
         token.user = res.user
+      } else if (account?.provider === 'apple') {
+        const lang = (await resolveRequestLocale()).toUpperCase()
+        const appleProfile = profile as { name?: { firstName?: string; lastName?: string } } | undefined
+        const res = await apiServer.post<AuthResponse>(`/auth/apple`, {
+          idToken: account?.id_token,
+          firstName: appleProfile?.name?.firstName,
+          lastName: appleProfile?.name?.lastName,
+          lang,
+        })
+        token.accessToken = res.accessToken
+        token.user = res.user
+      } else if (account?.provider === 'magic-link' && user) {
+        const credentialsUser = user as unknown as {
+          accessToken: string
+          user: AuthResponse['user']
+        }
+        token.accessToken = credentialsUser.accessToken
+        token.user = credentialsUser.user
       }
 
       return token

@@ -1,14 +1,26 @@
 'use client'
 
+import { useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { X } from '@/lib/constants/icons'
-import { Button } from '@/components/ui/button'
-import { useTranslation } from '@/lib/context/translation.context'
+import { FormProvider, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { signIn } from 'next-auth/react'
 import { usePathname } from 'next/navigation'
+import { z } from 'zod'
+
+import { X } from '@/lib/constants/icons'
+import { Button } from '@/components/ui/button'
+import { InputFormField } from '@/components/form/input-form-field'
+import { useAction } from '@/lib/hooks/use-action'
+import { useTranslation } from '@/lib/context/translation.context'
+import useLocaleStore from '@/core/store/locale.store'
 
 interface LoginPopupProps {
   onClose: () => void
+}
+
+type EmailFormValues = {
+  email: string
 }
 
 function GoogleIcon({ className }: { className?: string }) {
@@ -45,16 +57,53 @@ function AppleIcon({ className }: { className?: string }) {
 export default function LoginPopup({ onClose }: LoginPopupProps) {
   const pathname = usePathname()
   const t = useTranslation()
+  const lang = useLocaleStore(state => state.lang)
+
+  const [sentTo, setSentTo] = useState<string | null>(null)
+
+  const schema = useMemo(
+    () =>
+      z.object({
+        email: z.string().min(1, t.login_email_required).email(t.login_email_invalid),
+      }),
+    [t]
+  )
+
+  const form = useForm<EmailFormValues>({
+    resolver: zodResolver(schema),
+    defaultValues: { email: '' },
+  })
+
+  const { loading, execute } = useAction<{ email: string }>({
+    onSuccess: data => {
+      if (data) setSentTo(data.email)
+    },
+  })
+
+  const onSubmit = (values: EmailFormValues) => {
+    void execute(async () => {
+      const res = await fetch('/api/magic-link/request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: values.email,
+          lang: lang.toUpperCase(),
+          callbackUrl: pathname,
+        }),
+      })
+      if (!res.ok) {
+        return { success: false, error: t.admin_common_error }
+      }
+      return { success: true, data: { email: values.email } }
+    })
+  }
 
   return createPortal(
     <>
-      {/* Backdrop */}
       <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm" onClick={onClose} />
 
-      {/* Modal */}
       <div className="fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 px-4">
         <div className="relative rounded-2xl bg-background p-6 shadow-xl">
-          {/* Close button */}
           <button
             onClick={onClose}
             className="absolute right-4 top-4 rounded-full p-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
@@ -63,46 +112,79 @@ export default function LoginPopup({ onClose }: LoginPopupProps) {
             <X className="size-5" />
           </button>
 
-          {/* Header */}
-          <div className="mb-8 text-center">
-            <h2 className="text-2xl font-semibold">{t.login_popup_title}</h2>
-            <p className="mt-2 text-muted-foreground">{t.login_popup_subtitle}</p>
-          </div>
+          {sentTo ? (
+            <div className="py-2">
+              <div className="mb-6 text-center">
+                <h2 className="text-2xl font-semibold">{t.login_magic_link_sent_title}</h2>
+                <p className="mt-2 text-muted-foreground">{t.login_magic_link_sent_subtitle}</p>
+                <p className="mt-3 break-all text-sm font-medium text-foreground">{sentTo}</p>
+              </div>
+              <p className="text-center text-xs text-muted-foreground">{t.login_magic_link_sent_hint}</p>
+              <Button variant="outline" className="mt-6 w-full" onClick={() => setSentTo(null)}>
+                {t.login_magic_link_use_another_email}
+              </Button>
+            </div>
+          ) : (
+            <>
+              <div className="mb-8 text-center">
+                <h2 className="text-2xl font-semibold">{t.login_popup_title}</h2>
+                <p className="mt-2 text-muted-foreground">{t.login_popup_subtitle}</p>
+              </div>
 
-          {/* Social login buttons */}
-          <div className="space-y-3">
-            <Button
-              variant="outline"
-              size="lg"
-              className="w-full justify-center gap-3"
-              onClick={() => signIn('google', { callbackUrl: pathname })}
-            >
-              <GoogleIcon className="size-5" />
-              {t.login_with_google}
-            </Button>
+              <FormProvider {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+                  <InputFormField<EmailFormValues>
+                    name="email"
+                    label={t.login_email_label}
+                    type="email"
+                    required
+                  />
+                  <Button type="submit" size="lg" className="w-full justify-center" disabled={loading}>
+                    {loading ? t.login_magic_link_sending : t.login_continue_with_email}
+                  </Button>
+                </form>
+              </FormProvider>
 
-            <Button
-              variant="outline"
-              size="lg"
-              className="w-full justify-center gap-3"
-              // onClick={handleAppleLogin}
-            >
-              <AppleIcon className="size-5" />
-              {t.login_with_apple}
-            </Button>
-          </div>
+              <div className="my-4 flex items-center gap-3 text-xs text-muted-foreground">
+                <span className="h-px flex-1 bg-border" />
+                {t.login_or}
+                <span className="h-px flex-1 bg-border" />
+              </div>
 
-          {/* Terms notice */}
-          <p className="mt-6 text-center text-xs text-muted-foreground">
-            {t.login_terms_notice}{' '}
-            <a href="#" className="underline hover:text-foreground">
-              {t.footer_terms}
-            </a>{' '}
-            {t.login_terms_and}{' '}
-            <a href="#" className="underline hover:text-foreground">
-              {t.footer_privacy_policy}
-            </a>
-          </p>
+              <div className="space-y-3">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="w-full justify-center gap-3"
+                  onClick={() => signIn('google', { callbackUrl: pathname })}
+                >
+                  <GoogleIcon className="size-5" />
+                  {t.login_with_google}
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="w-full justify-center gap-3"
+                  onClick={() => signIn('apple', { callbackUrl: pathname })}
+                >
+                  <AppleIcon className="size-5" />
+                  {t.login_with_apple}
+                </Button>
+              </div>
+
+              <p className="mt-6 text-center text-xs text-muted-foreground">
+                {t.login_terms_notice}{' '}
+                <a href="#" className="underline hover:text-foreground">
+                  {t.footer_terms}
+                </a>{' '}
+                {t.login_terms_and}{' '}
+                <a href="#" className="underline hover:text-foreground">
+                  {t.footer_privacy_policy}
+                </a>
+              </p>
+            </>
+          )}
         </div>
       </div>
     </>,

@@ -13,10 +13,10 @@ interface NavbarActionsProps {
 export default function NavbarActions({ children, isTransparent }: NavbarActionsProps) {
   return (
     <div className="flex items-center gap-0.5">
-      {children}
       <WishlistDrawer isTransparent={isTransparent} />
       <AccountMenu isTransparent={isTransparent} />
       <LangSwitch isTransparent={isTransparent} />
+      {children}
     </div>
   )
 }

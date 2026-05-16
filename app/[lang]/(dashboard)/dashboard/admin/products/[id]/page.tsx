@@ -1,4 +1,4 @@
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import { authOptions } from '@/lib/auth/auth-options'
 import { getServerSession } from 'next-auth'
 import { redirect, notFound } from 'next/navigation'
 import { getProductById, getShopCategoriesAdmin } from '@/lib/api/products'

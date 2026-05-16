@@ -1,4 +1,4 @@
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import { authOptions } from '@/lib/auth/auth-options'
 import { SupportedLocale } from '@/lib/configs/locales'
 import { getTranslations } from '@/lib/configs/locales/i18n'
 import { PageParamsProps, PageSearchParamsProps } from '@/lib/types/page.type'

@@ -13,7 +13,14 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useTranslation } from '@/lib/context/translation.context'
 import { useAction } from '@/lib/hooks/use-action'
-import { CalendarCheck2Icon, MoreHorizontalIcon, EyeIcon, ImageIcon, LoaderIcon } from '@/lib/constants/icons'
+import {
+  CalendarCheck2Icon,
+  MoreHorizontalIcon,
+  EyeIcon,
+  ImageIcon,
+  LoaderIcon,
+  ExternalLinkIcon,
+} from '@/lib/constants/icons'
 import { getAdminBookingsAction } from '@/lib/actions/bookings.actions'
 import { formatDate, formatTime, formatCurrency } from '@/lib/utils/format.utils'
 import type { AdminBooking, GetAdminBookingsParams, PaginatedAdminBookings } from '@/lib/api/bookings'
@@ -152,6 +159,18 @@ export default function BookingsTable({
                               <EyeIcon className="size-4" />
                               {t.admin_booking_action_view}
                             </DropdownMenuItem>
+                            {booking.stripePaymentIntentId && (
+                              <DropdownMenuItem asChild>
+                                <a
+                                  href={`https://dashboard.stripe.com/payments/${booking.stripePaymentIntentId}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  <ExternalLinkIcon className="size-4" />
+                                  {t.admin_booking_action_view_on_stripe}
+                                </a>
+                              </DropdownMenuItem>
+                            )}
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </TableCell>

@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react'
 import { toast } from 'sonner'
 import { useTranslation } from '@/lib/context/translation.context'
 import type { ActionResult } from '@/lib/actions/action.types'
+import { ApiError } from '@/lib/api/fetch-client'
 
 type UseActionOptions<T> = {
   onSuccess?: (data?: T) => void
@@ -28,8 +29,9 @@ export function useAction<T = void>(options: UseActionOptions<T> = {}) {
           options.onError?.(msg)
         }
         return result
-      } catch {
-        const msg = options.errorMessage ?? t.admin_common_error
+      } catch (err) {
+        const apiMessage = err instanceof ApiError ? err.message : undefined
+        const msg = apiMessage ?? options.errorMessage ?? t.admin_common_error
         toast.error(msg)
         options.onError?.(msg)
         return { success: false, error: msg } as ActionResult<T>

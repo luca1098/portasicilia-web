@@ -159,6 +159,7 @@ export type AdminOrder = {
   totalAmount: string
   currency: string
   paymentStatus: string
+  stripePaymentIntentId: string | null
   items: OrderItem[]
   user: AdminOrderUser
   createdAt: string

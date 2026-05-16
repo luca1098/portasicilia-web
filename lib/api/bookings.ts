@@ -117,6 +117,7 @@ export type AdminBooking = {
   contactEmail: string
   contactPhone: string
   paymentStatus: string
+  stripePaymentIntentId: string | null
   createdAt: string
   user: AdminBookingUser
   listing: AdminBookingListing

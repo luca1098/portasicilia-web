@@ -28,6 +28,7 @@ import {
   CheckCircle2Icon,
   RotateCcwIcon,
   XIcon,
+  ExternalLinkIcon,
 } from '@/lib/constants/icons'
 import { getAdminOrdersAction, updateOrderStatusAction } from '@/lib/actions/orders.actions'
 import { formatDate, formatCurrency } from '@/lib/utils/format.utils'
@@ -289,6 +290,18 @@ export default function OrdersTable({ initialOrders, initialNextCursor, fetchPar
                               <EyeIcon className="size-4" />
                               {t.admin_order_action_view}
                             </DropdownMenuItem>
+                            {order.stripePaymentIntentId && (
+                              <DropdownMenuItem asChild>
+                                <a
+                                  href={`https://dashboard.stripe.com/payments/${order.stripePaymentIntentId}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  <ExternalLinkIcon className="size-4" />
+                                  {t.admin_order_action_view_on_stripe}
+                                </a>
+                              </DropdownMenuItem>
+                            )}
                             <DropdownMenuSeparator />
                             <DropdownMenuLabel className="text-xs text-muted-foreground">
                               {t.admin_order_action_change_status}

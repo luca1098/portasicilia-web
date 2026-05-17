@@ -21,26 +21,30 @@ interface NewsletterFormValues {
   email: string
 }
 
-const FooterLinkColumn = ({
-  title,
-  links,
-  lang,
-}: {
-  title: string
-  links: { label: string; href: string }[]
-  lang: string
-}) => (
+type FooterLink = { label: string; href: string } | { label: string; onClick: () => void }
+
+const FooterLinkColumn = ({ title, links, lang }: { title: string; links: FooterLink[]; lang: string }) => (
   <div className="flex flex-col gap-4">
     <h3 className="text-lg font-semibold text-white">{title}</h3>
     <ul className="flex flex-col gap-2">
       {links.map((link, index) => (
         <li key={index}>
-          <Link
-            href={`/${lang}${link.href}`}
-            className="text-sm text-primary transition-colors hover:text-primary/80"
-          >
-            {link.label}
-          </Link>
+          {'onClick' in link ? (
+            <button
+              type="button"
+              onClick={link.onClick}
+              className="text-left text-sm text-primary transition-colors hover:text-primary/80"
+            >
+              {link.label}
+            </button>
+          ) : (
+            <Link
+              href={`/${lang}${link.href}`}
+              className="text-sm text-primary transition-colors hover:text-primary/80"
+            >
+              {link.label}
+            </Link>
+          )}
         </li>
       ))}
     </ul>
@@ -146,9 +150,16 @@ export default function Footer() {
     { label: t.footer_discover_more, href: '/blog' },
   ]
 
-  const linkUtiliLinks = [
+  const linkUtiliLinks: FooterLink[] = [
     { label: t.footer_privacy_policy, href: '/privacy-policy' },
     { label: t.footer_cookie_policy, href: '/cookie-policy' },
+    {
+      label: t.footer_privacy_settings,
+      onClick: () => {
+        const cmp = (window as unknown as { __ucCmp?: { showSecondLayer: () => void } }).__ucCmp
+        cmp?.showSecondLayer()
+      },
+    },
     { label: t.footer_terms, href: '/terms' },
     { label: t.footer_faq, href: '/faq' },
     { label: t.footer_cancellation, href: '/cancellation-policy' },

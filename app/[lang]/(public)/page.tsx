@@ -56,7 +56,7 @@ export default async function Home({ params }: PageParamsProps) {
       <JsonLd data={[organizationSchema(), websiteSchema(lang)]} />
 
       {/* Hero */}
-      <section className="relative flex min-h-[60vh] flex-col items-center justify-center px-4 md:min-h-[50vh]">
+      <section className="relative flex min-h-[35vh] flex-col items-center justify-center px-4 md:min-h-[50vh]">
         <video
           src="/videos/hero-bg.mp4"
           poster="/images/hero-bg.jpg"
@@ -70,7 +70,7 @@ export default async function Home({ params }: PageParamsProps) {
         />
         <div className="relative z-10 flex flex-col items-center">
           <div className="text-center">
-            <h1 className="text-4xl font-bold leading-tight text-white [text-shadow:0_2px_16px_rgb(0_0_0/55%)] md:text-5xl lg:text-7xl max-w-2xl">
+            <h1 className="text-4xl font-bold leading-tight text-white [text-shadow:0_2px_16px_rgb(0_0_0/55%)] md:text-5xl lg:text-7xl max-w-2xl ">
               {t.hero_title}
             </h1>
           </div>

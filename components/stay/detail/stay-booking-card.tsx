@@ -326,9 +326,6 @@ export default function StayBookingCard({ stay }: StayBookingCardProps) {
               )}
             </div>
           )}
-          {stay.cancellationTerms.length > 0 && (
-            <p className="text-xs font-semibold text-primary">{stay.cancellationTerms[0]}</p>
-          )}
         </div>
         <Button size="lg" className="rounded-xl px-8" disabled={booking.loadingPrice} onClick={handleBook}>
           {booking.loadingPrice && <LoaderIcon className="size-4 animate-spin" />}

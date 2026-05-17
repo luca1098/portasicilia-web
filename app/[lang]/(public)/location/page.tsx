@@ -27,12 +27,14 @@ export default async function LocationPage({ params }: PageParamsProps) {
 
   return (
     <PageWrapper>
-      <main className="mx-auto max-w-7xl px-4 py-10">
-        <div className="mb-10 text-center">
-          <h1 className="text-2xl font-bold">{t.location_page_title}</h1>
-          <p className="text-sm text-muted-foreground">{t.location_page_subtitle}</p>
-        </div>
-        <LocationCardGrid locations={locationCards} lang={lang} />
+      <main className="min-h-screen">
+        <section className="mx-auto max-w-7xl px-4 pb-16 pt-12 md:px-8 md:pt-16">
+          <div className="mb-12 text-center">
+            <h1 className="text-3xl font-bold tracking-tight md:text-4xl">{t.location_page_title}</h1>
+            <p className="mt-3 text-muted-foreground">{t.location_page_subtitle}</p>
+          </div>
+          <LocationCardGrid locations={locationCards} lang={lang} />
+        </section>
       </main>
     </PageWrapper>
   )

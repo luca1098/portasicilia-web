@@ -18,7 +18,6 @@ import { getStayCards } from '@/lib/api/stays'
 import { getHighlightedCategories } from '@/lib/api/categories'
 import { getFeaturedSocialVideos } from '@/lib/api/social-videos'
 import { Button } from '@/components/ui/button'
-import { ArrowRight } from '@/lib/constants/icons'
 import SocialVideoSection from '@/components/social-video/social-video-section'
 
 export async function generateMetadata({ params }: PageParamsProps): Promise<Metadata> {
@@ -57,36 +56,40 @@ export default async function Home({ params }: PageParamsProps) {
       <JsonLd data={[organizationSchema(), websiteSchema(lang)]} />
 
       {/* Hero */}
-      <section className="relative flex min-h-[80vh] flex-col items-center justify-center px-4">
-        <Image
-          src="/images/hero-bg.png"
-          alt={t.seo_hero_alt}
-          fill
-          className="object-cover object-bottom"
-          priority
-          sizes="100vw"
+      <section className="relative flex min-h-[60vh] flex-col items-center justify-center px-4 md:min-h-[50vh]">
+        <video
+          src="/videos/hero-bg.mp4"
+          poster="/images/hero-bg.jpg"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-label={t.seo_hero_alt}
+          className="absolute inset-0 h-full w-full object-cover"
         />
-        <div className="relative z-10 flex flex-col items-center gap-8">
+        <div className="relative z-10 flex flex-col items-center">
           <div className="text-center">
-            <p className="mb-2 text-sm tracking-widest text-white/80">{t.hero_subtitle}</p>
-            <h1 className="text-4xl font-bold leading-tight text-white drop-shadow-lg md:text-5xl lg:text-7xl max-w-2xl">
+            <h1 className="text-4xl font-bold leading-tight text-white [text-shadow:0_2px_16px_rgb(0_0_0/55%)] md:text-5xl lg:text-7xl max-w-2xl">
               {t.hero_title}
             </h1>
           </div>
+        </div>
+        <div className="absolute bottom-0 left-1/2 z-20 w-full max-w-xl -translate-x-1/2 translate-y-1/2 px-4">
           <SearchBar />
         </div>
       </section>
 
       {/* Locations */}
-      <section className="mx-auto max-w-7xl px-4 py-16 md:px-8">
+      <section className="mx-auto max-w-7xl px-4 pb-16 pt-24 md:px-8 md:pt-28">
         <div className="mb-10 text-center">
-          <p className="text-sm text-muted-foreground">{t.home_locations_subtitle}</p>
-          <h2 className="mt-1 text-3xl font-bold">{t.home_locations_title}</h2>
+          <h2 className="text-3xl font-bold">{t.home_locations_title}</h2>
+          <p className="mt-2 text-sm text-muted-foreground">{t.home_locations_subtitle}</p>
         </div>
         <LocationCardList locations={locationCards} lang={lang} />
         <div className="mt-10 flex justify-center">
           <Button asChild>
-            <Link href={`/${lang}/location`}>{t.home_cta_explore}</Link>
+            <Link href={`/${lang}/location`}>{t.home_locations_cta}</Link>
           </Button>
         </div>
       </section>
@@ -102,13 +105,18 @@ export default async function Home({ params }: PageParamsProps) {
         />
         <div className="absolute inset-0 bg-black/40" />
         <div className="relative z-10 mx-auto max-w-7xl w-full">
-          <h2 className="mb-10 text-center text-3xl font-bold text-white drop-shadow-lg md:text-4xl">
-            {t.home_experiences_title}
-          </h2>
+          <div className="mb-10 text-center">
+            <h2 className="text-3xl font-bold text-white drop-shadow-lg md:text-4xl">
+              {t.home_experiences_title}
+            </h2>
+            <p className="mt-2 text-sm text-white/85 drop-shadow md:text-base">
+              {t.home_experiences_subtitle}
+            </p>
+          </div>
           <ExperienceCardList experiences={experienceCards} lang={lang} darkBg />
           <div className="mt-10 flex justify-center">
             <Button asChild>
-              <Link href={`/${lang}/experiences`}>{t.home_cta_explore}</Link>
+              <Link href={`/${lang}/experiences`}>{t.home_experiences_cta}</Link>
             </Button>
           </div>
         </div>
@@ -126,13 +134,14 @@ export default async function Home({ params }: PageParamsProps) {
         />
         <div className="absolute inset-0 bg-black/40" />
         <div className="relative z-10 mx-auto max-w-7xl w-full">
-          <h2 className="mb-10 text-center text-3xl font-bold text-white drop-shadow-lg md:text-4xl">
-            {t.home_stays_title}
-          </h2>
+          <div className="mb-10 text-center">
+            <h2 className="text-3xl font-bold text-white drop-shadow-lg md:text-4xl">{t.home_stays_title}</h2>
+            <p className="mt-2 text-sm text-white/85 drop-shadow md:text-base">{t.home_stays_subtitle}</p>
+          </div>
           <StayList stays={stayCards} lang={lang} darkBg />
           <div className="mt-10 flex justify-center">
             <Button asChild>
-              <Link href={`/${lang}/stays`}>{t.home_cta_stays}</Link>
+              <Link href={`/${lang}/stays`}>{t.home_stays_cta}</Link>
             </Button>
           </div>
         </div>
@@ -150,35 +159,27 @@ export default async function Home({ params }: PageParamsProps) {
         <SocialVideoSection videos={socialVideos} title={t.home_social_videos_title} lang={lang} />
       )}
 
-      {/* Shop banner */}
-      <section className="mx-auto max-w-7xl px-4 py-4 md:px-8 my-12">
-        <Link
-          href={`/${lang}/shop`}
-          aria-label={t.shop_cat_oro_verde_title}
-          className="group relative block h-[400px] rounded-3xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-4 overflow-hidden"
-        >
+      {/* Become Partner Banner */}
+      <section className="mx-auto max-w-7xl px-4 py-14 md:px-8">
+        <div className="relative overflow-hidden rounded-2xl">
           <Image
-            src="/images/oil-banner-home.png"
-            alt={t.shop_cat_oro_verde_title}
-            fill
-            sizes="(min-width: 1280px) 1216px, 100vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+            src="/images/partner-banner.jpg"
+            alt={t.home_partner_banner_title}
+            width={1280}
+            height={400}
+            className="h-64 w-full object-cover md:h-80"
+            sizes="(max-width: 768px) 100vw, 1280px"
           />
-          <div className="absolute inset-0 flex flex-col justify-center gap-4 p-8 md:max-w-[55%] md:gap-6 md:p-14 lg:p-16">
-            <h2 className="text-balance text-3xl font-bold leading-tight text-foreground md:text-4xl lg:text-5xl">
-              {t.shop_cat_oro_verde_title}
+          <div className="absolute inset-0 bg-black/20" />
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 px-6 text-center">
+            <h2 className="text-2xl font-bold text-white drop-shadow-lg md:text-5xl">
+              {t.home_partner_banner_title}
             </h2>
-            <p className="max-w-xl text-sm leading-relaxed text-foreground/80 md:text-base">
-              {t.shop_cat_oro_verde_description}
-            </p>
-            <div>
-              <span className="inline-flex items-center gap-2 rounded-md border border-foreground bg-transparent px-5 py-2.5 text-sm font-medium text-foreground transition-all group-hover:gap-3 group-hover:bg-white/10 md:text-base">
-                {t.shop_cat_oro_verde_cta}
-                <ArrowRight className="size-4" />
-              </span>
-            </div>
+            <Button asChild size="lg" className="bg-white text-primary hover:bg-white/90">
+              <Link href={`/${lang}/partner`}>{t.home_partner_banner_cta}</Link>
+            </Button>
           </div>
-        </Link>
+        </div>
       </section>
     </main>
   )

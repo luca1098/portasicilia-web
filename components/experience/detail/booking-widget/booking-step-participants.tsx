@@ -1,4 +1,3 @@
-import { CheckIcon } from '@/lib/constants/icons'
 import { useTranslation } from '@/lib/context/translation.context'
 import { interpolate } from '@/lib/utils/i18n.utils'
 import { formatCurrency } from '@/core/utils/currency.utils'
@@ -89,13 +88,7 @@ export default function BookingStepParticipants() {
           <hr className="border-border" />
 
           <div className="flex items-end justify-between px-5 py-4">
-            <div>
-              <p className="text-lg font-bold">{priceLabel}</p>
-              <p className="mt-1 flex items-center gap-1.5 text-xs font-medium text-primary">
-                <CheckIcon className="size-3.5" />
-                {t.exp_detail_free_cancellation}
-              </p>
-            </div>
+            <p className="text-lg font-bold">{priceLabel}</p>
             <Button type="button" onClick={handleChooseDate}>
               {t.exp_detail_choose_date}
             </Button>

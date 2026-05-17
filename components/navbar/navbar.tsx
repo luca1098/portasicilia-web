@@ -58,73 +58,47 @@ export default function Navbar() {
           hidden ? '-translate-y-full' : 'translate-y-0',
           isOnTopOfHomePage
             ? 'bg-linear-to-b from-black/50 to-transparent'
-            : 'border-b border-border bg-background backdrop-saturate-150'
+            : 'bg-background backdrop-saturate-150'
         )}
       >
-        <div className="mx-auto flex max-w-7xl items-center px-4 py-2 md:px-6">
+        <div className="relative mx-auto flex max-w-7xl items-center px-4 py-2 md:px-6">
           <Link href={`/${lang}/`} className="mr-8 shrink-0 transition-opacity duration-200 hover:opacity-80">
             <Image
-              src={isOnTopOfHomePage ? '/logo-full.png' : '/logo.png'}
+              src={isOnTopOfHomePage ? '/logo-full-white.png' : '/logo.png'}
               alt="Porta Sicilia"
-              width={isOnTopOfHomePage ? 140 : 50}
-              height={isOnTopOfHomePage ? 70 : 50}
+              width={isOnTopOfHomePage ? 148 : 50}
+              height={isOnTopOfHomePage ? 80 : 50}
               className="transition-all duration-500"
               priority
             />
           </Link>
 
-          <nav className="hidden items-center gap-1 md:flex">
-            {publicItems.map(item =>
-              item.key === 'shop' ? (
-                <span key="inspiration-and-shop" className="contents">
-                  <InspirationMenu isTransparent={isOnTopOfHomePage} />
-                  <Link
-                    href={`/${lang}${item.href}`}
-                    className={cn(
-                      'group relative px-3 py-2 text-sm font-medium tracking-wide transition-colors duration-200',
-                      isOnTopOfHomePage
-                        ? 'text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.4)] hover:text-white'
-                        : isActiveLink(item.href)
-                          ? 'text-primary'
-                          : 'text-foreground/70 hover:text-foreground'
-                    )}
-                  >
-                    {t[item.key] ?? item.key}
-                    <span
-                      className={cn(
-                        'absolute bottom-0 left-3 right-3 h-[2px] rounded-full bg-primary transition-transform duration-300 origin-left',
-                        isActiveLink(item.href) && !isOnTopOfHomePage
-                          ? 'scale-x-100'
-                          : 'scale-x-0 group-hover:scale-x-100'
-                      )}
-                    />
-                  </Link>
-                </span>
-              ) : (
-                <Link
-                  key={item.key}
-                  href={`/${lang}${item.href}`}
+          <nav className="hidden items-center gap-1 md:absolute md:left-1/2 md:flex md:-translate-x-1/2">
+            {publicItems.map(item => (
+              <Link
+                key={item.key}
+                href={`/${lang}${item.href}`}
+                className={cn(
+                  'group relative px-3 py-2 text-sm font-medium tracking-wide transition-colors duration-200',
+                  isOnTopOfHomePage
+                    ? 'text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.4)] hover:text-white'
+                    : isActiveLink(item.href)
+                      ? 'text-primary'
+                      : 'text-foreground/70 hover:text-foreground'
+                )}
+              >
+                {t[item.key] ?? item.key}
+                <span
                   className={cn(
-                    'group relative px-3 py-2 text-sm font-medium tracking-wide transition-colors duration-200',
-                    isOnTopOfHomePage
-                      ? 'text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.4)] hover:text-white'
-                      : isActiveLink(item.href)
-                        ? 'text-primary'
-                        : 'text-foreground/70 hover:text-foreground'
+                    'absolute bottom-0 left-3 right-3 h-[2px] rounded-full bg-primary transition-transform duration-300 origin-left',
+                    isActiveLink(item.href) && !isOnTopOfHomePage
+                      ? 'scale-x-100'
+                      : 'scale-x-0 group-hover:scale-x-100'
                   )}
-                >
-                  {t[item.key] ?? item.key}
-                  <span
-                    className={cn(
-                      'absolute bottom-0 left-3 right-3 h-[2px] rounded-full bg-primary transition-transform duration-300 origin-left',
-                      isActiveLink(item.href) && !isOnTopOfHomePage
-                        ? 'scale-x-100'
-                        : 'scale-x-0 group-hover:scale-x-100'
-                    )}
-                  />
-                </Link>
-              )
-            )}
+                />
+              </Link>
+            ))}
+            <InspirationMenu isTransparent={isOnTopOfHomePage} />
           </nav>
 
           <div className="ml-auto">

@@ -117,7 +117,7 @@ export default function ListingCard({
           </p>
           {freeCancellationLabel && (
             <p
-              className={`mt-0.5 text-xs font-medium flex items-center gap-1 ${darkBg ? 'text-white/80' : 'text-emerald-600'}`}
+              className={`mt-0.5 text-xs font-medium flex items-center gap-1 ${darkBg ? 'text-white/80' : 'text-muted-foreground'}`}
             >
               <CheckIcon className="size-3.5" /> {freeCancellationLabel}
             </p>

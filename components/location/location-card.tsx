@@ -14,6 +14,10 @@ export default function LocationCard({ location, lang, darkBg }: LocationCardPro
   const t = useTranslation()
 
   const totalStaysAndExperiences = location.totalStays + location.totalActivities
+  const countLabel =
+    totalStaysAndExperiences > 0
+      ? interpolate(t.location_card_count, { count: totalStaysAndExperiences })
+      : t.location_card_empty
   return (
     <Link href={`/${lang}/location/${location.slug}`} className="group shrink-0 w-full">
       <div className="relative aspect-square w-full overflow-hidden rounded-2xl">
@@ -35,9 +39,7 @@ export default function LocationCard({ location, lang, darkBg }: LocationCardPro
         <p className={`text-sm font-bold ${darkBg ? 'text-white' : 'text-foreground'}`}>
           {location.state ? `${location.name}, ${location.state}` : location.name}
         </p>
-        <p className={`text-xs ${darkBg ? 'text-white/70' : 'text-muted-foreground'}`}>
-          {interpolate(t.location_card_count, { count: totalStaysAndExperiences })}
-        </p>
+        <p className={`text-xs ${darkBg ? 'text-white/70' : 'text-muted-foreground'}`}>{countLabel}</p>
       </div>
     </Link>
   )

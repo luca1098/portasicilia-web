@@ -8,7 +8,7 @@ type LocationDetailHeroProps = {
 
 export default function LocationDetailHero({ name, cover }: LocationDetailHeroProps) {
   return (
-    <section className="relative flex h-[50vh] items-center justify-center overflow-hidden">
+    <section className="relative flex h-[20vh] md:h-[30vh] items-center justify-center overflow-hidden mt-16">
       {cover ? (
         <Image src={cover} alt={name} fill className="object-cover" sizes="100vw" priority />
       ) : (

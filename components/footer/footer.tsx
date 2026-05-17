@@ -157,7 +157,7 @@ export default function Footer() {
   ]
 
   return (
-    <footer className="bg-[#0a1628]">
+    <footer className="bg-night">
       {/* Newsletter Section */}
       <div className="mx-auto max-w-7xl px-4 py-12">
         <div className="flex flex-col items-center gap-8 lg:flex-row lg:justify-between">
@@ -165,9 +165,9 @@ export default function Footer() {
           <Image
             src="/logo-white.png"
             alt="Porta Sicilia — Truly Sicilian Experience"
-            width={200}
+            width={135}
             height={100}
-            className="h-14 w-auto"
+            className="w-auto"
           />
 
           {/* Newsletter Form */}

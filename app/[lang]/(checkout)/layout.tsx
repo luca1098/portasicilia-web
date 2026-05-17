@@ -23,7 +23,7 @@ export default async function CheckoutLayout({ children, params }: CheckoutLayou
 
       <main className="min-h-[calc(100vh-8rem)] overflow-x-clip">{children}</main>
 
-      <footer className="border-t bg-[#0a1628]">
+      <footer className="border-t bg-night">
         <nav
           className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-6 text-sm text-gray-400"
           aria-label={t.checkout_footer_nav}

@@ -11,7 +11,7 @@ export const ORGANIZATION = {
   name: 'Porta Sicilia',
   legalName: 'GUARNERI SALVATORE',
   url: SITE_URL,
-  logo: `${SITE_URL}/logo-full.png`,
+  logo: `${SITE_URL}/logo-full-white.png`,
   address: {
     streetAddress: 'Cortile Gonzales 7',
     addressLocality: 'Lercara Friddi',

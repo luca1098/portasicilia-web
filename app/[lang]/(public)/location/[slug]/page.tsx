@@ -82,19 +82,23 @@ export default async function LocationDetailPage({ params }: LocationDetailPageP
       <JsonLd data={jsonLdData} />
       <LocationDetailHero name={locality.name} cover={locality.cover} />
 
-      <section className="mx-auto max-w-7xl px-4 py-16 md:px-8">
-        <h2 className="mb-6 text-2xl font-bold md:text-3xl">
-          {interpolate(t.location_detail_experiences_title, { name: locality.name })}
-        </h2>
-        <ExperienceCardList experiences={experienceCards} lang={lang} />
-      </section>
+      {experienceCards.length > 0 && (
+        <section className="mx-auto max-w-7xl px-4 py-16 md:px-8">
+          <h2 className="mb-6 text-2xl font-bold md:text-3xl">
+            {interpolate(t.location_detail_experiences_title, { name: locality.name })}
+          </h2>
+          <ExperienceCardList experiences={experienceCards} lang={lang} />
+        </section>
+      )}
 
-      <section className="mx-auto max-w-7xl px-4 py-16 md:px-8">
-        <h2 className="mb-6 text-2xl font-bold md:text-3xl">
-          {interpolate(t.location_detail_stays_title, { name: locality.name })}
-        </h2>
-        <StayList stays={stayCards} lang={lang} />
-      </section>
+      {stayCards.length > 0 && (
+        <section className="mx-auto max-w-7xl px-4 py-16 md:px-8">
+          <h2 className="mb-6 text-2xl font-bold md:text-3xl">
+            {interpolate(t.location_detail_stays_title, { name: locality.name })}
+          </h2>
+          <StayList stays={stayCards} lang={lang} />
+        </section>
+      )}
 
       <LocationTipsSection
         title={interpolate(t.location_detail_poi_title, { name: locality.name })}

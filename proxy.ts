@@ -31,5 +31,7 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next|favicon\\.ico|.*\\..*).*)'],
+  matcher: [
+    '/((?!api|_next|uc-cmp|uc-app|uc-api|uc-config|uc-consent|uc-aggregator|uc-privacy|favicon\\.ico|.*\\..*).*)',
+  ],
 }

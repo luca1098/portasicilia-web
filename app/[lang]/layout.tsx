@@ -12,7 +12,7 @@ export default async function RootLayout({ children, params }: RootLayoutProps) 
       <head>
         <Script
           id="usercentrics-cmp"
-          src="https://web.cmp.usercentrics.eu/ui/loader.js"
+          src="/uc-cmp/ui/loader.js"
           data-settings-id="5kW_lfUnkcT6Kp"
           strategy="beforeInteractive"
           async

@@ -23,6 +23,23 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async rewrites() {
+    return [
+      { source: '/uc-cmp/:path*', destination: 'https://web.cmp.usercentrics.eu/:path*' },
+      { source: '/uc-app/:path*', destination: 'https://app.usercentrics.eu/:path*' },
+      { source: '/uc-api/:path*', destination: 'https://api.usercentrics.eu/:path*' },
+      { source: '/uc-config/:path*', destination: 'https://config.eu.usercentrics.eu/:path*' },
+      {
+        source: '/uc-consent/:path*',
+        destination: 'https://consent-api.service.consent.usercentrics.eu/:path*',
+      },
+      {
+        source: '/uc-aggregator/:path*',
+        destination: 'https://aggregator.service.consent.usercentrics.eu/:path*',
+      },
+      { source: '/uc-privacy/:path*', destination: 'https://privacy-proxy.usercentrics.eu/:path*' },
+    ]
+  },
 }
 
 export default nextConfig

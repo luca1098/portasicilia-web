@@ -108,7 +108,7 @@ export default function AdminApplicationDetail({ application: a, lang, t }: Prop
             <Section title={t.partner_admin_created_owner}>
               <Link
                 href={`/${lang}/dashboard/admin/owners/${a.createdOwner.id}`}
-                className="text-[#1a4d3a] underline-offset-2 hover:underline text-sm"
+                className="text-primary underline-offset-2 hover:underline text-sm"
               >
                 {a.createdOwner.email}
               </Link>

@@ -15,7 +15,7 @@ export default function PartnerFaq({ t }: Props) {
     { q: t.partner_faq_q6, a: t.partner_faq_a6 },
   ]
   return (
-    <section className="bg-muted/30 px-4 py-16">
+    <section className="px-4 py-16">
       <div className="mx-auto max-w-3xl">
         <h2 className="text-3xl font-bold text-center">{t.partner_faq_title}</h2>
         <Accordion type="single" collapsible className="mt-8">

@@ -2,9 +2,23 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import { useTranslation } from '@/lib/context/translation.context'
 import { useAction } from '@/lib/hooks/use-action'
 import { updatePartnerApplication } from '@/lib/api/partner-applications'
+import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
+import { LoaderIcon } from '@/lib/constants/icons'
 import type { PartnerApplicationDetail, PartnerApplicationStatus } from '@/lib/types/partner-application.type'
 
 type Props = { application: PartnerApplicationDetail }
@@ -12,9 +26,11 @@ type Props = { application: PartnerApplicationDetail }
 export default function AdminApplicationActions({ application }: Props) {
   const t = useTranslation()
   const router = useRouter()
+  const { data: session } = useSession()
   const [adminNotes, setAdminNotes] = useState(application.adminNotes ?? '')
   const [rejectionReason, setRejectionReason] = useState(application.rejectionReason ?? '')
-  const [showRejectForm, setShowRejectForm] = useState(false)
+  const [approveDialogOpen, setApproveDialogOpen] = useState(false)
+  const [rejectDialogOpen, setRejectDialogOpen] = useState(false)
 
   const isReadOnly = application.status === 'APPROVED'
 
@@ -30,54 +46,66 @@ export default function AdminApplicationActions({ application }: Props) {
     rejectionReason?: string
   }) => {
     void execute(async () => {
-      const data = await updatePartnerApplication(application.id, patch)
+      const headers = session?.accessToken ? { Authorization: `Bearer ${session.accessToken}` } : undefined
+      const data = await updatePartnerApplication(application.id, patch, headers)
       return { success: true as const, data }
     })
   }
 
-  const onApprove = () => {
-    if (window.confirm(t.partner_admin_approve_confirm)) {
-      runStatusChange({ status: 'APPROVED', adminNotes: adminNotes || undefined })
-    }
+  const onMarkInReview = () => runStatusChange({ status: 'IN_REVIEW', adminNotes: adminNotes || undefined })
+
+  const onConfirmApprove = () => {
+    setApproveDialogOpen(false)
+    runStatusChange({ status: 'APPROVED', adminNotes: adminNotes || undefined })
+  }
+
+  const onConfirmReject = () => {
+    setRejectDialogOpen(false)
+    runStatusChange({
+      status: 'REJECTED',
+      rejectionReason: rejectionReason.trim(),
+      adminNotes: adminNotes || undefined,
+    })
   }
 
   return (
     <div className="space-y-4 rounded-xl border border-border bg-card p-4">
       <div className="space-y-2">
-        <button
+        <Button
           type="button"
+          variant="outline"
+          className="w-full"
           disabled={isReadOnly || loading || application.status === 'IN_REVIEW'}
-          onClick={() =>
-            runStatusChange({
-              status: 'IN_REVIEW',
-              adminNotes: adminNotes || undefined,
-            })
-          }
-          className="w-full rounded-lg border border-border px-3 py-2 text-sm disabled:opacity-50 hover:bg-accent transition-colors"
+          onClick={onMarkInReview}
         >
           {t.partner_admin_action_review}
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
+          className="w-full"
           disabled={isReadOnly || loading}
-          onClick={onApprove}
-          className="w-full rounded-lg bg-[#1a4d3a] px-3 py-2 text-sm text-white disabled:opacity-50 hover:bg-[#153d2e] transition-colors"
+          onClick={() => setApproveDialogOpen(true)}
         >
+          {loading && <LoaderIcon className="size-4 animate-spin" />}
           {t.partner_admin_action_approve}
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
+          variant="destructive"
+          className="w-full"
           disabled={isReadOnly || loading}
-          onClick={() => setShowRejectForm(true)}
-          className="w-full rounded-lg bg-destructive px-3 py-2 text-sm text-destructive-foreground disabled:opacity-50 hover:bg-destructive/90 transition-colors"
+          onClick={() => setRejectDialogOpen(true)}
         >
           {t.partner_admin_action_reject}
-        </button>
+        </Button>
       </div>
 
-      <label className="block text-sm">
-        <span className="text-muted-foreground">{t.partner_admin_admin_notes_label}</span>
-        <textarea
+      <div className="space-y-1.5">
+        <label className="text-sm text-muted-foreground" htmlFor="admin-notes">
+          {t.partner_admin_admin_notes_label}
+        </label>
+        <Textarea
+          id="admin-notes"
           rows={4}
           value={adminNotes}
           disabled={isReadOnly}
@@ -87,37 +115,48 @@ export default function AdminApplicationActions({ application }: Props) {
               runStatusChange({ adminNotes })
             }
           }}
-          className="mt-1 w-full rounded-lg border border-border px-2 py-1 text-sm disabled:opacity-50 focus:outline-none focus:ring-1 focus:ring-ring"
         />
-      </label>
+      </div>
 
-      {showRejectForm && (
-        <div className="space-y-2 rounded-lg border-l-4 border-destructive bg-destructive/5 p-3">
-          <label className="block text-sm">
-            <span>{t.partner_admin_reject_reason_label}</span>
-            <textarea
-              rows={3}
-              value={rejectionReason}
-              onChange={e => setRejectionReason(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-border px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-ring"
-            />
-          </label>
-          <button
-            type="button"
-            disabled={rejectionReason.trim().length < 5 || loading}
-            onClick={() =>
-              runStatusChange({
-                status: 'REJECTED',
-                rejectionReason: rejectionReason.trim(),
-                adminNotes: adminNotes || undefined,
-              })
-            }
-            className="rounded-lg bg-destructive px-3 py-2 text-sm text-destructive-foreground disabled:opacity-50 hover:bg-destructive/90 transition-colors"
-          >
-            {t.partner_admin_action_reject}
-          </button>
-        </div>
-      )}
+      <AlertDialog open={approveDialogOpen} onOpenChange={setApproveDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t.partner_admin_action_approve}</AlertDialogTitle>
+            <AlertDialogDescription>{t.partner_admin_approve_confirm}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t.partner_admin_cancel}</AlertDialogCancel>
+            <AlertDialogAction onClick={onConfirmApprove} disabled={loading}>
+              {t.partner_admin_action_approve}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={rejectDialogOpen} onOpenChange={setRejectDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t.partner_admin_action_reject}</AlertDialogTitle>
+            <AlertDialogDescription>{t.partner_admin_reject_reason_label}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <Textarea
+            rows={3}
+            value={rejectionReason}
+            onChange={e => setRejectionReason(e.target.value)}
+            placeholder={t.partner_admin_reject_reason_label}
+          />
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t.partner_admin_cancel}</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={onConfirmReject}
+              disabled={rejectionReason.trim().length < 5 || loading}
+              className="bg-destructive text-white hover:bg-destructive/90"
+            >
+              {t.partner_admin_action_reject}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

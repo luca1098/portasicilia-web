@@ -27,7 +27,7 @@ export default function ApplicationWizardStep1() {
           </label>
         </div>
         {errors.listingInterests && (
-          <p className="mt-1 text-sm text-destructive">{t.partner_form_listing_types_required}</p>
+          <p className="mt-1 text-sm text-destructive">{errors.listingInterests.message}</p>
         )}
       </div>
 

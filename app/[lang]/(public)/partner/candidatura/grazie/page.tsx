@@ -10,7 +10,7 @@ export default async function PartnerApplicationSuccessPage({ params }: PagePara
   return (
     <main className="flex min-h-[60vh] items-center justify-center px-4 py-16">
       <div className="max-w-md text-center">
-        <h1 className="text-3xl font-bold text-[#1a4d3a]">{t.partner_success_title}</h1>
+        <h1 className="text-3xl font-bold text-primary">{t.partner_success_title}</h1>
         <p className="mt-4 text-muted-foreground">{t.partner_success_message}</p>
         <Button asChild className="mt-8">
           <Link href={`/${lang}`}>{t.partner_success_cta}</Link>

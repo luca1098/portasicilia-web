@@ -5,6 +5,7 @@ import { getServerSession } from 'next-auth'
 import { redirect, notFound } from 'next/navigation'
 import { apiServer } from '@/lib/api/fetch-client'
 import AdminApplicationDetail from '@/components/partner/admin-application-detail'
+import { PartnerApplicationStatusBadge } from '@/components/partner/partner-application-status-badge'
 import { DashboardWidePage } from '@/components/dashboard/dashboard-page'
 import Link from 'next/link'
 import { ArrowLeft } from '@/lib/constants/icons'
@@ -21,10 +22,11 @@ export default async function AdminPartnerApplicationDetailPage({ params }: Prop
   }
 
   const t = await getTranslations(lang as SupportedLocale)
+  const headers = { Authorization: `Bearer ${session.accessToken}` }
 
   let detail: TDetail | undefined
   try {
-    detail = await apiServer.get<TDetail>(`/admin/partner-applications/${id}`)
+    detail = await apiServer.get<TDetail>(`/admin/partner-applications/${id}`, { headers })
   } catch {
     notFound()
   }
@@ -41,7 +43,7 @@ export default async function AdminPartnerApplicationDetailPage({ params }: Prop
           <ArrowLeft className="size-4" />
         </Link>
         <h1 className="text-2xl font-bold tracking-tight">{detail.businessName}</h1>
-        <span className="rounded bg-muted px-2 py-1 text-xs">{detail.status}</span>
+        <PartnerApplicationStatusBadge status={detail.status} />
       </div>
 
       <AdminApplicationDetail application={detail} lang={lang} t={t} />

@@ -1,4 +1,4 @@
-import { api } from './fetch-client'
+import { api, apiServer } from './fetch-client'
 import type {
   PartnerApplicationDetail,
   PartnerApplicationInput,
@@ -20,16 +20,33 @@ export type ListPartnerApplicationsParams = {
   pageSize?: number
 }
 
-export const listPartnerApplications = async (
-  params: ListPartnerApplicationsParams
-): Promise<PartnerApplicationListResponse> => {
+const buildListQuery = (params: ListPartnerApplicationsParams): string => {
   const search = new URLSearchParams()
   if (params.status) search.set('status', params.status)
   if (params.q) search.set('q', params.q)
   if (params.page) search.set('page', String(params.page))
   if (params.pageSize) search.set('pageSize', String(params.pageSize))
   const qs = search.toString()
-  return api.get<PartnerApplicationListResponse>(`/admin/partner-applications${qs ? `?${qs}` : ''}`)
+  return qs ? `?${qs}` : ''
+}
+
+export const listPartnerApplications = async (
+  params: ListPartnerApplicationsParams,
+  headers?: HeadersInit
+): Promise<PartnerApplicationListResponse> => {
+  return api.get<PartnerApplicationListResponse>(`/admin/partner-applications${buildListQuery(params)}`, {
+    headers,
+  })
+}
+
+export const getAdminPartnerApplications = async (
+  params: ListPartnerApplicationsParams,
+  headers?: HeadersInit
+): Promise<PartnerApplicationListResponse> => {
+  return apiServer.get<PartnerApplicationListResponse>(
+    `/admin/partner-applications${buildListQuery(params)}`,
+    { headers }
+  )
 }
 
 export const getPartnerApplication = async (id: string): Promise<PartnerApplicationDetail> => {
@@ -44,7 +61,8 @@ export type UpdatePartnerApplicationPatch = {
 
 export const updatePartnerApplication = async (
   id: string,
-  patch: UpdatePartnerApplicationPatch
+  patch: UpdatePartnerApplicationPatch,
+  headers?: HeadersInit
 ): Promise<PartnerApplicationDetail> => {
-  return api.patch<PartnerApplicationDetail>(`/admin/partner-applications/${id}`, patch)
+  return api.patch<PartnerApplicationDetail>(`/admin/partner-applications/${id}`, patch, { headers })
 }

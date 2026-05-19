@@ -19,9 +19,9 @@ export default function ApplicationWizardStepper({ current }: Props) {
             className={
               'flex-1 rounded px-3 py-2 text-center ' +
               (active
-                ? 'bg-[#1a4d3a] text-white'
+                ? 'bg-primary text-primary-foreground'
                 : done
-                  ? 'bg-[#1a4d3a]/80 text-white'
+                  ? 'bg-primary/80 text-primary-foreground'
                   : 'bg-muted text-muted-foreground')
             }
           >

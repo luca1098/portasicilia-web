@@ -1,17 +1,18 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useForm, FormProvider } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslation } from '@/lib/context/translation.context'
 import { useAction } from '@/lib/hooks/use-action'
 import {
-  partnerApplicationSchema,
+  createPartnerApplicationSchema,
   type PartnerApplicationFormValues,
 } from '@/lib/schemas/partner-application.schema'
 import { submitPartnerApplication } from '@/lib/api/partner-applications'
 import type { SubmitPartnerApplicationResponse } from '@/lib/types/partner-application.type'
+import { Button } from '@/components/ui/button'
 import ApplicationWizardStepper from './application-wizard-stepper'
 import ApplicationWizardStep1 from './application-wizard-step-1'
 import ApplicationWizardStep2 from './application-wizard-step-2'
@@ -29,8 +30,10 @@ export default function ApplicationWizard({ lang }: Props) {
   const router = useRouter()
   const [step, setStep] = useState<1 | 2 | 3>(1)
 
+  const schema = useMemo(() => createPartnerApplicationSchema(t), [t])
+
   const methods = useForm<PartnerApplicationFormValues>({
-    resolver: zodResolver(partnerApplicationSchema),
+    resolver: zodResolver(schema),
     mode: 'onTouched',
     defaultValues: {
       listingInterests: [],
@@ -77,31 +80,19 @@ export default function ApplicationWizard({ lang }: Props) {
 
         <div className="mt-8 flex gap-3">
           {step > 1 && (
-            <button
-              type="button"
-              onClick={() => setStep((step - 1) as 1 | 2 | 3)}
-              className="rounded border px-5 py-2"
-            >
+            <Button type="button" variant="outline" onClick={() => setStep((step - 1) as 1 | 2 | 3)}>
               {t.partner_form_back}
-            </button>
+            </Button>
           )}
           {step < 3 && (
-            <button
-              type="button"
-              onClick={onContinue}
-              className="ml-auto rounded bg-[#1a4d3a] px-6 py-2 text-white"
-            >
+            <Button type="button" onClick={onContinue} className="ml-auto">
               {t.partner_form_continue}
-            </button>
+            </Button>
           )}
           {step === 3 && (
-            <button
-              type="submit"
-              disabled={loading}
-              className="ml-auto rounded bg-[#1a4d3a] px-6 py-2 text-white disabled:opacity-50"
-            >
+            <Button type="submit" disabled={loading} className="ml-auto">
               {loading ? t.partner_form_submitting : t.partner_form_submit}
-            </button>
+            </Button>
           )}
         </div>
       </form>

@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useCallback, useEffect } from 'react'
-import Link from 'next/link'
+import { useState, useCallback } from 'react'
+import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import { useTranslation } from '@/lib/context/translation.context'
 import { listPartnerApplications } from '@/lib/api/partner-applications'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
@@ -12,71 +13,69 @@ import AdminEmptyState from '@/components/dashboard/admin-empty-state'
 import { ClipboardListIcon, Search } from '@/lib/constants/icons'
 import { formatDate } from '@/lib/utils/format.utils'
 import type {
+  PartnerApplicationListResponse,
   PartnerApplicationStatus,
   PartnerApplicationSummary,
 } from '@/lib/types/partner-application.type'
+import { PartnerApplicationStatusBadge } from './partner-application-status-badge'
 
 const STATUS_OPTIONS: PartnerApplicationStatus[] = ['PENDING', 'IN_REVIEW', 'APPROVED', 'REJECTED']
 
-const STATUS_BADGE_CLASS: Record<PartnerApplicationStatus, string> = {
-  PENDING: 'bg-yellow-100 text-yellow-800',
-  IN_REVIEW: 'bg-blue-100 text-blue-800',
-  APPROVED: 'bg-green-100 text-green-800',
-  REJECTED: 'bg-red-100 text-red-800',
-}
-
-const statusLabelKey = (
-  s: PartnerApplicationStatus
-):
-  | 'partner_admin_status_pending'
-  | 'partner_admin_status_in_review'
-  | 'partner_admin_status_approved'
-  | 'partner_admin_status_rejected' => {
-  switch (s) {
-    case 'PENDING':
-      return 'partner_admin_status_pending'
-    case 'IN_REVIEW':
-      return 'partner_admin_status_in_review'
-    case 'APPROVED':
-      return 'partner_admin_status_approved'
-    case 'REJECTED':
-      return 'partner_admin_status_rejected'
-  }
+const STATUS_FILTER_LABEL_KEY: Record<PartnerApplicationStatus, string> = {
+  PENDING: 'partner_admin_status_pending',
+  IN_REVIEW: 'partner_admin_status_in_review',
+  APPROVED: 'partner_admin_status_approved',
+  REJECTED: 'partner_admin_status_rejected',
 }
 
 const PAGE_SIZE = 20
 
-export default function AdminApplicationsList({ lang }: { lang: string }) {
-  const t = useTranslation()
+type Props = {
+  lang: string
+  initialData: PartnerApplicationListResponse
+}
+
+export default function AdminApplicationsList({ lang, initialData }: Props) {
+  const t = useTranslation() as Record<string, string>
+  const router = useRouter()
+  const { data: session } = useSession()
+  const basePath = `/${lang}/dashboard/admin/partner-applications`
 
   const [status, setStatus] = useState<PartnerApplicationStatus | ''>('')
   const [search, setSearch] = useState('')
   const [searchTimer, setSearchTimer] = useState<ReturnType<typeof setTimeout> | null>(null)
-  const [page, setPage] = useState(1)
-  const [data, setData] = useState<PartnerApplicationSummary[]>([])
-  const [total, setTotal] = useState(0)
+  const [page, setPage] = useState(initialData.page)
+  const [data, setData] = useState<PartnerApplicationSummary[]>(initialData.data)
+  const [total, setTotal] = useState(initialData.total)
   const [loading, setLoading] = useState(false)
 
   const totalPages = Math.ceil(total / PAGE_SIZE)
 
-  const fetchApplications = useCallback(async (nextStatus: string, nextQ: string, nextPage: number) => {
-    setLoading(true)
-    try {
-      const res = await listPartnerApplications({
-        status: (nextStatus as PartnerApplicationStatus) || undefined,
-        q: nextQ || undefined,
-        page: nextPage,
-        pageSize: PAGE_SIZE,
-      })
-      setData(res.data)
-      setTotal(res.total)
-      setPage(nextPage)
-    } catch {
-      // silently keep previous data
-    } finally {
-      setLoading(false)
-    }
-  }, [])
+  const fetchApplications = useCallback(
+    async (nextStatus: string, nextQ: string, nextPage: number) => {
+      setLoading(true)
+      try {
+        const headers = session?.accessToken ? { Authorization: `Bearer ${session.accessToken}` } : undefined
+        const res = await listPartnerApplications(
+          {
+            status: (nextStatus as PartnerApplicationStatus) || undefined,
+            q: nextQ || undefined,
+            page: nextPage,
+            pageSize: PAGE_SIZE,
+          },
+          headers
+        )
+        setData(res.data)
+        setTotal(res.total)
+        setPage(nextPage)
+      } catch {
+        // silently keep previous data
+      } finally {
+        setLoading(false)
+      }
+    },
+    [session?.accessToken]
+  )
 
   const handleStatusChange = (value: string) => {
     const next = value === 'ALL' ? '' : (value as PartnerApplicationStatus)
@@ -97,11 +96,6 @@ export default function AdminApplicationsList({ lang }: { lang: string }) {
     fetchApplications(status, search, nextPage)
   }
 
-  useEffect(() => {
-    fetchApplications('', '', 1)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   return (
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row">
@@ -113,7 +107,7 @@ export default function AdminApplicationsList({ lang }: { lang: string }) {
             <SelectItem value="ALL">{t.partner_admin_filter_all}</SelectItem>
             {STATUS_OPTIONS.map(s => (
               <SelectItem key={s} value={s}>
-                {t[statusLabelKey(s)]}
+                {t[STATUS_FILTER_LABEL_KEY[s]]}
               </SelectItem>
             ))}
           </SelectContent>
@@ -147,24 +141,17 @@ export default function AdminApplicationsList({ lang }: { lang: string }) {
             </TableHeader>
             <TableBody>
               {data.map(app => (
-                <TableRow key={app.id} className="hover:bg-muted/50">
-                  <TableCell className="font-medium">
-                    <Link
-                      href={`/${lang}/dashboard/admin/partner-applications/${app.id}`}
-                      className="text-primary underline-offset-2 hover:underline"
-                    >
-                      {app.businessName}
-                    </Link>
-                  </TableCell>
+                <TableRow
+                  key={app.id}
+                  className="cursor-pointer hover:bg-muted/50"
+                  onClick={() => router.push(`${basePath}/${app.id}`)}
+                >
+                  <TableCell className="font-medium">{app.businessName}</TableCell>
                   <TableCell className="text-muted-foreground">{app.email}</TableCell>
                   <TableCell className="text-muted-foreground">{app.locality}</TableCell>
                   <TableCell className="text-muted-foreground">{app.listingInterests.join(', ')}</TableCell>
                   <TableCell>
-                    <span
-                      className={`rounded px-2 py-1 text-xs font-medium ${STATUS_BADGE_CLASS[app.status]}`}
-                    >
-                      {t[statusLabelKey(app.status)]}
-                    </span>
+                    <PartnerApplicationStatusBadge status={app.status} />
                   </TableCell>
                   <TableCell className="text-sm text-muted-foreground">{formatDate(app.createdAt)}</TableCell>
                 </TableRow>

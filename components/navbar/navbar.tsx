@@ -68,7 +68,10 @@ export default function Navbar() {
               alt="Porta Sicilia"
               width={isOnTopOfHomePage ? 148 : 50}
               height={isOnTopOfHomePage ? 80 : 50}
-              className="transition-all duration-500"
+              className={cn(
+                'transition-all duration-500',
+                isOnTopOfHomePage ? 'w-26 md:w-32' : 'w-12 md:w-16'
+              )}
               priority
             />
           </Link>

@@ -19,6 +19,7 @@ import { getHighlightedCategories } from '@/lib/api/categories'
 import { getFeaturedSocialVideos } from '@/lib/api/social-videos'
 import { Button } from '@/components/ui/button'
 import SocialVideoSection from '@/components/social-video/social-video-section'
+import HeroVideoBackground from '@/components/home/hero-video-background'
 
 export async function generateMetadata({ params }: PageParamsProps): Promise<Metadata> {
   const { lang } = await params
@@ -56,18 +57,8 @@ export default async function Home({ params }: PageParamsProps) {
       <JsonLd data={[organizationSchema(), websiteSchema(lang)]} />
 
       {/* Hero */}
-      <section className="relative flex min-h-[45vh] flex-col items-center justify-center px-4 md:min-h-[50vh]">
-        <video
-          src="/videos/hero-bg.mp4"
-          poster="/images/hero-bg.jpg"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          aria-label={t.seo_hero_alt}
-          className="absolute inset-0 h-full w-full object-cover"
-        />
+      <section className="relative flex min-h-[35vh] flex-col items-center justify-center px-4 md:min-h-[50vh]">
+        <HeroVideoBackground alt={t.seo_hero_alt} />
         <div className="absolute inset-0 bg-black/15" />
         <div className="relative z-10 flex flex-col items-center">
           <div className="text-center">

@@ -22,7 +22,7 @@ export default async function LocationPage({ params }: PageParamsProps) {
   const { lang } = await params
   const [t, { data: locationCards }] = await Promise.all([
     getTranslations(lang as SupportedLocale),
-    getLocalityCards(),
+    getLocalityCards({ lang }),
   ])
 
   return (

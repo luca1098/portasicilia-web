@@ -4,6 +4,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { InputFormField } from '@/components/form/input-form-field'
+import { TextareaFormField } from '@/components/form/textarea-form-field'
 import { FileUploaderFormField } from '@/components/form/file-uploader-form-field'
 import { CheckboxFormField } from '@/components/form/checkbox-form-field'
 import { Button } from '@/components/ui/button'
@@ -35,6 +36,8 @@ export default function LocalityForm({ mode, locality }: LocalityFormProps) {
     resolver: zodResolver(LocalityFormSchema),
     defaultValues: {
       name: locality?.name ?? '',
+      state: locality?.state ?? '',
+      description: locality?.description ?? '',
       cover: locality?.cover ?? null,
       highlighted: locality?.highlighted ?? false,
     },
@@ -52,6 +55,14 @@ export default function LocalityForm({ mode, locality }: LocalityFormProps) {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div className="rounded-xl border border-border bg-card p-6 space-y-4">
           <InputFormField<LocalityFormValues> name="name" label={t.admin_loc_name} required />
+          <InputFormField<LocalityFormValues> name="state" label={t.admin_loc_state} />
+          <TextareaFormField<LocalityFormValues>
+            name="description"
+            label={t.admin_loc_description}
+            description={t.admin_loc_description_hint}
+            maxLength={2000}
+            rows={5}
+          />
 
           <FileUploaderFormField<LocalityFormValues> name="cover" label={t.admin_loc_cover} />
           <CheckboxFormField<LocalityFormValues>

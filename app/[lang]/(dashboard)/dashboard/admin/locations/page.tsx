@@ -4,7 +4,7 @@ import { getTranslations } from '@/lib/configs/locales/i18n'
 import { PageParamsProps } from '@/lib/types/page.type'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
-import { getLocalities } from '@/lib/api/localities'
+import { getLocalitiesAdmin } from '@/lib/api/localities'
 import LocalitiesTable from '@/components/dashboard/localities/localities-table'
 import { DashboardListPage } from '@/components/dashboard/dashboard-page'
 import { Button } from '@/components/ui/button'
@@ -15,12 +15,13 @@ export default async function LocationsSettingsPage({ params }: PageParamsProps)
   const { lang } = await params
   const session = await getServerSession(authOptions)
 
-  if (!session?.user) {
+  if (!session?.user || !session.accessToken) {
     redirect(`/${lang}`)
   }
 
   const t = await getTranslations(lang as SupportedLocale)
-  const localities = await getLocalities()
+  const headers = { Authorization: `Bearer ${session.accessToken}` }
+  const localities = await getLocalitiesAdmin(headers)
 
   return (
     <DashboardListPage>

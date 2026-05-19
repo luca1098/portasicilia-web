@@ -17,6 +17,20 @@ export default async function RootLayout({ children, params }: RootLayoutProps) 
           strategy="beforeInteractive"
           async
         />
+        <Script
+          id="gtag-src"
+          src="https://www.googletagmanager.com/gtag/js?id=G-Q4R0BMBRQY"
+          strategy="afterInteractive"
+          async
+        />
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-Q4R0BMBRQY');
+          `}
+        </Script>
       </head>
       <body className={`antialiased`}>
         <Providers params={params}>{children}</Providers>

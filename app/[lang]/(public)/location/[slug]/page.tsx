@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: LocationDetailPageProps): Pro
   try {
     const [t, locality] = await Promise.all([
       getTranslations(lang as SupportedLocale),
-      getLocalityBySlug(slug),
+      getLocalityBySlug(slug, lang),
     ])
     return buildMetadata({
       title: `${locality.name} — ${t.seo_location_suffix}`,
@@ -48,7 +48,7 @@ export default async function LocationDetailPage({ params }: LocationDetailPageP
 
   let locality
   try {
-    locality = await getLocalityBySlug(slug)
+    locality = await getLocalityBySlug(slug, lang)
   } catch (error) {
     if (error instanceof ApiError && error.status === 404) {
       notFound()
@@ -61,7 +61,7 @@ export default async function LocationDetailPage({ params }: LocationDetailPageP
       getExperienceCards({ localityId: locality.id }),
       getStayCards({ localityId: locality.id }),
       getArticles({ localityId: locality.id, limit: 4 }),
-      getSuggestedLocalities({ limit: 4, exclude: locality.id }),
+      getSuggestedLocalities({ limit: 4, exclude: locality.id, lang }),
     ])
 
   const tips = locality.tips ?? []

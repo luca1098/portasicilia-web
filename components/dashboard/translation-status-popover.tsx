@@ -52,6 +52,7 @@ type TranslationSource = {
   fetchDetails: (id: string, locale: string, auth: RequestAuth) => Promise<TranslationDetails>
   requestComplete: (id: string, locale: string | null, auth: RequestAuth) => Promise<void>
   sectionLabelKey: string
+  subSectionLabelKey?: string
 }
 
 type TranslationStatusPopoverProps = {
@@ -94,6 +95,17 @@ function makeFlatSource(entity: 'category' | 'product', sectionLabelKey: string)
 
 const categorySource = makeFlatSource('category', 'admin_translation_category_section')
 const productSource = makeFlatSource('product', 'admin_translation_product_section')
+
+const localitySource: TranslationSource = {
+  fetchDetails: (id, locale, auth) =>
+    api.get<TranslationDetails>(`/translations/locality/${id}/details?locale=${locale}`, auth),
+  async requestComplete(id, locale, auth) {
+    const qs = locale ? `?locale=${locale}` : ''
+    await api.post(`/translations/locality/${id}/complete${qs}`, undefined, auth)
+  },
+  sectionLabelKey: 'admin_translation_locality_section',
+  subSectionLabelKey: 'admin_translation_tips_section',
+}
 
 // ==================== CONSTANTS ====================
 
@@ -279,91 +291,104 @@ function TranslationStatusPopover({
           {t[labelKey]}
         </button>
       </PopoverTrigger>
-      <PopoverContent align="start" className="w-72 p-4">
-        <p className="mb-3 text-sm font-semibold">{t.admin_translation_title}</p>
+      <PopoverContent
+        align="start"
+        className="flex max-h-[min(70vh,560px)] w-72 flex-col overflow-hidden p-0"
+      >
+        <div className="shrink-0 border-b px-4 pb-3 pt-4">
+          <p className="mb-3 text-sm font-semibold">{t.admin_translation_title}</p>
 
-        {locales.length > 0 && (
-          <div className="mb-3 flex gap-3 border-b pb-2">
-            {locales.map(locale => (
-              <button
-                key={locale}
-                type="button"
-                onClick={() => handleTabChange(locale)}
-                className={
-                  activeLocale === locale
-                    ? 'border-b-2 border-primary pb-1 text-xs font-semibold'
-                    : 'pb-1 text-xs text-muted-foreground hover:text-foreground'
-                }
+          {locales.length > 0 && (
+            <div className="flex gap-3">
+              {locales.map(locale => (
+                <button
+                  key={locale}
+                  type="button"
+                  onClick={() => handleTabChange(locale)}
+                  className={
+                    activeLocale === locale
+                      ? 'border-b-2 border-primary pb-1 text-xs font-semibold'
+                      : 'pb-1 text-xs text-muted-foreground hover:text-foreground'
+                  }
+                >
+                  {locale.toUpperCase()}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="min-h-0 flex-1 overflow-y-auto px-4 py-3">
+          {activeLocaleInfo && (
+            <p className="mb-2 text-[11px] text-muted-foreground">
+              {activeLocale?.toUpperCase()} {activeLocaleInfo.completed}/{activeLocaleInfo.total}
+            </p>
+          )}
+
+          {loadingDetails ? (
+            <div className="flex items-center justify-center py-6">
+              <LoaderIcon className="size-5 animate-spin text-muted-foreground" />
+            </div>
+          ) : fetchError ? (
+            <div className="flex flex-col items-center gap-2 py-4">
+              <XIcon className="size-4 text-red-400" />
+              <p className="text-xs text-muted-foreground">{t.admin_common_error}</p>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => activeLocale && fetchDetailsForLocale(activeLocale)}
               >
-                {locale.toUpperCase()}
-              </button>
-            ))}
-          </div>
-        )}
+                {t.admin_common_retry}
+              </Button>
+            </div>
+          ) : activeDetails === null ? null : (
+            <>
+              {activeDetails.listing.length > 0 && (
+                <>
+                  <SectionHeader>{t[source.sectionLabelKey]}</SectionHeader>
+                  {activeDetails.listing.map(f => (
+                    <FieldRow key={f.field} field={f.field} status={f.status} />
+                  ))}
+                </>
+              )}
 
-        {activeLocaleInfo && (
-          <p className="mb-2 text-[11px] text-muted-foreground">
-            {activeLocale?.toUpperCase()} {activeLocaleInfo.completed}/{activeLocaleInfo.total}
-          </p>
-        )}
+              {activeDetails.itineraries.length > 0 && (
+                <>
+                  <SectionHeader>
+                    {t[source.subSectionLabelKey ?? 'admin_translation_itinerary_section']}
+                  </SectionHeader>
+                  {activeDetails.itineraries.map(it => (
+                    <div key={it.id} className="mb-2">
+                      <p className="mb-0.5 text-[11px] font-medium text-foreground/70">{it.title}</p>
+                      {it.fields.map(f => (
+                        <FieldRow key={f.field} field={f.field} status={f.status} />
+                      ))}
+                    </div>
+                  ))}
+                </>
+              )}
 
-        {loadingDetails ? (
-          <div className="flex items-center justify-center py-6">
-            <LoaderIcon className="size-5 animate-spin text-muted-foreground" />
-          </div>
-        ) : fetchError ? (
-          <div className="flex flex-col items-center gap-2 py-4">
-            <XIcon className="size-4 text-red-400" />
-            <p className="text-xs text-muted-foreground">{t.admin_common_error}</p>
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={() => activeLocale && fetchDetailsForLocale(activeLocale)}
-            >
-              {t.admin_common_retry}
-            </Button>
-          </div>
-        ) : activeDetails === null ? null : (
-          <div>
-            {activeDetails.listing.length > 0 && (
-              <>
-                <SectionHeader>{t[source.sectionLabelKey]}</SectionHeader>
-                {activeDetails.listing.map(f => (
-                  <FieldRow key={f.field} field={f.field} status={f.status} />
-                ))}
-              </>
-            )}
+              {activeDetails.stayDetail && activeDetails.stayDetail.length > 0 && (
+                <>
+                  <SectionHeader>{t.admin_translation_stay_detail_section}</SectionHeader>
+                  {activeDetails.stayDetail.map(f => (
+                    <FieldRow key={f.field} field={f.field} status={f.status} />
+                  ))}
+                </>
+              )}
+            </>
+          )}
+        </div>
 
-            {activeDetails.itineraries.length > 0 && (
-              <>
-                <SectionHeader>{t.admin_translation_itinerary_section}</SectionHeader>
-                {activeDetails.itineraries.map(it => (
-                  <div key={it.id} className="mb-2">
-                    <p className="mb-0.5 text-[11px] font-medium text-foreground/70">{it.title}</p>
-                    {it.fields.map(f => (
-                      <FieldRow key={f.field} field={f.field} status={f.status} />
-                    ))}
-                  </div>
-                ))}
-              </>
-            )}
-
-            {activeDetails.stayDetail && activeDetails.stayDetail.length > 0 && (
-              <>
-                <SectionHeader>{t.admin_translation_stay_detail_section}</SectionHeader>
-                {activeDetails.stayDetail.map(f => (
-                  <FieldRow key={f.field} field={f.field} status={f.status} />
-                ))}
-              </>
-            )}
-
+        {!loadingDetails && !fetchError && activeDetails !== null && (
+          <div className="shrink-0 border-t bg-popover px-4 pb-4 pt-3">
             {!hasMissing ? (
-              <p className="mt-3 text-[11px] text-emerald-600">{t.admin_translation_all_done}</p>
+              <p className="text-[11px] text-emerald-600">{t.admin_translation_all_done}</p>
             ) : (
               <Button
                 size="sm"
                 variant="outline"
-                className="mt-4 w-full"
+                className="w-full"
                 disabled={translating}
                 onClick={handleTranslate}
               >
@@ -390,4 +415,8 @@ export function CategoryTranslationStatusPopover(props: VariantProps) {
 
 export function ProductTranslationStatusPopover(props: VariantProps) {
   return <TranslationStatusPopover {...props} source={productSource} />
+}
+
+export function LocalityTranslationStatusPopover(props: VariantProps) {
+  return <TranslationStatusPopover {...props} source={localitySource} />
 }

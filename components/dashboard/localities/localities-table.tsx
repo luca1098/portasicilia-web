@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import {
@@ -16,6 +16,7 @@ import { useTranslation } from '@/lib/context/translation.context'
 import { MapPinnedIcon, MoreHorizontalIcon, PencilIcon, Trash2Icon, ImageIcon } from '@/lib/constants/icons'
 import type { Locality } from '@/lib/schemas/entities/locality.entity.schema'
 import LocalityDeleteDialog from './locality-delete-dialog'
+import { LocalityTranslationStatusPopover } from '@/components/dashboard/translation-status-popover'
 
 type LocalitiesTableProps = {
   localities: Locality[]
@@ -24,6 +25,7 @@ type LocalitiesTableProps = {
 export default function LocalitiesTable({ localities }: LocalitiesTableProps) {
   const [deleteTarget, setDeleteTarget] = useState<Locality | null>(null)
   const params = useParams()
+  const router = useRouter()
   const lang = params.lang as string
   const t = useTranslation()
   const basePath = `/${lang}/dashboard/admin/locations`
@@ -51,6 +53,7 @@ export default function LocalitiesTable({ localities }: LocalitiesTableProps) {
               <TableHead>{t.admin_loc_name}</TableHead>
               <TableHead>{t.admin_loc_slug}</TableHead>
               <TableHead className="text-center">{t.admin_loc_tips_count}</TableHead>
+              <TableHead>{t.admin_col_translations}</TableHead>
               <TableHead className="w-16" />
             </TableRow>
           </TableHeader>
@@ -83,6 +86,13 @@ export default function LocalitiesTable({ localities }: LocalitiesTableProps) {
                 </TableCell>
                 <TableCell className="text-muted-foreground">{locality.slug}</TableCell>
                 <TableCell className="text-center">{locality.tips?.length ?? 0}</TableCell>
+                <TableCell>
+                  <LocalityTranslationStatusPopover
+                    listingId={locality.id}
+                    status={locality.translationStatus}
+                    onTranslationComplete={() => router.refresh()}
+                  />
+                </TableCell>
                 <TableCell>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>

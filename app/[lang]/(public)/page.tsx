@@ -43,7 +43,7 @@ export default async function Home({ params }: PageParamsProps) {
     socialVideosData,
   ] = await Promise.all([
     getTranslations(lang as SupportedLocale),
-    getLocalityCards({ limit: 6, highlighted: true }),
+    getLocalityCards({ limit: 6, highlighted: true, lang }),
     getExperienceCards({ limit: 6, highlighted: true }),
     getStayCards({ limit: 6, highlighted: true }),
     getHighlightedCategories(lang),

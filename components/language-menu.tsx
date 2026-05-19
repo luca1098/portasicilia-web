@@ -60,7 +60,11 @@ function LanguageMenuProvider({ children, onSelect }: LanguageMenuProviderProps)
 
     if (session?.accessToken) {
       try {
-        await api.patch('/users/me/lang', { lang: lang.toUpperCase() })
+        await api.patch(
+          '/users/me/lang',
+          { lang: lang.toUpperCase() },
+          { headers: { Authorization: `Bearer ${session.accessToken}` } }
+        )
       } catch (error) {
         // Non-blocking: URL already changed.
         console.error('Failed to persist language preference', error)

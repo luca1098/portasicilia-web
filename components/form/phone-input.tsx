@@ -24,61 +24,61 @@ type PhoneInputProps = Omit<React.ComponentProps<'input'>, 'onChange' | 'value' 
     onChange?: (value: RPNInput.Value) => void
     label?: string
     required?: boolean
+    ref?: React.Ref<React.ElementRef<typeof RPNInput.default>>
   }
 
-const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps> = React.forwardRef<
-  React.ElementRef<typeof RPNInput.default>,
-  PhoneInputProps
->(({ className, onChange, value, label, required, ...props }, ref) => {
+function PhoneInput({ ref, className, onChange, value, label, required, ...props }: PhoneInputProps) {
+  const inputComponent = React.useMemo(
+    () =>
+      function PhoneInputInner({
+        ref: inputRef,
+        className: inputClassName,
+        ...inputProps
+      }: React.ComponentProps<'input'> & { ref?: React.Ref<HTMLInputElement> }) {
+        const hasValue = !!(inputProps.value && String(inputProps.value).length > 0)
+
+        return (
+          <div className="group/field relative flex-1" data-has-value={hasValue ? '' : undefined}>
+            <Input
+              className={cn('rounded-l-none rounded-r-xl border-l-0', inputClassName)}
+              {...inputProps}
+              ref={inputRef}
+            />
+            {label && (
+              <label
+                htmlFor={inputProps.id}
+                className={cn(
+                  'pointer-events-none absolute left-3 select-none transition-all duration-200',
+                  'font-normal text-muted-foreground',
+                  'top-4 text-sm',
+                  'group-focus-within/field:top-1.5 group-focus-within/field:text-xs',
+                  'group-data-has-value/field:top-1.5 group-data-has-value/field:text-xs'
+                )}
+              >
+                {label}
+                {required && <span className="ml-0.5 text-destructive">*</span>}
+              </label>
+            )}
+          </div>
+        )
+      },
+    [label, required]
+  )
+
   return (
     <RPNInput.default
       ref={ref}
       className={cn('flex w-full [&>*:last-child]:flex-1', className)}
       flagComponent={FlagComponent}
       countrySelectComponent={CountrySelect}
-      inputComponent={React.useMemo(
-        () =>
-          React.forwardRef<HTMLInputElement, React.ComponentProps<'input'>>(function PhoneInputInner(
-            { className: inputClassName, ...inputProps },
-            inputRef
-          ) {
-            const hasValue = !!(inputProps.value && String(inputProps.value).length > 0)
-
-            return (
-              <div className="group/field relative flex-1" data-has-value={hasValue ? '' : undefined}>
-                <Input
-                  className={cn('rounded-l-none rounded-r-xl border-l-0', inputClassName)}
-                  {...inputProps}
-                  ref={inputRef}
-                />
-                {label && (
-                  <label
-                    htmlFor={inputProps.id}
-                    className={cn(
-                      'pointer-events-none absolute left-3 select-none transition-all duration-200',
-                      'font-normal text-muted-foreground',
-                      'top-4 text-sm',
-                      'group-focus-within/field:top-1.5 group-focus-within/field:text-xs',
-                      'group-data-has-value/field:top-1.5 group-data-has-value/field:text-xs'
-                    )}
-                  >
-                    {label}
-                    {required && <span className="ml-0.5 text-destructive">*</span>}
-                  </label>
-                )}
-              </div>
-            )
-          }),
-        [label, required]
-      )}
+      inputComponent={inputComponent}
       smartCaret={false}
       value={value || undefined}
       onChange={value => onChange?.(value || ('' as RPNInput.Value))}
       {...props}
     />
   )
-})
-PhoneInput.displayName = 'PhoneInput'
+}
 
 type CountryEntry = { label: string; value: RPNInput.Country | undefined }
 

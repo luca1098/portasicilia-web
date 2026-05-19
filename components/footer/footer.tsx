@@ -12,6 +12,9 @@ import { InputFormField } from '@/components/form/input-form-field'
 import { useTranslation } from '@/lib/context/translation.context'
 import React, { useEffect, useMemo, useState } from 'react'
 import { api } from '@/lib/api/fetch-client'
+import { useAction } from '@/lib/hooks/use-action'
+import { subscribeNewsletterAction } from '@/lib/actions/newsletter.actions'
+import type { SupportedLocale } from '@/lib/configs/locales'
 import type { Locality } from '@/lib/schemas/entities/locality.entity.schema'
 import type { Category } from '@/lib/schemas/entities/category.entity.schema'
 import type { StayCard } from '@/lib/api/stays'
@@ -100,8 +103,14 @@ export default function Footer() {
     },
   })
 
-  const onSubmit = (_data: NewsletterFormValues) => {
-    // TODO: implement newsletter subscription
+  const { loading: subscribing, execute: executeSubscribe } = useAction<void>({
+    successMessage: t.footer_subscribe_success,
+    errorMessage: t.footer_subscribe_error,
+    onSuccess: () => form.reset(),
+  })
+
+  const onSubmit = async (data: NewsletterFormValues) => {
+    await executeSubscribe(() => subscribeNewsletterAction(data.email, lang as SupportedLocale))
   }
 
   const [localities, setLocalities] = useState<Locality[]>([])
@@ -197,9 +206,10 @@ export default function Footer() {
                 />
                 <Button
                   type="submit"
+                  disabled={subscribing}
                   className="h-14 w-full shrink-0 rounded-xl bg-primary px-6 text-sm font-medium text-white hover:bg-primary/90 sm:w-auto"
                 >
-                  {t.footer_subscribe_button}
+                  {subscribing ? t.footer_subscribe_loading : t.footer_subscribe_button}
                 </Button>
               </form>
             </FormProvider>

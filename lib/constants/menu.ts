@@ -10,6 +10,7 @@ export const menuItems: MenuItem[] = [
   { key: 'location', href: '/location', area: 'public' },
   { key: 'experiences', href: '/experiences', area: 'public' },
   { key: 'stays', href: '/stays', area: 'public' },
+  { key: 'partner_nav_label', href: '/partner', area: 'public' },
 ]
 
 export function getMenuItemsByArea(area: MenuArea): MenuItem[] {

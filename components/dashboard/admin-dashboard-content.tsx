@@ -9,6 +9,7 @@ import {
   ArrowRight,
   ClipboardListIcon,
   CalendarCheck2Icon,
+  StoreIcon,
 } from '@/lib/constants/icons'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
@@ -20,6 +21,7 @@ type StatsLabels = {
   experiences: string
   stays: string
   users: string
+  owners: string
 }
 
 type StatsValues = {
@@ -27,6 +29,7 @@ type StatsValues = {
   experiences: string
   stays: string
   users: string
+  owners: string
 }
 
 type AdminDashboardContentProps = {
@@ -60,6 +63,12 @@ const statsConfig = [
     icon: UsersIcon,
     accent: 'text-chart-4',
     bgAccent: 'bg-chart-4/8',
+  },
+  {
+    key: 'owners' as const,
+    icon: StoreIcon,
+    accent: 'text-chart-5',
+    bgAccent: 'bg-chart-5/8',
   },
 ]
 
@@ -109,7 +118,7 @@ export default function AdminDashboardContent({ title, welcome, stats, values }:
       </div>
 
       {/* Stats grid */}
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
         {statsConfig.map(({ key, icon: Icon, accent, bgAccent }) => (
           <div
             key={key}

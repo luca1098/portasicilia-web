@@ -18,7 +18,7 @@ export default async function BookingsPage({ params }: PageParamsProps) {
 
   const t = await getTranslations(lang as SupportedLocale)
   const headers = { Authorization: `Bearer ${session.accessToken}` }
-  const fetchParams = { status: 'CONFIRMED', limit: 20 }
+  const fetchParams = { statusIn: 'CONFIRMED,CANCELLED,COMPLETED', limit: 20 }
   const result = await getAdminBookings(headers, fetchParams)
 
   return (

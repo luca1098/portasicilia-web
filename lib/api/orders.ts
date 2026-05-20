@@ -8,14 +8,14 @@ export type CreateOrderItem = {
 export type CreateOrderBilling = {
   firstName: string
   lastName: string
-  street: string
-  city: string
-  zipCode: string
-  province: string
+  billingType: 'PRIVATE' | 'COMPANY'
+  street?: string
+  city?: string
+  zipCode?: string
+  province?: string
   country?: string
   fiscalCode?: string
   vatNumber?: string
-  billingType: 'PRIVATE' | 'COMPANY'
   companyName?: string
   recipientCode?: string
   pecEmail?: string

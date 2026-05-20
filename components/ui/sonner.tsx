@@ -1,36 +1,33 @@
 'use client'
 
 import { Toaster as Sonner, type ToasterProps } from 'sonner'
-import { SparklesIcon, AlertCircleIcon } from '@/lib/constants/icons'
+import { CheckCheckIcon, AlertTriangleIcon, BanIcon, InfoIcon } from '@/lib/constants/icons'
 
 function Toaster({ ...props }: ToasterProps) {
   return (
     <Sonner
-      className="toaster group"
+      className="ps-toaster"
       icons={{
-        success: <SparklesIcon className="size-5" />,
-        error: <AlertCircleIcon className="size-5" />,
+        success: <CheckCheckIcon className="size-3.5" strokeWidth={3} />,
+        error: <BanIcon className="size-3.5" strokeWidth={3} />,
+        warning: <AlertTriangleIcon className="size-3.5" strokeWidth={3} />,
+        info: <InfoIcon className="size-3.5" strokeWidth={3} />,
       }}
       closeButton
       toastOptions={{
         unstyled: true,
         classNames: {
-          toast:
-            'ps-toast flex items-center gap-3 w-full rounded-xl px-4 py-3.5 shadow-lg text-sm font-medium',
+          toast: 'ps-toast',
           success: 'ps-toast-success',
           error: 'ps-toast-error',
+          warning: 'ps-toast-warning',
+          info: 'ps-toast-info',
           title: 'ps-toast-title',
-          icon: 'ps-toast-icon shrink-0',
+          description: 'ps-toast-description',
+          icon: 'ps-toast-icon',
           closeButton: 'ps-toast-close',
         },
       }}
-      style={
-        {
-          '--normal-bg': 'var(--popover)',
-          '--normal-text': 'var(--popover-foreground)',
-          '--normal-border': 'var(--border)',
-        } as React.CSSProperties
-      }
       {...props}
     />
   )

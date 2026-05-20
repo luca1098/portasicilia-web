@@ -4,6 +4,8 @@ export {
   ArrowRight,
   BellIcon,
   CalendarIcon,
+  BanIcon,
+  CheckCheckIcon,
   CheckCircle2Icon,
   CheckIcon,
   ChevronsUpDownIcon,

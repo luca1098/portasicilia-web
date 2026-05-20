@@ -33,6 +33,7 @@ export default function UserBookingCard({ booking }: { booking: UserBooking }) {
   const [reviewOpen, setReviewOpen] = useState(false)
 
   const isCounterProposed = booking.status === 'COUNTER_PROPOSED'
+  const isStay = booking.listing.type === 'STAY'
   const isPast = new Date(booking.date) < new Date(new Date().toDateString())
   const canCancel = (booking.status === 'PENDING_APPROVAL' || booking.status === 'CONFIRMED') && !isPast
   const isCompleted = booking.status === 'COMPLETED'
@@ -78,6 +79,7 @@ export default function UserBookingCard({ booking }: { booking: UserBooking }) {
               <span className="flex items-center gap-1">
                 <CalendarIcon className="size-3.5" />
                 {formatDate(booking.date)}
+                {isStay && booking.dateTo && <> – {formatDate(booking.dateTo)}</>}
               </span>
               {booking.timeSlot && (
                 <span className="flex items-center gap-1">
@@ -125,21 +127,38 @@ export default function UserBookingCard({ booking }: { booking: UserBooking }) {
           <div className="overflow-hidden">
             <div className="border-t border-border bg-muted/30 px-4 py-4">
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {/* Date & Time */}
-                <div>
-                  <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                    {t.user_detail_date}
-                  </p>
-                  <p className="mt-1 text-sm">
-                    {formatDate(booking.date)}
-                    {booking.timeSlot && (
-                      <span className="text-muted-foreground">
-                        {' '}
-                        {formatTime(booking.timeSlot.startTime)} - {formatTime(booking.timeSlot.endTime)}
-                      </span>
-                    )}
-                  </p>
-                </div>
+                {/* Date & Time / Check-in & Check-out */}
+                {isStay && booking.dateTo ? (
+                  <>
+                    <div>
+                      <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                        {t.stay_detail_check_in}
+                      </p>
+                      <p className="mt-1 text-sm">{formatDate(booking.date)}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                        {t.stay_detail_check_out}
+                      </p>
+                      <p className="mt-1 text-sm">{formatDate(booking.dateTo)}</p>
+                    </div>
+                  </>
+                ) : (
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                      {t.user_detail_date}
+                    </p>
+                    <p className="mt-1 text-sm">
+                      {formatDate(booking.date)}
+                      {booking.timeSlot && (
+                        <span className="text-muted-foreground">
+                          {' '}
+                          {formatTime(booking.timeSlot.startTime)} - {formatTime(booking.timeSlot.endTime)}
+                        </span>
+                      )}
+                    </p>
+                  </div>
+                )}
 
                 {/* Participants */}
                 <div>

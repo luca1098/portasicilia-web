@@ -142,7 +142,7 @@ export default function OrderCheckoutSteps() {
 
   return (
     <div className="space-y-4" role="list" aria-label={t.checkout_steps}>
-      <LoginStepSection isActive={effectiveStep === 1} onActivate={() => setActiveStep(1)} />
+      <LoginStepSection isActive={effectiveStep === 1} />
 
       <DeliveryStepSection
         stepNumber={2}

@@ -44,6 +44,14 @@ type SidebarSection = {
 
 const sidebarSections: SidebarSection[] = [
   {
+    labelKey: 'admin_sidebar_section_bookings',
+    items: [
+      { key: 'admin_sidebar_requests', icon: ClipboardListIcon, href: '/requests' },
+      { key: 'admin_sidebar_bookings', icon: CalendarCheck2Icon, href: '/bookings' },
+      { key: 'admin_sidebar_reviews', icon: StarIcon, href: '/reviews' },
+    ],
+  },
+  {
     labelKey: 'admin_sidebar_section_management',
     items: [
       { key: 'admin_sidebar_dashboard', icon: LayoutDashboardIcon, href: '' },
@@ -53,14 +61,6 @@ const sidebarSections: SidebarSection[] = [
       { key: 'admin_sidebar_stays', icon: HomeIcon, href: '/stays' },
       { key: 'admin_sidebar_owners', icon: StoreIcon, href: '/owners' },
       { key: 'admin_sidebar_partner_applications', icon: HandshakeIcon, href: '/partner-applications' },
-    ],
-  },
-  {
-    labelKey: 'admin_sidebar_section_bookings',
-    items: [
-      { key: 'admin_sidebar_requests', icon: ClipboardListIcon, href: '/requests' },
-      { key: 'admin_sidebar_bookings', icon: CalendarCheck2Icon, href: '/bookings' },
-      { key: 'admin_sidebar_reviews', icon: StarIcon, href: '/reviews' },
     ],
   },
   {
@@ -107,6 +107,7 @@ export default function AdminSidebar() {
   const [collapsed, setCollapsed] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [openSections, setOpenSections] = useState<Record<string, boolean>>(() => ({
+    admin_sidebar_section_bookings: true,
     [activeSectionKey]: true,
   }))
 

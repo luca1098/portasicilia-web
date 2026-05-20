@@ -12,40 +12,157 @@ import { AlertCircleIcon, LoaderIcon } from '@/lib/constants/icons'
 import { Button } from '@/components/ui/button'
 
 const appearance: Appearance = {
-  theme: 'stripe',
+  labels: 'floating',
   variables: {
-    colorPrimary: 'oklch(0.649 0.1064 205.4)',
-    colorBackground: 'oklch(1 0 0)',
-    colorText: 'oklch(0.145 0 0)',
-    colorDanger: 'oklch(0.577 0.245 27.325)',
-    fontFamily: 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
-    borderRadius: '0.625rem',
+    accessibleColorOnColorPrimary: 'oklch(0.9814 0.019 204.85)',
+    colorTextSecondary: '#737373',
+    colorTextPlaceholder: '#737373',
+    accessibleColorOnColorDanger: 'oklch(0.577 0.245 27.325)',
+    colorSuccess: '#23c90d',
+    iconColor: 'oklch(0.556 0 0)',
+    iconHoverColor: 'oklch(0.145 0 0)',
+    tabIconColor: 'oklch(0.556 0 0)',
+    tabIconHoverColor: 'oklch(0.145 0 0)',
+    tabIconSelectedColor: 'oklch(0.649 0.1064 205.4)',
+    iconCardCvcColor: 'oklch(0.556 0 0)',
+    iconCardErrorColor: 'oklch(0.577 0.245 27.325)',
+    iconCheckmarkColor: 'oklch(0.9814 0.019 204.85)',
+    iconChevronDownColor: 'oklch(0.556 0 0)',
+    iconChevronDownHoverColor: 'oklch(0.145 0 0)',
+    fontFamily:
+      'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+    fontSizeBase: '14px',
+    fontWeightMedium: '500',
+    fontWeightBold: '600',
+    fontLineHeight: '1.5',
+    borderRadius: '0.875rem',
     spacingUnit: '4px',
-    fontSizeBase: '1.1rem',
+    gridRowSpacing: '16px',
+    gridColumnSpacing: '12px',
+    colorPrimary: '#1aa1ae',
   },
   rules: {
+    '.Label': {
+      color: 'oklch(0.556 0 0)',
+      fontWeight: '400',
+      fontSize: '14px',
+    },
+    '.Label--floating': {
+      color: 'oklch(0.556 0 0)',
+      fontWeight: '400',
+      fontSize: '12px',
+    },
+    '.Label--resting': {
+      color: 'oklch(0.556 0 0)',
+      fontWeight: '400',
+      fontSize: '14px',
+    },
+    '.Label--invalid': {
+      color: 'oklch(0.577 0.245 27.325)',
+    },
     '.Input': {
+      backgroundColor: 'oklch(1 0 0)',
       border: '1px solid oklch(0.922 0 0)',
-      boxShadow: 'none',
-      padding: '10px 12px',
-      transition: 'border-color 0.15s ease',
+      borderRadius: '0.875rem',
+      color: 'oklch(0.145 0 0)',
+      fontSize: '14px',
+      lineHeight: '1.5',
+      transition: 'color 0.15s ease, box-shadow 0.15s ease',
     },
     '.Input:focus': {
       border: '1px solid oklch(0.708 0 0)',
-      boxShadow: '0 0 0 3px oklch(0.708 0 0 / 0.5)',
+      outline: 'none',
+    },
+    '.Input:disabled': {
+      backgroundColor: 'oklch(0.97 0 0)',
+      color: 'oklch(0.556 0 0)',
     },
     '.Input--invalid': {
       border: '1px solid oklch(0.577 0.245 27.325)',
     },
-    '.Label': {
-      color: 'oklch(0.145 0 0)',
-      fontSize: '14px',
-      fontWeight: '500',
-      marginBottom: '6px',
-    },
     '.Error': {
       color: 'oklch(0.577 0.245 27.325)',
-      fontSize: '13px',
+      fontSize: '14px',
+      marginTop: '4px',
+    },
+    '.Tab': {
+      backgroundColor: 'oklch(1 0 0)',
+      border: '1px solid oklch(0.922 0 0)',
+      borderRadius: '0.875rem',
+      padding: '12px 14px',
+      transition: 'border-color 0.15s ease, background-color 0.15s ease',
+    },
+    '.Tab:hover': {
+      backgroundColor: 'oklch(0.97 0 0)',
+      borderColor: 'oklch(0.708 0 0)',
+    },
+    '.Tab--selected': {
+      backgroundColor: 'oklch(1 0 0)',
+      borderColor: 'oklch(0.649 0.1064 205.4)',
+      boxShadow: '0 0 0 1px oklch(0.649 0.1064 205.4)',
+    },
+    '.Tab--selected:focus': {
+      borderColor: 'oklch(0.649 0.1064 205.4)',
+    },
+    '.TabLabel': {
+      fontSize: '14px',
+      fontWeight: '500',
+    },
+    '.TabIcon': {
+      color: 'oklch(0.556 0 0)',
+    },
+    '.TabIcon--selected': {
+      color: 'oklch(0.649 0.1064 205.4)',
+    },
+    '.Block': {
+      backgroundColor: 'oklch(1 0 0)',
+      border: '1px solid oklch(0.922 0 0)',
+      borderRadius: '0.875rem',
+      boxShadow: 'none',
+    },
+    '.AccordionItem': {
+      backgroundColor: 'oklch(1 0 0)',
+      border: '1px solid oklch(0.922 0 0)',
+      borderRadius: '0.875rem',
+      boxShadow: 'none',
+      padding: '14px 16px',
+    },
+    '.CheckboxInput': {
+      backgroundColor: 'oklch(1 0 0)',
+      border: '1px solid oklch(0.922 0 0)',
+      borderRadius: '0.25rem',
+    },
+    '.CheckboxInput--checked': {
+      backgroundColor: 'oklch(0.649 0.1064 205.4)',
+      borderColor: 'oklch(0.649 0.1064 205.4)',
+    },
+    '.CheckboxLabel': {
+      color: 'oklch(0.145 0 0)',
+      fontSize: '14px',
+    },
+    '.PickerItem': {
+      backgroundColor: 'oklch(1 0 0)',
+      color: 'oklch(0.145 0 0)',
+      borderRadius: '0.625rem',
+      fontSize: '14px',
+    },
+    '.PickerItem--highlight': {
+      backgroundColor: 'oklch(0.97 0 0)',
+    },
+    '.PickerItem--selected': {
+      backgroundColor: 'oklch(0.649 0.1064 205.4)',
+      color: 'oklch(0.9814 0.019 204.85)',
+    },
+    '.RedirectText': {
+      color: 'oklch(0.556 0 0)',
+      fontSize: '14px',
+    },
+    '.Text': {
+      color: 'oklch(0.145 0 0)',
+      fontSize: '14px',
+    },
+    '.Text--redirect': {
+      color: 'oklch(0.556 0 0)',
     },
   },
 }
@@ -108,7 +225,10 @@ function PaymentForm({ depositAmount, initialError, returnPath, payLabelKey }: P
 
       <p className="text-xs leading-relaxed text-muted-foreground">
         {t.checkout_policy_text}{' '}
-        <button type="button" className="underline underline-offset-2 hover:text-foreground">
+        <button
+          type="button"
+          className="font-medium text-primary underline underline-offset-2 transition-colors hover:text-primary/80"
+        >
           {t.checkout_policy_learn_more}
         </button>
       </p>

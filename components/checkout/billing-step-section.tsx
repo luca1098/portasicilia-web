@@ -70,10 +70,9 @@ export default function BillingStepSection({
             <div>
               <h2 className="text-base font-semibold">{t.checkout_step_billing}</h2>
               <p className="text-sm text-muted-foreground">
-                {billingData?.firstName} {billingData?.lastName}
-                {billingData?.billingType === 'COMPANY' && billingData?.companyName
-                  ? ` - ${billingData.companyName}`
-                  : ''}
+                {billingData?.billingType === 'COMPANY'
+                  ? billingData?.companyName
+                  : `${billingData?.firstName ?? ''} ${billingData?.lastName ?? ''}`.trim()}
               </p>
             </div>
           </div>

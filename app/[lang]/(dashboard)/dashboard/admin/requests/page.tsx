@@ -8,7 +8,7 @@ import { getAdminBookings } from '@/lib/api/bookings'
 import RequestsTable from '@/components/dashboard/bookings/requests-table'
 import { DashboardListPage } from '@/components/dashboard/dashboard-page'
 
-const ALL_STATUSES = 'PENDING_APPROVAL,REJECTED,COUNTER_PROPOSED,CANCELLED,NO_SHOW'
+const ALL_STATUSES = 'PENDING_APPROVAL,REJECTED,COUNTER_PROPOSED,NO_SHOW'
 
 export default async function RequestsPage({
   params,

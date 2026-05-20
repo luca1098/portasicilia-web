@@ -1,21 +1,24 @@
 'use client'
 
+import { useState } from 'react'
 import Image from 'next/image'
 import { signOut, useSession } from 'next-auth/react'
-import { useTranslation } from '@/lib/context/translation.context'
-import { UserIcon } from '@/lib/constants/icons'
+
+import LoginPopup from '@/components/auth/login-popup'
 import { Button } from '@/components/ui/button'
+import { UserIcon } from '@/lib/constants/icons'
+import { useTranslation } from '@/lib/context/translation.context'
 import { cn } from '@/lib/utils/shadcn.utils'
-import LoginStep from '@/components/checkout/login-step'
 
 type LoginStepSectionProps = {
   isActive: boolean
-  onActivate: () => void
 }
 
-export default function LoginStepSection({ isActive, onActivate }: LoginStepSectionProps) {
+export default function LoginStepSection({ isActive }: LoginStepSectionProps) {
   const t = useTranslation()
   const { data: session } = useSession()
+
+  const [isPopupOpen, setIsPopupOpen] = useState(false)
 
   const isComplete = !!session
 
@@ -58,33 +61,26 @@ export default function LoginStepSection({ isActive, onActivate }: LoginStepSect
           </Button>
         </div>
       ) : (
-        <>
-          <div className="flex items-center justify-between p-5">
-            <div className="flex items-center gap-3">
-              <span
-                className={cn(
-                  'flex size-7 items-center justify-center rounded-full text-sm font-semibold',
-                  isActive ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
-                )}
-                aria-hidden="true"
-              >
-                1
-              </span>
-              <h2 className="text-base font-semibold">{t.checkout_step_login}</h2>
-            </div>
-            {!isActive && (
-              <Button size="sm" onClick={onActivate}>
-                {t.checkout_continue}
-              </Button>
-            )}
+        <div className="flex items-center justify-between gap-3 p-5">
+          <div className="flex items-center gap-3">
+            <span
+              className={cn(
+                'flex size-7 items-center justify-center rounded-full text-sm font-semibold',
+                isActive ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
+              )}
+              aria-hidden="true"
+            >
+              1
+            </span>
+            <h2 className="text-base font-semibold">{t.checkout_step_login}</h2>
           </div>
-          {isActive && (
-            <div className="border-t px-5 pb-5 pt-4">
-              <LoginStep />
-            </div>
-          )}
-        </>
+          <Button variant="secondary" size="sm" onClick={() => setIsPopupOpen(true)}>
+            {t.login}
+          </Button>
+        </div>
       )}
+
+      {isPopupOpen ? <LoginPopup onClose={() => setIsPopupOpen(false)} /> : null}
     </section>
   )
 }

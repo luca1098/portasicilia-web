@@ -8,14 +8,14 @@ export type CreateBookingParticipant = {
 export type CreateBookingBilling = {
   firstName: string
   lastName: string
-  street: string
-  city: string
-  zipCode: string
-  province: string
+  billingType: 'PRIVATE' | 'COMPANY'
+  street?: string
+  city?: string
+  zipCode?: string
+  province?: string
   country?: string
   fiscalCode?: string
   vatNumber?: string
-  billingType: 'PRIVATE' | 'COMPANY'
   companyName?: string
   recipientCode?: string
   pecEmail?: string
@@ -69,6 +69,7 @@ export type BookingResponse = {
   id: string
   status: string
   date: string
+  dateTo?: string | null
   timeSlotId?: string
   participants: CreateBookingParticipant[]
   totalPax: number
@@ -100,6 +101,7 @@ export type AdminBookingUser = {
 
 export type AdminBookingListing = {
   id: string
+  type: 'EXPERIENCE' | 'STAY'
   name: string
   slug: string
   cover: string | null
@@ -110,6 +112,7 @@ export type AdminBooking = {
   id: string
   status: string
   date: string
+  dateTo?: string | null
   totalPax: number
   totalAmount: string
   depositAmount: string
@@ -154,17 +157,19 @@ export function getAdminBookings(headers: HeadersInit, params?: GetAdminBookings
   return apiServer.get<PaginatedAdminBookings>('/bookings/admin', { params: queryParams, headers })
 }
 
-export function refundBooking(bookingId: string) {
-  return api.post<AdminBooking>(`/bookings/${bookingId}/refund`)
+function authOpts(token: string) {
+  return { headers: { Authorization: `Bearer ${token}` } }
 }
 
-export type AdminDashboardStats = {
-  locations: number
-  experiences: number
-  stays: number
-  users: number
+export function refundBooking(bookingId: string, token: string) {
+  return api.post<AdminBooking>(`/bookings/${bookingId}/refund`, undefined, authOpts(token))
 }
 
-export function getAdminStats(headers: HeadersInit) {
-  return apiServer.get<AdminDashboardStats>('/bookings/admin/stats', { headers })
+export type RespondBookingDto = {
+  action: 'CONFIRM' | 'REJECT'
+  responseMessage?: string
+}
+
+export function respondBooking(bookingId: string, dto: RespondBookingDto, token: string) {
+  return api.patch<AdminBooking>(`/bookings/${bookingId}/respond`, dto, authOpts(token))
 }

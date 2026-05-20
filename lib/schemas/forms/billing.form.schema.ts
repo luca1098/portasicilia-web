@@ -4,56 +4,91 @@ const billingTypeEnum = z.enum(['PRIVATE', 'COMPANY'])
 
 const baseBillingSchema = z.object({
   billingType: billingTypeEnum,
-  firstName: z.string().min(1, 'First name is required'),
-  lastName: z.string().min(1, 'Last name is required'),
+  firstName: z.string(),
+  lastName: z.string(),
   phone: z.string().min(1, 'Phone number is required'),
-  fiscalCode: z
-    .string()
-    .min(1, 'Fiscal code is required')
-    .regex(/^[A-Z0-9]{16}$/i, 'Fiscal code must be 16 alphanumeric characters'),
+  fiscalCode: z.string(),
   companyName: z.string(),
   vatNumber: z.string(),
   sdiCode: z.string(),
   pec: z.string(),
-  streetAddress: z.string().min(1, 'Street address is required'),
-  city: z.string().min(1, 'City is required'),
-  zipCode: z
-    .string()
-    .min(1, 'ZIP code is required')
-    .regex(/^\d{5}$/, 'ZIP code must be 5 digits'),
-  province: z
-    .string()
-    .min(1, 'Province is required')
-    .regex(/^[A-Z]{2}$/i, 'Province must be 2 letters'),
-  country: z.string().min(1, 'Country is required'),
+  streetAddress: z.string(),
+  city: z.string(),
+  zipCode: z.string(),
+  province: z.string(),
+  country: z.string(),
 })
 
 export function createBillingFormSchema(sdiOrPecMessage: string) {
   return baseBillingSchema.superRefine((data, ctx) => {
-    if (data.billingType === 'COMPANY') {
-      if (!data.companyName.trim()) {
+    if (data.billingType === 'PRIVATE') {
+      if (!data.firstName.trim()) {
         ctx.addIssue({
           code: 'custom',
-          message: 'Company name is required',
-          path: ['companyName'],
+          message: 'First name is required',
+          path: ['firstName'],
         })
       }
-      if (!/^\d{11}$/.test(data.vatNumber)) {
+      if (!data.lastName.trim()) {
         ctx.addIssue({
           code: 'custom',
-          message: 'VAT number must be 11 digits',
-          path: ['vatNumber'],
+          message: 'Last name is required',
+          path: ['lastName'],
         })
       }
-      const hasSdi = /^[A-Z0-9]{7}$/i.test(data.sdiCode)
-      const hasPec = data.pec.trim().length > 0 && z.string().email().safeParse(data.pec).success
-      if (!hasSdi && !hasPec) {
-        ctx.addIssue({
-          code: 'custom',
-          message: sdiOrPecMessage,
-          path: ['sdiCode'],
-        })
-      }
+      return
+    }
+
+    if (!data.companyName.trim()) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'Company name is required',
+        path: ['companyName'],
+      })
+    }
+    if (!/^\d{11}$/.test(data.vatNumber)) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'VAT number must be 11 digits',
+        path: ['vatNumber'],
+      })
+    }
+    if (!data.streetAddress.trim()) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'Street address is required',
+        path: ['streetAddress'],
+      })
+    }
+    if (!data.city.trim()) {
+      ctx.addIssue({ code: 'custom', message: 'City is required', path: ['city'] })
+    }
+    if (!/^\d{5}$/.test(data.zipCode)) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'ZIP code must be 5 digits',
+        path: ['zipCode'],
+      })
+    }
+    if (!/^[A-Z]{2}$/i.test(data.province)) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'Province must be 2 letters',
+        path: ['province'],
+      })
+    }
+    if (!data.country.trim()) {
+      ctx.addIssue({ code: 'custom', message: 'Country is required', path: ['country'] })
+    }
+
+    const hasSdi = /^[A-Z0-9]{7}$/i.test(data.sdiCode)
+    const hasPec = data.pec.trim().length > 0 && z.string().email().safeParse(data.pec).success
+    if (!hasSdi && !hasPec) {
+      ctx.addIssue({
+        code: 'custom',
+        message: sdiOrPecMessage,
+        path: ['sdiCode'],
+      })
     }
   })
 }
@@ -62,21 +97,22 @@ export type BillingFormValues = z.infer<typeof baseBillingSchema>
 
 /** Maps frontend form values to backend BillingDto field names */
 export function mapBillingToDto(values: BillingFormValues) {
+  const isCompany = values.billingType === 'COMPANY'
   return {
     billingType: values.billingType,
-    firstName: values.firstName,
-    lastName: values.lastName,
+    firstName: isCompany ? values.companyName : values.firstName,
+    lastName: isCompany ? '' : values.lastName,
     contactPhone: values.phone,
-    fiscalCode: values.fiscalCode,
-    street: values.streetAddress,
-    city: values.city,
-    zipCode: values.zipCode,
-    province: values.province,
-    country: values.country,
-    companyName: values.companyName || undefined,
-    vatNumber: values.vatNumber || undefined,
-    recipientCode: values.sdiCode || undefined,
-    pecEmail: values.pec || undefined,
+    fiscalCode: isCompany ? undefined : undefined,
+    street: isCompany ? values.streetAddress : undefined,
+    city: isCompany ? values.city : undefined,
+    zipCode: isCompany ? values.zipCode : undefined,
+    province: isCompany ? values.province : undefined,
+    country: isCompany ? values.country : undefined,
+    companyName: isCompany ? values.companyName || undefined : undefined,
+    vatNumber: isCompany ? values.vatNumber || undefined : undefined,
+    recipientCode: isCompany ? values.sdiCode || undefined : undefined,
+    pecEmail: isCompany ? values.pec || undefined : undefined,
   }
 }
 

@@ -1,8 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import Image from 'next/image'
-import { usePathname, useRouter } from 'next/navigation'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import {
@@ -40,11 +38,22 @@ import {
   CheckIcon,
   XIcon,
   CalendarIcon,
-  ImageIcon,
   LoaderIcon,
 } from '@/lib/constants/icons'
-import { formatDate, formatTime } from '@/lib/utils/format.utils'
 import { StatusBadge } from '@/components/dashboard/bookings/status-badge'
+import { OwnerBookingDetailDialog } from '@/components/dashboard/bookings/booking-detail-dialog'
+import {
+  BookingCoverCell,
+  BookingNameCell,
+  BookingDateCell,
+  BookingParticipantsCell,
+} from '@/components/dashboard/bookings/booking-cells'
+import {
+  BookingsEmpty,
+  BookingsLoadMore,
+  StatusFilterPills,
+  type StatusFilter,
+} from '@/components/dashboard/bookings/bookings-table-shell'
 import ProposalCards from '@/components/shared/proposal-cards'
 import {
   ownerRespondBookingAction,
@@ -61,47 +70,12 @@ type OwnerRequestsTableProps = {
   activeStatus?: string
 }
 
-const STATUS_FILTERS = [
+const STATUS_FILTERS: StatusFilter[] = [
   { key: 'ALL', labelKey: 'owner_requests_filter_all' },
   { key: 'PENDING_APPROVAL', labelKey: 'admin_booking_status_pending_approval' },
   { key: 'COUNTER_PROPOSED', labelKey: 'admin_booking_status_counter_proposed' },
   { key: 'REJECTED', labelKey: 'admin_booking_status_rejected' },
 ]
-
-function StatusFilterPills({ activeStatus }: { activeStatus: string }) {
-  const t = useTranslation() as Record<string, string>
-  const router = useRouter()
-  const pathname = usePathname()
-
-  function handleFilter(key: string) {
-    if (key === 'ALL') {
-      router.replace(pathname)
-    } else {
-      router.replace(`${pathname}?status=${key}`)
-    }
-  }
-
-  return (
-    <div className="flex flex-wrap gap-2">
-      {STATUS_FILTERS.map(filter => {
-        const isActive = activeStatus === filter.key
-        return (
-          <button
-            key={filter.key}
-            onClick={() => handleFilter(filter.key)}
-            className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition-all duration-200 ${
-              isActive
-                ? 'bg-primary text-primary-foreground shadow-sm'
-                : 'bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-            }`}
-          >
-            {t[filter.labelKey] || filter.key}
-          </button>
-        )
-      })}
-    </div>
-  )
-}
 
 function CounterProposalDialog({
   open,
@@ -337,6 +311,7 @@ function InnerRequestsTable({
   const t = useTranslation() as Record<string, string>
   const [bookings, setBookings] = useState(initialBookings)
   const [nextCursor, setNextCursor] = useState(initialNextCursor)
+  const [selectedBooking, setSelectedBooking] = useState<AdminBooking | null>(null)
 
   const { loading, execute: loadMore } = useAction<PaginatedAdminBookings>({
     onSuccess: data => {
@@ -360,16 +335,7 @@ function InnerRequestsTable({
   }
 
   if (bookings.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border/60 bg-muted/20 px-6 py-14 text-center">
-        <div className="mb-4 flex size-14 items-center justify-center rounded-2xl bg-muted/60">
-          <ClipboardListIcon className="size-6 text-muted-foreground/50" />
-        </div>
-        <p className="max-w-[240px] text-sm leading-relaxed text-muted-foreground/70">
-          {t[emptyKey] || t.owner_requests_empty_all}
-        </p>
-      </div>
-    )
+    return <BookingsEmpty icon={ClipboardListIcon}>{t[emptyKey] || t.owner_requests_empty_all}</BookingsEmpty>
   }
 
   return (
@@ -388,41 +354,19 @@ function InnerRequestsTable({
           </TableHeader>
           <TableBody>
             {bookings.map(booking => (
-              <TableRow key={booking.id}>
-                <TableCell>
-                  {booking.listing.cover ? (
-                    <Image
-                      src={booking.listing.cover}
-                      alt={booking.listing.name}
-                      width={40}
-                      height={40}
-                      className="size-10 rounded-lg object-cover"
-                      unoptimized
-                    />
-                  ) : (
-                    <div className="flex size-10 items-center justify-center rounded-lg bg-muted">
-                      <ImageIcon className="size-4 text-muted-foreground" />
-                    </div>
-                  )}
-                </TableCell>
-                <TableCell className="font-medium">{booking.listing.name}</TableCell>
-                <TableCell className="text-muted-foreground">
-                  <div className="flex flex-col">
-                    <span>{formatDate(booking.date)}</span>
-                    {booking.timeSlot && (
-                      <span className="text-xs">
-                        {formatTime(booking.timeSlot.startTime)} - {formatTime(booking.timeSlot.endTime)}
-                      </span>
-                    )}
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <span className="text-sm">{booking.totalPax}</span>
-                </TableCell>
+              <TableRow
+                key={booking.id}
+                className="cursor-pointer hover:bg-muted/50"
+                onClick={() => setSelectedBooking(booking)}
+              >
+                <BookingCoverCell booking={booking} />
+                <BookingNameCell booking={booking} />
+                <BookingDateCell booking={booking} />
+                <BookingParticipantsCell booking={booking} />
                 <TableCell>
                   <StatusBadge status={booking.status} />
                 </TableCell>
-                <TableCell>
+                <TableCell onClick={e => e.stopPropagation()}>
                   <RequestActions booking={booking} onStatusChange={handleStatusChange} />
                 </TableCell>
               </TableRow>
@@ -430,14 +374,14 @@ function InnerRequestsTable({
           </TableBody>
         </Table>
       </div>
-      {nextCursor && (
-        <div className="flex justify-center">
-          <Button variant="outline" onClick={handleLoadMore} disabled={loading}>
-            {loading && <LoaderIcon className="size-4 animate-spin" />}
-            {t.admin_load_more}
-          </Button>
-        </div>
-      )}
+      {nextCursor && <BookingsLoadMore onClick={handleLoadMore} loading={loading} />}
+
+      <OwnerBookingDetailDialog
+        booking={selectedBooking}
+        open={!!selectedBooking}
+        onOpenChange={open => !open && setSelectedBooking(null)}
+        onCancelled={cancelledId => handleStatusChange(cancelledId, 'CANCELLED')}
+      />
     </div>
   )
 }
@@ -450,7 +394,7 @@ export default function OwnerRequestsTable({
 }: OwnerRequestsTableProps) {
   return (
     <div className="space-y-4">
-      <StatusFilterPills activeStatus={activeStatus} />
+      <StatusFilterPills activeStatus={activeStatus} filters={STATUS_FILTERS} />
       <InnerRequestsTable
         key={activeStatus}
         bookings={bookings}

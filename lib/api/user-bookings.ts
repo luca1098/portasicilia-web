@@ -25,6 +25,7 @@ export type UserBooking = {
   id: string
   status: string
   date: string
+  dateTo?: string | null
   participants: CreateBookingParticipant[]
   totalPax: number
   message: string | null

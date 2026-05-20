@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import Image from 'next/image'
+import { useSession } from 'next-auth/react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import {
@@ -10,19 +10,42 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 import { useTranslation } from '@/lib/context/translation.context'
 import { useAction } from '@/lib/hooks/use-action'
 import {
   CalendarCheck2Icon,
   MoreHorizontalIcon,
   EyeIcon,
-  ImageIcon,
-  LoaderIcon,
   ExternalLinkIcon,
+  XIcon,
+  RotateCcwIcon,
 } from '@/lib/constants/icons'
 import { getAdminBookingsAction } from '@/lib/actions/bookings.actions'
-import { formatDate, formatTime, formatCurrency } from '@/lib/utils/format.utils'
+import { refundBooking } from '@/lib/api/bookings'
+import { AdminBookingDetailDialog } from '@/components/dashboard/bookings/booking-detail-dialog'
+import CancelBookingDialog from '@/components/dashboard/user/cancel-booking-dialog'
+import { StatusBadge } from '@/components/dashboard/bookings/status-badge'
+import {
+  BookingCoverCell,
+  BookingNameCell,
+  BookingDateCell,
+  BookingParticipantsCell,
+  BookingTotalCell,
+  BookingDepositCell,
+  PaymentStatusBadge,
+} from '@/components/dashboard/bookings/booking-cells'
+import { BookingsEmpty, BookingsLoadMore } from '@/components/dashboard/bookings/bookings-table-shell'
+import { isBookingCancellable } from '@/lib/utils/booking.utils'
 import type { AdminBooking, GetAdminBookingsParams, PaginatedAdminBookings } from '@/lib/api/bookings'
 
 type BookingsTableProps = {
@@ -31,20 +54,112 @@ type BookingsTableProps = {
   fetchParams: GetAdminBookingsParams
 }
 
-function PaymentBadge({ status, t }: { status: string; t: Record<string, string> }) {
-  const colorMap: Record<string, string> = {
-    PENDING: 'bg-amber-100 text-amber-800',
-    PAID: 'bg-green-100 text-green-800',
-    REFUNDED: 'bg-blue-100 text-blue-800',
-    FAILED: 'bg-red-100 text-red-800',
+function BookingRowActions({
+  booking,
+  onView,
+  onCancel,
+  onRefundSuccess,
+}: {
+  booking: AdminBooking
+  onView: () => void
+  onCancel: () => void
+  onRefundSuccess: (bookingId: string) => void
+}) {
+  const t = useTranslation() as Record<string, string>
+  const { data: session } = useSession()
+  const accessToken = session?.accessToken
+  const [refundDialogOpen, setRefundDialogOpen] = useState(false)
+
+  const { loading: refundLoading, execute: executeRefund } = useAction<AdminBooking>({
+    successMessage: t.admin_booking_refund_success,
+    onSuccess: () => {
+      onRefundSuccess(booking.id)
+      setRefundDialogOpen(false)
+    },
+  })
+
+  const canCancel = isBookingCancellable(booking)
+  const isRefundable = booking.status === 'CANCELLED' && booking.paymentStatus !== 'REFUNDED'
+  const isRefunded = booking.status === 'CANCELLED' && booking.paymentStatus === 'REFUNDED'
+
+  function handleRefund() {
+    if (!accessToken) return
+    executeRefund(async () => {
+      const data = await refundBooking(booking.id, accessToken)
+      return { success: true, data }
+    })
   }
 
   return (
-    <span
-      className={`rounded-full px-2 py-0.5 text-xs font-medium ${colorMap[status] || 'bg-muted text-muted-foreground'}`}
-    >
-      {t[`admin_payment_status_${status.toLowerCase()}`] || status}
-    </span>
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon-sm">
+            <MoreHorizontalIcon className="size-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          {canCancel ? (
+            <DropdownMenuItem onSelect={onCancel} className="text-destructive focus:text-destructive">
+              <XIcon className="size-4" />
+              {t.user_cancel_action}
+            </DropdownMenuItem>
+          ) : (
+            <DropdownMenuItem onSelect={onView}>
+              <EyeIcon className="size-4" />
+              {t.admin_booking_action_view}
+            </DropdownMenuItem>
+          )}
+          {isRefundable && (
+            <DropdownMenuItem onSelect={() => setRefundDialogOpen(true)}>
+              <RotateCcwIcon className="size-4" />
+              {t.admin_booking_action_refund}
+            </DropdownMenuItem>
+          )}
+          {isRefunded && (
+            <DropdownMenuItem disabled>
+              <RotateCcwIcon className="size-4" />
+              {t.admin_booking_payment_refunded}
+            </DropdownMenuItem>
+          )}
+          {booking.stripePaymentIntentId && (
+            <DropdownMenuItem asChild>
+              <a
+                href={`https://dashboard.stripe.com/payments/${booking.stripePaymentIntentId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <ExternalLinkIcon className="size-4" />
+                {t.admin_booking_action_view_on_stripe}
+              </a>
+            </DropdownMenuItem>
+          )}
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <AlertDialog open={refundDialogOpen} onOpenChange={setRefundDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t.admin_booking_refund_confirm_title}</AlertDialogTitle>
+            <AlertDialogDescription>{t.admin_booking_refund_confirm_desc}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={refundLoading}>
+              {t.admin_booking_refund_confirm_cancel}
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={e => {
+                e.preventDefault()
+                handleRefund()
+              }}
+              disabled={refundLoading}
+            >
+              {t.admin_booking_refund_confirm_action}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   )
 }
 
@@ -56,6 +171,8 @@ export default function BookingsTable({
   const t = useTranslation() as Record<string, string>
   const [bookings, setBookings] = useState(initialBookings)
   const [nextCursor, setNextCursor] = useState(initialNextCursor)
+  const [selectedBooking, setSelectedBooking] = useState<AdminBooking | null>(null)
+  const [cancelTarget, setCancelTarget] = useState<AdminBooking | null>(null)
 
   const { loading, execute: loadMore } = useAction<PaginatedAdminBookings>({
     onSuccess: data => {
@@ -66,141 +183,90 @@ export default function BookingsTable({
     },
   })
 
+  function handleBookingCancelled(cancelledId: string) {
+    setBookings(prev => prev.map(b => (b.id === cancelledId ? { ...b, status: 'CANCELLED' } : b)))
+  }
+
+  function handleRefundSuccess(bookingId: string) {
+    setBookings(prev => prev.map(b => (b.id === bookingId ? { ...b, paymentStatus: 'REFUNDED' } : b)))
+  }
+
   function handleLoadMore() {
     if (!nextCursor) return
     loadMore(() => getAdminBookingsAction({ ...fetchParams, cursor: nextCursor }))
   }
 
+  if (bookings.length === 0) {
+    return <BookingsEmpty icon={CalendarCheck2Icon}>{t.admin_bookings_no_results}</BookingsEmpty>
+  }
+
   return (
-    <Tabs defaultValue="experiences">
-      <TabsList>
-        <TabsTrigger value="experiences">{t.admin_bookings_tab_experiences}</TabsTrigger>
-        <TabsTrigger value="stays">{t.admin_bookings_tab_stays}</TabsTrigger>
-      </TabsList>
+    <div className="space-y-4">
+      <div className="rounded-xl border border-border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-16" />
+              <TableHead>{t.admin_booking_col_experience}</TableHead>
+              <TableHead>{t.admin_booking_col_date}</TableHead>
+              <TableHead>{t.admin_booking_col_participants}</TableHead>
+              <TableHead>{t.admin_booking_col_total}</TableHead>
+              <TableHead>{t.admin_booking_col_deposit}</TableHead>
+              <TableHead>{t.admin_booking_col_status}</TableHead>
+              <TableHead>{t.admin_booking_col_payment}</TableHead>
+              <TableHead className="w-16" />
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {bookings.map(booking => (
+              <TableRow
+                key={booking.id}
+                className="cursor-pointer hover:bg-muted/50"
+                onClick={() => setSelectedBooking(booking)}
+              >
+                <BookingCoverCell booking={booking} />
+                <BookingNameCell booking={booking} />
+                <BookingDateCell booking={booking} />
+                <BookingParticipantsCell booking={booking} />
+                <BookingTotalCell booking={booking} />
+                <BookingDepositCell booking={booking} />
+                <TableCell>
+                  <StatusBadge status={booking.status} />
+                </TableCell>
+                <TableCell>
+                  <PaymentStatusBadge status={booking.paymentStatus} />
+                </TableCell>
+                <TableCell onClick={e => e.stopPropagation()}>
+                  <BookingRowActions
+                    booking={booking}
+                    onView={() => setSelectedBooking(booking)}
+                    onCancel={() => setCancelTarget(booking)}
+                    onRefundSuccess={handleRefundSuccess}
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+      {nextCursor && <BookingsLoadMore onClick={handleLoadMore} loading={loading} />}
 
-      <TabsContent value="experiences" className="mt-4">
-        {bookings.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border/60 bg-muted/20 px-6 py-14 text-center">
-            <div className="mb-4 flex size-14 items-center justify-center rounded-2xl bg-muted/60">
-              <CalendarCheck2Icon className="size-6 text-muted-foreground/50" />
-            </div>
-            <p className="max-w-[240px] text-sm leading-relaxed text-muted-foreground/70">
-              {t.admin_bookings_no_results}
-            </p>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            <div className="rounded-xl border border-border">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-16" />
-                    <TableHead>{t.admin_booking_col_experience}</TableHead>
-                    <TableHead>{t.admin_booking_col_date}</TableHead>
-                    <TableHead>{t.admin_booking_col_participants}</TableHead>
-                    <TableHead>{t.admin_booking_col_total}</TableHead>
-                    <TableHead>{t.admin_booking_col_deposit}</TableHead>
-                    <TableHead>{t.admin_booking_col_payment}</TableHead>
-                    <TableHead className="w-16" />
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {bookings.map(booking => (
-                    <TableRow key={booking.id}>
-                      <TableCell>
-                        {booking.listing.cover ? (
-                          <Image
-                            src={booking.listing.cover}
-                            alt={booking.listing.name}
-                            width={40}
-                            height={40}
-                            className="size-10 rounded-lg object-cover"
-                            unoptimized
-                          />
-                        ) : (
-                          <div className="flex size-10 items-center justify-center rounded-lg bg-muted">
-                            <ImageIcon className="size-4 text-muted-foreground" />
-                          </div>
-                        )}
-                      </TableCell>
-                      <TableCell className="font-medium">{booking.listing.name}</TableCell>
-                      <TableCell className="text-muted-foreground">
-                        <div className="flex flex-col">
-                          <span>{formatDate(booking.date)}</span>
-                          {booking.timeSlot && (
-                            <span className="text-xs">
-                              {formatTime(booking.timeSlot.startTime)} -{' '}
-                              {formatTime(booking.timeSlot.endTime)}
-                            </span>
-                          )}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <span className="text-sm">{booking.totalPax}</span>
-                      </TableCell>
-                      <TableCell className="text-sm">
-                        {booking.priceSnapshot ? formatCurrency(booking.priceSnapshot.total) : '\u2014'}
-                      </TableCell>
-                      <TableCell className="text-sm text-muted-foreground">
-                        {booking.depositAmount ? formatCurrency(booking.depositAmount) : '\u2014'}
-                      </TableCell>
-                      <TableCell>
-                        <PaymentBadge status={booking.paymentStatus} t={t} />
-                      </TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon-sm">
-                              <MoreHorizontalIcon className="size-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem>
-                              <EyeIcon className="size-4" />
-                              {t.admin_booking_action_view}
-                            </DropdownMenuItem>
-                            {booking.stripePaymentIntentId && (
-                              <DropdownMenuItem asChild>
-                                <a
-                                  href={`https://dashboard.stripe.com/payments/${booking.stripePaymentIntentId}`}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                >
-                                  <ExternalLinkIcon className="size-4" />
-                                  {t.admin_booking_action_view_on_stripe}
-                                </a>
-                              </DropdownMenuItem>
-                            )}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-            {nextCursor && (
-              <div className="flex justify-center">
-                <Button variant="outline" onClick={handleLoadMore} disabled={loading}>
-                  {loading && <LoaderIcon className="size-4 animate-spin" />}
-                  {t.admin_load_more}
-                </Button>
-              </div>
-            )}
-          </div>
-        )}
-      </TabsContent>
+      <AdminBookingDetailDialog
+        booking={selectedBooking}
+        open={!!selectedBooking}
+        onOpenChange={open => !open && setSelectedBooking(null)}
+        onCancelled={handleBookingCancelled}
+      />
 
-      <TabsContent value="stays" className="mt-4">
-        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border/60 bg-muted/20 px-6 py-14 text-center">
-          <div className="mb-4 flex size-14 items-center justify-center rounded-2xl bg-muted/60">
-            <CalendarCheck2Icon className="size-6 text-muted-foreground/50" />
-          </div>
-          <p className="max-w-[240px] text-sm leading-relaxed text-muted-foreground/70">
-            {t.admin_bookings_stays_coming_soon}
-          </p>
-        </div>
-      </TabsContent>
-    </Tabs>
+      <CancelBookingDialog
+        open={!!cancelTarget}
+        onOpenChange={open => !open && setCancelTarget(null)}
+        bookingId={cancelTarget?.id ?? ''}
+        onSuccess={() => {
+          if (cancelTarget) handleBookingCancelled(cancelTarget.id)
+          setCancelTarget(null)
+        }}
+      />
+    </div>
   )
 }

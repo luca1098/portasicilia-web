@@ -80,6 +80,8 @@ export default function LoginPopup({ onClose }: LoginPopupProps) {
     },
   })
 
+  const buildCallbackUrl = () => `${pathname}${window.location.search}`
+
   const onSubmit = (values: EmailFormValues) => {
     void execute(async () => {
       const res = await fetch('/api/magic-link/request', {
@@ -88,7 +90,7 @@ export default function LoginPopup({ onClose }: LoginPopupProps) {
         body: JSON.stringify({
           email: values.email,
           lang: lang.toUpperCase(),
-          callbackUrl: pathname,
+          callbackUrl: buildCallbackUrl(),
         }),
       })
       if (!res.ok) {
@@ -156,7 +158,7 @@ export default function LoginPopup({ onClose }: LoginPopupProps) {
                   variant="outline"
                   size="lg"
                   className="w-full justify-center gap-3"
-                  onClick={() => signIn('google', { callbackUrl: pathname })}
+                  onClick={() => signIn('google', { callbackUrl: buildCallbackUrl() })}
                 >
                   <GoogleIcon className="size-5" />
                   {t.login_with_google}
@@ -166,7 +168,7 @@ export default function LoginPopup({ onClose }: LoginPopupProps) {
                   variant="outline"
                   size="lg"
                   className="w-full justify-center gap-3"
-                  onClick={() => signIn('apple', { callbackUrl: pathname })}
+                  onClick={() => signIn('apple', { callbackUrl: buildCallbackUrl() })}
                 >
                   <AppleIcon className="size-5" />
                   {t.login_with_apple}

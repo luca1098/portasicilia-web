@@ -5,7 +5,7 @@ import { PageParamsProps } from '@/lib/types/page.type'
 import { interpolate } from '@/lib/utils/i18n.utils'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
-import { getAdminStats } from '@/lib/api/bookings'
+import { getAdminStats } from '@/lib/api/admin'
 import AdminDashboardContent from '@/components/dashboard/admin-dashboard-content'
 
 export default async function AdminDashboardPage({ params }: PageParamsProps) {
@@ -20,7 +20,7 @@ export default async function AdminDashboardPage({ params }: PageParamsProps) {
   const name = session.user.firstName || session.user.email
   const headers = { Authorization: `Bearer ${session.accessToken}` }
 
-  let statsValues = { locations: '—', experiences: '—', stays: '—', users: '—' }
+  let statsValues = { locations: '—', experiences: '—', stays: '—', users: '—', owners: '—' }
   try {
     const data = await getAdminStats(headers)
     statsValues = {
@@ -28,6 +28,7 @@ export default async function AdminDashboardPage({ params }: PageParamsProps) {
       experiences: String(data.experiences),
       stays: String(data.stays),
       users: String(data.users),
+      owners: String(data.owners),
     }
   } catch {
     // Stats endpoint may not be available yet; show placeholders
@@ -42,6 +43,7 @@ export default async function AdminDashboardPage({ params }: PageParamsProps) {
         experiences: t.admin_stats_experiences,
         stays: t.admin_stats_stays,
         users: t.admin_stats_users,
+        owners: t.admin_stats_owners,
       }}
       values={statsValues}
     />

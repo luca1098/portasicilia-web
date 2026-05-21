@@ -1,5 +1,7 @@
 'use client'
 
+import Link from 'next/link'
+import { useParams } from 'next/navigation'
 import { useTranslation } from '@/lib/context/translation.context'
 import { InputFormField } from '@/components/form/input-form-field'
 import { TextareaFormField } from '@/components/form/textarea-form-field'
@@ -11,6 +13,8 @@ type ReferralOption = { value: string; label: string }
 
 export default function ApplicationWizardStep3() {
   const t = useTranslation()
+  const params = useParams()
+  const lang = params.lang as string
   const referralOptions: ReferralOption[] = [
     { value: 'GOOGLE', label: t.partner_form_referral_google },
     { value: 'SOCIAL', label: t.partner_form_referral_social },
@@ -53,6 +57,24 @@ export default function ApplicationWizardStep3() {
       <CheckboxFormField<PartnerApplicationFormValues>
         name="gdprConsent"
         label={t.partner_form_gdpr_consent}
+        required
+      />
+
+      <CheckboxFormField<PartnerApplicationFormValues>
+        name="partnerTermsConsent"
+        label={
+          <>
+            {t.partner_form_partner_terms_consent_pre}{' '}
+            <Link
+              href={`/${lang}/partner-terms`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary underline"
+            >
+              {t.partner_form_partner_terms_consent_link}
+            </Link>
+          </>
+        }
         required
       />
     </div>

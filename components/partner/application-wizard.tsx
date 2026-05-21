@@ -46,6 +46,7 @@ export default function ApplicationWizard({ lang }: Props) {
       description: '',
       pitch: '',
       gdprConsent: false as unknown as true,
+      partnerTermsConsent: false as unknown as true,
       applicantLang: lang.toUpperCase() as 'IT' | 'EN',
     },
   })

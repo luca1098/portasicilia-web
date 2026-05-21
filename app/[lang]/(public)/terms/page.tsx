@@ -24,208 +24,246 @@ export default async function TermsPage({ params }: PageParamsProps) {
   return (
     <PageWrapper>
       <section className="mx-auto max-w-4xl px-4 py-16 md:px-8">
-        <h1 className="mb-10 text-4xl font-bold tracking-tight">{t.terms_title}</h1>
+        <h1 className="mb-2 text-4xl font-bold tracking-tight">{t.terms_title}</h1>
+        <p className="mb-10 text-sm text-muted-foreground">{t.terms_last_updated}</p>
 
-        <div className="space-y-8 text-muted-foreground [&_h2]:mb-3 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-foreground [&_h3]:mb-2 [&_h3]:text-lg [&_h3]:font-medium [&_h3]:text-foreground [&_p]:leading-relaxed [&_ul]:ml-6 [&_ul]:list-disc [&_ul]:space-y-1">
+        <div className="space-y-10 text-muted-foreground [&_h2]:mb-3 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-foreground [&_h3]:mb-2 [&_h3]:mt-6 [&_h3]:text-lg [&_h3]:font-medium [&_h3]:text-foreground [&_p]:leading-relaxed [&_ul]:ml-6 [&_ul]:list-disc [&_ul]:space-y-1">
           <div>
-            <h2>1. {t.terms_1_title}</h2>
-            <p>{t.terms_1_text}</p>
-          </div>
-
-          <div>
-            <h2>2. {t.terms_2_title}</h2>
-            <p>{t.terms_2_text}</p>
-          </div>
-
-          <div>
-            <h2>3. {t.terms_3_title}</h2>
-            <p>{t.terms_3_text}</p>
-          </div>
-
-          <div>
-            <h2>4. {t.terms_4_title}</h2>
-            <p>{t.terms_4_text}</p>
-            <h3 className="mt-4">4.1 {t.terms_4_1_title}</h3>
-            <p>{t.terms_4_1_text}</p>
-          </div>
-
-          <div>
-            <h2>5. {t.terms_5_title}</h2>
-            <p>{t.terms_5_text_1}</p>
-            <p>{t.terms_5_text_2}</p>
-          </div>
-
-          <div>
-            <h2>6. {t.terms_6_title}</h2>
-            <p>{t.terms_6_text_1}</p>
-            <p>{t.terms_6_text_2}</p>
-          </div>
-
-          <div>
-            <h2>7. {t.terms_7_title}</h2>
-
-            <h3 className="mt-4">7.1 {t.terms_7_1_title}</h3>
-            <p>{t.terms_7_1_text_1}</p>
-            <p>{t.terms_7_1_text_2}</p>
-            <p>{t.terms_7_1_text_3}</p>
-
-            <h3 className="mt-6">7.2 {t.terms_7_2_title}</h3>
-            <p>{t.terms_7_2_text}</p>
-            <ul>
-              <li>{t.terms_7_2_item_1}</li>
-              <li>{t.terms_7_2_item_2}</li>
-              <li>{t.terms_7_2_item_3}</li>
+            <h2>{t.terms_operator_title}</h2>
+            <p>{t.terms_operator_intro}</p>
+            <ul className="mt-2">
+              <li>{t.terms_operator_company}</li>
+              <li>{t.terms_operator_address}</li>
+              <li>{t.terms_operator_vat}</li>
+              <li>{t.terms_operator_rea}</li>
+              <li>{t.terms_operator_pec}</li>
+              <li>{t.terms_operator_email}</li>
+              <li>{t.terms_operator_phone}</li>
             </ul>
-            <p className="mt-3">{t.terms_7_2_no_confirm}</p>
+            <p className="mt-3">{t.terms_operator_brand}</p>
+          </div>
 
-            <h3 className="mt-6">{t.terms_7_2_cancel_title}</h3>
-            <p>{t.terms_7_2_cancel_free}</p>
-            <p>{t.terms_7_2_cancel_late}</p>
-            <p>{t.terms_7_2_cancel_noshow}</p>
-
-            <h3 className="mt-6">7.3 {t.terms_7_3_title}</h3>
-            <p>{t.terms_7_3_text}</p>
-            <ul>
-              <li>{t.terms_7_3_item_1}</li>
-              <li>{t.terms_7_3_item_2}</li>
-              <li>{t.terms_7_3_item_3}</li>
+          <div>
+            <h2>{t.terms_defs_title}</h2>
+            <p>{t.terms_defs_intro}</p>
+            <ul className="mt-2">
+              <li>{t.terms_defs_user}</li>
+              <li>{t.terms_defs_host}</li>
+              <li>{t.terms_defs_platform}</li>
+              <li>{t.terms_defs_service}</li>
+              <li>{t.terms_defs_product}</li>
+              <li>{t.terms_defs_booking}</li>
+              <li>{t.terms_defs_commission}</li>
             </ul>
+          </div>
 
-            <h3 className="mt-6">{t.terms_7_3_cancel_title}</h3>
-            <p>{t.terms_7_3_cancel_30}</p>
-            <p>{t.terms_7_3_cancel_late}</p>
+          <div>
+            <h2>{t.terms_acceptance_title}</h2>
+            <p>{t.terms_acceptance_text_1}</p>
+            <p>{t.terms_acceptance_text_2}</p>
+            <p>{t.terms_acceptance_text_3}</p>
+          </div>
 
-            <h3 className="mt-4">{t.terms_7_3_issues_title}</h3>
-            <p>{t.terms_7_3_issues_text}</p>
+          <div>
+            <h2>{t.terms_age_title}</h2>
+            <p>{t.terms_age_text}</p>
+          </div>
+
+          <div>
+            <h2>{t.terms_auth_title}</h2>
+            <p>{t.terms_auth_intro}</p>
+            <p>{t.terms_auth_google}</p>
+            <p>{t.terms_auth_apple}</p>
+            <p>{t.terms_auth_credentials}</p>
+          </div>
+
+          <div>
+            <h2>{t.terms_platform_title}</h2>
+            <p>{t.terms_platform_intro}</p>
+
+            <h3>{t.terms_platform_exp_title}</h3>
+            <p>{t.terms_platform_exp_text}</p>
             <ul>
-              <li>{t.terms_7_3_issues_item_1}</li>
-              <li>{t.terms_7_3_issues_item_2}</li>
+              <li>{t.terms_platform_exp_item_1}</li>
+              <li>{t.terms_platform_exp_item_2}</li>
+              <li>{t.terms_platform_exp_item_3}</li>
+            </ul>
+            <p className="mt-3">{t.terms_platform_exp_no_confirm}</p>
+
+            <h3>{t.terms_platform_stay_title}</h3>
+            <p>{t.terms_platform_stay_text}</p>
+            <ul>
+              <li>{t.terms_platform_stay_item_1}</li>
+              <li>{t.terms_platform_stay_item_2}</li>
+              <li>{t.terms_platform_stay_item_3}</li>
             </ul>
 
-            <h3 className="mt-6">7.4 {t.terms_7_4_title}</h3>
-            <p>{t.terms_7_4_text_1}</p>
-            <p>{t.terms_7_4_text_2}</p>
+            <h3>{t.terms_platform_shop_title}</h3>
+            <p>{t.terms_platform_shop_text}</p>
           </div>
 
           <div>
-            <h2>8. {t.terms_8_title}</h2>
+            <h2>{t.terms_payments_title}</h2>
+            <p>{t.terms_payments_stripe}</p>
+            <p>{t.terms_payments_sca}</p>
+            <p>{t.terms_payments_transfer}</p>
+            <p>{t.terms_payments_methods}</p>
+            <p>{t.terms_payments_prices}</p>
+            <p>{t.terms_payments_invoice}</p>
+          </div>
 
-            <h3 className="mt-4">8.1 {t.terms_8_1_title}</h3>
-            <p>{t.terms_8_1_text}</p>
+          <div>
+            <h2>{t.terms_cancel_title}</h2>
+            <p>{t.terms_cancel_framework}</p>
+
+            <h3>{t.terms_cancel_exp_title}</h3>
+            <p>{t.terms_cancel_exp_free}</p>
+            <p>{t.terms_cancel_exp_late}</p>
+            <p>{t.terms_cancel_exp_noshow}</p>
+
+            <h3>{t.terms_cancel_stay_title}</h3>
+            <p>{t.terms_cancel_stay_30}</p>
+            <p>{t.terms_cancel_stay_late}</p>
+
+            <h3>{t.terms_cancel_stay_issues_title}</h3>
+            <p>{t.terms_cancel_stay_issues_text}</p>
             <ul>
-              <li>{t.terms_8_1_item_1}</li>
-              <li>{t.terms_8_1_item_2}</li>
-              <li>{t.terms_8_1_item_3}</li>
+              <li>{t.terms_cancel_stay_issues_item_1}</li>
+              <li>{t.terms_cancel_stay_issues_item_2}</li>
             </ul>
-            <p className="mt-3">{t.terms_8_1_note}</p>
 
-            <h3 className="mt-6">8.2 {t.terms_8_2_title}</h3>
-            <p>{t.terms_8_2_text}</p>
-            <p>{t.terms_8_2_cases}</p>
+            <h3>{t.terms_cancel_refund_title}</h3>
+            <p>{t.terms_cancel_refund_text_1}</p>
+            <p>{t.terms_cancel_refund_text_2}</p>
+          </div>
+
+          <div>
+            <h2>{t.terms_food_title}</h2>
+            <p>{t.terms_food_labeling}</p>
+            <p>{t.terms_food_shipping}</p>
+            <p>{t.terms_food_delays}</p>
+            <p>{t.terms_food_orders}</p>
+            <p>{t.terms_food_guarantee}</p>
+          </div>
+
+          <div>
+            <h2>{t.terms_food_withdrawal_title}</h2>
+            <p>{t.terms_food_withdrawal_text_1}</p>
+            <p>{t.terms_food_withdrawal_exceptions}</p>
+            <p>{t.terms_food_withdrawal_procedure}</p>
+          </div>
+
+          <div>
+            <h2>{t.terms_user_obligations_title}</h2>
+            <p>{t.terms_user_obligations_text}</p>
+            <p>{t.terms_user_obligations_cases}</p>
             <ul>
-              <li>{t.terms_8_2_item_1}</li>
-              <li>{t.terms_8_2_item_2}</li>
-              <li>{t.terms_8_2_item_3}</li>
+              <li>{t.terms_user_obligations_item_1}</li>
+              <li>{t.terms_user_obligations_item_2}</li>
+              <li>{t.terms_user_obligations_item_3}</li>
             </ul>
-            <p className="mt-3">{t.terms_8_2_note}</p>
+            <p className="mt-3">{t.terms_user_obligations_note}</p>
+            <p>{t.terms_user_obligations_responsible_use}</p>
+          </div>
 
-            <h3 className="mt-6">8.3 {t.terms_8_3_title}</h3>
-            <p>{t.terms_8_3_text}</p>
+          <div>
+            <h2>{t.terms_chargeback_title}</h2>
+            <p>{t.terms_chargeback_text_1}</p>
+            <p>{t.terms_chargeback_text_2}</p>
+            <p>{t.terms_chargeback_text_3}</p>
+          </div>
+
+          <div>
+            <h2>{t.terms_liability_title}</h2>
+            <p>{t.terms_liability_intermediary}</p>
             <ul>
-              <li>{t.terms_8_3_item_1}</li>
-              <li>{t.terms_8_3_item_2}</li>
-              <li>{t.terms_8_3_item_3}</li>
-              <li>{t.terms_8_3_item_4}</li>
+              <li>{t.terms_liability_item_1}</li>
+              <li>{t.terms_liability_item_2}</li>
+              <li>{t.terms_liability_item_3}</li>
             </ul>
-            <p className="mt-3">{t.terms_8_3_note}</p>
-
-            <h3 className="mt-6">8.4 {t.terms_8_4_title}</h3>
-            <p>{t.terms_8_4_text_1}</p>
-            <p>{t.terms_8_4_text_2}</p>
-            <p>{t.terms_8_4_text_3}</p>
+            <p className="mt-3">{t.terms_liability_limits}</p>
+            <p>{t.terms_liability_carveout}</p>
           </div>
 
           <div>
-            <h2>9. {t.terms_9_title}</h2>
-            <p>{t.terms_9_text}</p>
+            <h2>{t.terms_reviews_title}</h2>
+            <p>{t.terms_reviews_authenticity}</p>
+            <p>{t.terms_reviews_rules}</p>
+            <p>{t.terms_reviews_moderation}</p>
           </div>
 
           <div>
-            <h2>10. {t.terms_10_title}</h2>
-            <p>{t.terms_10_text}</p>
+            <h2>{t.terms_ip_title}</h2>
+            <p>{t.terms_ip_ownership}</p>
+            <p>{t.terms_ip_reserved}</p>
+            <p>{t.terms_ip_user_content}</p>
+            <p>{t.terms_ip_third_party}</p>
           </div>
 
           <div>
-            <h2>11. {t.terms_11_title}</h2>
-            <p>{t.terms_11_text_1}</p>
-            <ul>
-              <li>{t.terms_11_item_1}</li>
-              <li>{t.terms_11_item_2}</li>
-            </ul>
-            <p className="mt-3">{t.terms_11_text_2}</p>
-            <p>{t.terms_11_text_3}</p>
-            <p>{t.terms_11_text_4}</p>
+            <h2>{t.terms_dsa_title}</h2>
+            <p>{t.terms_dsa_intro}</p>
+            <p>{t.terms_dsa_procedure}</p>
+            <p>{t.terms_dsa_appeal}</p>
+            <p>{t.terms_dsa_authority}</p>
           </div>
 
           <div>
-            <h2>12. {t.terms_12_title}</h2>
-            <p>{t.terms_12_text}</p>
+            <h2>{t.terms_cookies_title}</h2>
+            <p>{t.terms_cookies_text}</p>
           </div>
 
           <div>
-            <h2>13. {t.terms_13_title}</h2>
-            <p>{t.terms_13_text}</p>
+            <h2>{t.terms_translation_title}</h2>
+            <p>{t.terms_translation_prevailing}</p>
+            <p>{t.terms_translation_auto}</p>
           </div>
 
           <div>
-            <h2>14. {t.terms_14_title}</h2>
-            <p>{t.terms_14_text}</p>
+            <h2>{t.terms_privacy_title}</h2>
+            <p>{t.terms_privacy_text}</p>
           </div>
 
           <div>
-            <h2>15. {t.terms_15_title}</h2>
-            <p>{t.terms_15_text}</p>
+            <h2>{t.terms_host_title}</h2>
+            <p>{t.terms_host_text_1}</p>
+            <p>{t.terms_host_text_2}</p>
           </div>
 
           <div>
-            <h2>16. {t.terms_16_title}</h2>
-            <p>{t.terms_16_text}</p>
+            <h2>{t.terms_termination_title}</h2>
+            <p>{t.terms_termination_text}</p>
           </div>
 
           <div>
-            <h2>17. {t.terms_17_title}</h2>
-            <p>{t.terms_17_text}</p>
+            <h2>{t.terms_changes_title}</h2>
+            <p>{t.terms_changes_text}</p>
           </div>
 
           <div>
-            <h2>18. {t.terms_18_title}</h2>
-            <p>{t.terms_18_text}</p>
+            <h2>{t.terms_law_title}</h2>
+            <p>{t.terms_law_text_1}</p>
+            <p>{t.terms_law_text_2}</p>
+            <p>{t.terms_law_severability}</p>
           </div>
 
           <div>
-            <h2>19. {t.terms_19_title}</h2>
-            <p>{t.terms_19_text}</p>
+            <h2>{t.terms_odr_title}</h2>
+            <p>{t.terms_odr_text_1}</p>
+            <p>{t.terms_odr_text_2}</p>
           </div>
 
           <div>
-            <h2>20. {t.terms_20_title}</h2>
-            <p>{t.terms_20_text}</p>
+            <h2>{t.terms_misc_title}</h2>
+            <p>{t.terms_misc_entire}</p>
+            <p>{t.terms_misc_waiver}</p>
+            <p>{t.terms_misc_assignment}</p>
+            <p>{t.terms_misc_affiliate}</p>
           </div>
 
           <div>
-            <h2>21. {t.terms_21_title}</h2>
-            <p>{t.terms_21_text}</p>
-          </div>
-
-          <div>
-            <h2>22. {t.terms_22_title}</h2>
-            <p>{t.terms_22_text_1}</p>
-            <p>{t.terms_22_text_2}</p>
-          </div>
-
-          <div>
-            <h2>23. {t.terms_23_title}</h2>
-            <p>{t.terms_23_text}</p>
+            <h2>{t.terms_contact_title}</h2>
+            <p>{t.terms_contact_text}</p>
           </div>
         </div>
       </section>

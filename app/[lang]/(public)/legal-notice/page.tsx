@@ -28,11 +28,28 @@ export default async function LegalNoticePage({ params }: PageParamsProps) {
 
         <div className="space-y-8 text-muted-foreground [&_h2]:mb-3 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-foreground [&_p]:leading-relaxed">
           <div>
-            <h2>{t.legal_notice_seller_title}</h2>
-            <p>GUARNERI SALVATORE</p>
-            <p>{t.legal_notice_address}: Cortile Gonzales 7, 90025 Lercara Friddi (PA), Italia</p>
-            <p>{t.legal_notice_vat}: 07069930829</p>
-            <p>{t.legal_notice_phone}: 327 4522382</p>
+            <h2>{t.legal_notice_owner_title}</h2>
+            <p>{t.legal_notice_owner_intro}</p>
+            <p className="mt-3 font-medium text-foreground">{t.legal_notice_owner_company}</p>
+            <p>{t.legal_notice_owner_brand}</p>
+            <p>
+              {t.legal_notice_address}: {t.legal_notice_address_value}
+            </p>
+            <p>
+              {t.legal_notice_vat}: {t.legal_notice_vat_value}
+            </p>
+            <p>
+              {t.legal_notice_rea}: {t.legal_notice_rea_value}
+            </p>
+            <p>
+              {t.legal_notice_pec}: {t.legal_notice_pec_value}
+            </p>
+            <p>
+              {t.legal_notice_email}: {t.legal_notice_email_value}
+            </p>
+            <p>
+              {t.legal_notice_phone}: {t.legal_notice_phone_value}
+            </p>
           </div>
 
           <div>
@@ -58,6 +75,11 @@ export default async function LegalNoticePage({ params }: PageParamsProps) {
           <div>
             <h2>{t.legal_notice_jurisdiction_title}</h2>
             <p>{t.legal_notice_jurisdiction_desc}</p>
+          </div>
+
+          <div>
+            <h2>{t.legal_notice_odr_title}</h2>
+            <p>{t.legal_notice_odr_desc}</p>
           </div>
         </div>
       </section>

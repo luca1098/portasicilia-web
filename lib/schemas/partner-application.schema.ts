@@ -9,6 +9,7 @@ type Translations = {
   partner_form_required: string
   partner_form_email_invalid: string
   partner_form_gdpr_required: string
+  partner_form_partner_terms_required: string
 }
 
 export const createPartnerApplicationSchema = (t: Translations) => {
@@ -50,6 +51,7 @@ export const createPartnerApplicationSchema = (t: Translations) => {
     pitch: z.string().trim().min(20, minMsg(20)).max(500, maxMsg(500)),
     referralSource: z.enum(['GOOGLE', 'SOCIAL', 'WORD_OF_MOUTH', 'OTHER']).optional(),
     gdprConsent: z.literal(true, { error: t.partner_form_gdpr_required }),
+    partnerTermsConsent: z.literal(true, { error: t.partner_form_partner_terms_required }),
     applicantLang: z.enum(['IT', 'EN']),
   })
 }

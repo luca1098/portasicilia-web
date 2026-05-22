@@ -173,6 +173,7 @@ export default function Footer() {
     { label: t.footer_faq, href: '/faq' },
     { label: t.footer_cancellation, href: '/cancellation-policy' },
     { label: t.footer_become_partner, href: '/partner' },
+    { label: t.footer_partner_terms, href: '/partner-terms' },
     { label: t.footer_legal_notice, href: '/legal-notice' },
   ]
 

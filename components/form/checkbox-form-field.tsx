@@ -1,4 +1,5 @@
 'use client'
+import { type ReactNode } from 'react'
 import { type FieldValues, type Path } from 'react-hook-form'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
@@ -7,7 +8,7 @@ import { FormField } from './form-field'
 
 interface CheckboxFormFieldProps<TFieldValues extends FieldValues> {
   name: Path<TFieldValues>
-  label: string
+  label: ReactNode
   description?: string
   className?: string
   disabled?: boolean

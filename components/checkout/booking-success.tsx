@@ -181,7 +181,7 @@ export default function BookingSuccess({
           guestSummary,
         }}
       >
-        <div className="mt-8 rounded-xl border bg-background">
+        <div className="mt-8 overflow-hidden rounded-xl border bg-background">
           <BookingCard.Header variant="large" />
           <BookingCard.Divider />
           {isStay ? (

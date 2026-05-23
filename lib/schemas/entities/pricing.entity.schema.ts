@@ -91,3 +91,27 @@ export const PriceListSchema = z.object({
 })
 
 export type PriceList = z.infer<typeof PriceListSchema>
+
+// ==================== EXPERIENCE SEASON ====================
+
+export const ExperienceSeasonTierPriceSchema = z.object({
+  overrideId: z.string(),
+  priceTierId: z.string(),
+  overrideAmount: z.number(),
+})
+
+export type ExperienceSeasonTierPrice = z.infer<typeof ExperienceSeasonTierPriceSchema>
+
+export const ExperienceSeasonSchema = z.object({
+  seasonGroupId: z.string(),
+  name: z.string(),
+  dateFrom: z.string(),
+  dateTo: z.string(),
+  dayOfWeek: z.array(z.number()).nullish(),
+  priority: z.number().int(),
+  reason: z.string().nullable(),
+  active: z.boolean(),
+  tierPrices: z.array(ExperienceSeasonTierPriceSchema),
+})
+
+export type ExperienceSeason = z.infer<typeof ExperienceSeasonSchema>

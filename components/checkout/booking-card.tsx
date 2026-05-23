@@ -251,27 +251,24 @@ function DepositPaid() {
 
   if (state.depositAmount === null || state.depositAmount <= 0) return null
 
+  const remaining = state.totalPrice !== null ? state.totalPrice - state.depositAmount : 0
+
   return (
-    <div className="mx-5 mb-5 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 dark:border-emerald-800 dark:bg-emerald-950/40">
-      <div className="flex items-center justify-between">
-        <span className="text-sm font-semibold text-emerald-700 dark:text-emerald-400">
-          {t.booking_success_deposit_paid}
-        </span>
-        <span className="text-sm font-semibold text-emerald-700 dark:text-emerald-400">
-          {`\u20AC ${Math.round(state.depositAmount)}`}
-        </span>
-      </div>
-      {state.totalPrice !== null && state.totalPrice - state.depositAmount > 0 && (
-        <div className="mt-1.5 flex items-center justify-between">
-          <span className="text-xs text-emerald-600/70 dark:text-emerald-500/70">
-            {t.booking_success_remaining_on_site}
-          </span>
-          <span className="text-xs text-emerald-600/70 dark:text-emerald-500/70">
-            {`\u20AC ${Math.round(state.totalPrice - state.depositAmount)}`}
-          </span>
+    <>
+      <Divider />
+      <div className="bg-success-soft px-5 py-4 text-success">
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-semibold">{t.booking_success_deposit_paid}</span>
+          <span className="text-sm font-semibold">{`\u20AC ${Math.round(state.depositAmount)}`}</span>
         </div>
-      )}
-    </div>
+        {remaining > 0 && (
+          <div className="mt-1 flex items-center justify-between opacity-75">
+            <span className="text-xs">{t.booking_success_remaining_on_site}</span>
+            <span className="text-xs">{`\u20AC ${Math.round(remaining)}`}</span>
+          </div>
+        )}
+      </div>
+    </>
   )
 }
 

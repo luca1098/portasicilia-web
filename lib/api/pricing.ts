@@ -3,6 +3,7 @@ import type {
   PriceTier,
   PriceModifier,
   PriceOverride,
+  ExperienceSeason,
 } from '@/lib/schemas/entities/pricing.entity.schema'
 import { apiServer } from './fetch-client'
 
@@ -92,4 +93,75 @@ export function updatePriceOverride(
 
 export function deletePriceOverride(_tierId: string, overrideId: string, headers: HeadersInit) {
   return apiServer.delete<void>(`/pricing/overrides/${overrideId}`, { headers })
+}
+
+// ==================== PRICE CALCULATION ====================
+
+export type PriceLineItem = {
+  tierType: string
+  label: string | null
+  quantity: number
+  quantityType: 'person' | 'experience' | 'asset' | 'night' | 'fee'
+  basePrice: string
+  overrideApplied: {
+    name: string
+    overrideAmount: string
+    reason: string | null
+  } | null
+  effectiveUnitPrice: string
+  modifiersApplied: unknown[]
+  finalUnitPrice: string
+  subtotal: string
+}
+
+export type PriceBreakdown = {
+  listingId: string
+  pricingMode: string
+  date: string
+  lineItems: PriceLineItem[]
+  modifiersApplied: unknown[]
+  subtotalBeforeModifiers: string
+  modifiersTotal: string
+  subtotalAfterModifiers: string
+  promoDiscount: string
+  netPrice: string
+  total: string
+  currency: string
+  commissionRate: string
+  commissionAmount: string
+  supplierPayout: string
+  calculatedAt: string
+}
+
+export type CalculatePriceInput = {
+  listingId: string
+  date: string
+  timeSlot?: string
+  participants?: { type: string; quantity: number }[]
+  assets?: { type: string; quantity: number }[]
+  totalParticipants?: number
+  numberOfNights?: number
+  promoCode?: string
+}
+
+export function calculatePrice(data: CalculatePriceInput) {
+  return apiServer.post<PriceBreakdown>('/pricing/calculate', data)
+}
+
+// ==================== EXPERIENCE SEASON ====================
+
+export function createSeason(data: unknown, headers: HeadersInit) {
+  return apiServer.post<ExperienceSeason>('/pricing/seasons', data, { headers })
+}
+
+export function getSeasonsByListingId(listingId: string) {
+  return apiServer.get<ExperienceSeason[]>(`/pricing/seasons/listing/${listingId}`)
+}
+
+export function updateSeason(seasonGroupId: string, data: unknown, headers: HeadersInit) {
+  return apiServer.patch<ExperienceSeason>(`/pricing/seasons/${seasonGroupId}`, data, { headers })
+}
+
+export function deleteSeason(seasonGroupId: string, headers: HeadersInit) {
+  return apiServer.delete<void>(`/pricing/seasons/${seasonGroupId}`, { headers })
 }

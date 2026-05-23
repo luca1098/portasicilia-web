@@ -97,7 +97,13 @@ function ExperienceInfoContent({ experience }: ExperienceInfoProps) {
             {categories.map(c => c.category.name).join(', ')}
           </span>
         )}
-        <button type="button" className="text-sm font-semibold text-primary underline">
+        <button
+          type="button"
+          onClick={() =>
+            document.getElementById('meeting-point')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          }
+          className="text-sm font-semibold text-primary underline"
+        >
           {t.exp_detail_show_map}
         </button>
       </div>

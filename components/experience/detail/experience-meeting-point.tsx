@@ -16,7 +16,7 @@ export default function ExperienceMeetingPoint({ experience }: ExperienceMeeting
   const embedUrl = `https://www.google.com/maps?q=${latitude},${longitude}&z=14&output=embed`
 
   return (
-    <div>
+    <div id="meeting-point" className="scroll-mt-24">
       <h2 className="mb-4 text-xl font-bold">{t.exp_detail_meeting_point}</h2>
       <p className="text-sm font-semibold">{address}</p>
       <a

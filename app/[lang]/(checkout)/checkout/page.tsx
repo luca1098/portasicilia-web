@@ -1,6 +1,7 @@
 import { notFound, redirect } from 'next/navigation'
 import { getExperienceById } from '@/lib/api/experiences'
 import { getStayById } from '@/lib/api/stays'
+import { calculatePrice, type CalculatePriceInput } from '@/lib/api/pricing'
 import CheckoutContent from '@/components/checkout/checkout-content'
 
 type CheckoutPageProps = {
@@ -132,70 +133,61 @@ export default async function CheckoutPage({ searchParams, params }: CheckoutPag
   const endTime = selectedSlot?.endTime ?? ''
 
   const tiers = experience.priceLists?.[0]?.tiers ?? []
+  const assetTierType = tiers[0]?.tierType ?? 'DEFAULT'
+
+  let depositAmount: number | null = experience.depositValue ?? null
 
   if (tiers.length > 0) {
+    const totalPax = adultsNum + childrenNum + infantsNum
+
+    const calcInput: CalculatePriceInput = {
+      listingId,
+      date,
+      // Mirror booking.service.ts: passes timeSlotId so display matches actual charge
+      ...(slotId && { timeSlot: slotId }),
+    }
+
     if (pricingMode === 'PER_PERSON') {
-      const adultTier = tiers.find(t => t.tierType === 'ADULT')
-      const childTier = tiers.find(t => t.tierType === 'CHILD')
-      const infantTier = tiers.find(t => t.tierType === 'INFANT')
-
-      if (adultTier) {
-        totalPrice = 0
-
-        if (adultsNum > 0) {
-          const subtotal = adultTier.baseAmount * adultsNum
-          priceTiers.push({
-            tierType: 'ADULT',
-            baseAmount: adultTier.baseAmount,
-            quantity: adultsNum,
-            subtotal,
-          })
-          totalPrice += subtotal
-        }
-
-        if (childTier && childrenNum > 0) {
-          const subtotal = childTier.baseAmount * childrenNum
-          priceTiers.push({
-            tierType: 'CHILD',
-            baseAmount: childTier.baseAmount,
-            quantity: childrenNum,
-            subtotal,
-          })
-          totalPrice += subtotal
-        }
-
-        if (infantTier && infantsNum > 0) {
-          const subtotal = infantTier.baseAmount * infantsNum
-          priceTiers.push({
-            tierType: 'INFANT',
-            baseAmount: infantTier.baseAmount,
-            quantity: infantsNum,
-            subtotal,
-          })
-          totalPrice += subtotal
-        }
-      }
+      const participants: { type: string; quantity: number }[] = []
+      if (adultsNum > 0) participants.push({ type: 'ADULT', quantity: adultsNum })
+      if (childrenNum > 0) participants.push({ type: 'CHILD', quantity: childrenNum })
+      if (infantsNum > 0) participants.push({ type: 'INFANT', quantity: infantsNum })
+      calcInput.participants = participants
     } else if (pricingMode === 'PER_EXPERIENCE') {
-      totalPrice = tiers[0].baseAmount
-      priceTiers.push({
-        tierType: 'PER_EXPERIENCE',
-        baseAmount: tiers[0].baseAmount,
-        quantity: 1,
-        subtotal: tiers[0].baseAmount,
-      })
+      calcInput.totalParticipants = totalPax > 0 ? totalPax : 1
     } else if (pricingMode === 'PER_ASSET') {
-      const subtotal = tiers[0].baseAmount * assetCountNum
-      totalPrice = subtotal
-      priceTiers.push({
-        tierType: 'PER_ASSET',
-        baseAmount: tiers[0].baseAmount,
-        quantity: assetCountNum,
-        subtotal,
-      })
+      calcInput.assets = [{ type: assetTierType, quantity: assetCountNum }]
+    }
+
+    try {
+      const breakdown = await calculatePrice(calcInput)
+
+      totalPrice = Number(breakdown.total)
+      // Mirror booking.service.ts:379 — actual deposit charged is the
+      // commission on the full booking total, not the per-unit estimate
+      // exposed via experience.depositValue.
+      depositAmount = Number(breakdown.commissionAmount)
+
+      for (const li of breakdown.lineItems) {
+        const displayTierType =
+          pricingMode === 'PER_EXPERIENCE'
+            ? 'PER_EXPERIENCE'
+            : pricingMode === 'PER_ASSET'
+              ? 'PER_ASSET'
+              : li.tierType
+        priceTiers.push({
+          tierType: displayTierType,
+          baseAmount: Number(li.effectiveUnitPrice),
+          quantity: li.quantity,
+          subtotal: Number(li.subtotal),
+          ...(li.label ? { label: li.label } : {}),
+        })
+      }
+    } catch {
+      // Pricing calculation failed: leave totalPrice null and priceTiers empty so
+      // CheckoutContent can degrade gracefully (it already handles null totals).
     }
   }
-
-  const depositAmount = experience.depositValue ?? null
 
   return (
     <CheckoutContent
@@ -214,7 +206,7 @@ export default async function CheckoutPage({ searchParams, params }: CheckoutPag
       slotId={slotId ?? ''}
       assetCount={assetCountNum}
       pricingMode={pricingMode}
-      assetTierType={tiers[0]?.tierType ?? 'DEFAULT'}
+      assetTierType={assetTierType}
       paymentError={payment_error === '1'}
     />
   )

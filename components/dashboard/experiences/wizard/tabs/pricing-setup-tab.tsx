@@ -29,6 +29,7 @@ import {
 } from '@/lib/schemas/forms/pricing-tab.form.schema'
 import type { DefaultPricingValues } from '@/lib/schemas/forms/pricing-tab.form.schema'
 import type { Experience } from '@/lib/schemas/entities/experience.entity.schema'
+import SeasonalPricingSection from './seasonal-pricing-section'
 
 type PricingSetupTabProps = {
   experienceId: string
@@ -67,6 +68,14 @@ export default function PricingSetupTab({ experienceId, experience, onSaved }: P
     )
   }
 
+  const existingPriceList = (experience?.priceLists ?? [])[0]
+  const existingTiers = existingPriceList?.tiers ?? []
+  const canManageSeasons =
+    Boolean(existingPriceList?.id) &&
+    Boolean(existingPriceList?.listingId) &&
+    existingTiers.length > 0 &&
+    existingTiers.every(t => Number(t.baseAmount) > 0)
+
   return (
     <div className="space-y-8">
       {!isPerAsset && (
@@ -83,6 +92,16 @@ export default function PricingSetupTab({ experienceId, experience, onSaved }: P
         pricingMode={pricingMode}
         onSaved={onSaved}
       />
+
+      {canManageSeasons && existingPriceList && (
+        <SeasonalPricingSection
+          experienceId={experienceId}
+          listingId={existingPriceList.listingId}
+          priceListId={existingPriceList.id}
+          tiers={existingTiers}
+          onSaved={onSaved}
+        />
+      )}
     </div>
   )
 }

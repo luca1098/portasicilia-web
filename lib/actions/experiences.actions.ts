@@ -10,7 +10,9 @@ import {
   getExperienceAvailability,
   type AvailableDateSlots,
 } from '@/lib/api/experiences'
+import { createSeason, updateSeason, deleteSeason, getSeasonsByListingId } from '@/lib/api/pricing'
 import type { Experience } from '@/lib/schemas/entities/experience.entity.schema'
+import type { ExperienceSeason } from '@/lib/schemas/entities/pricing.entity.schema'
 import { revalidatePath } from 'next/cache'
 import { type ActionResult, getAuthHeaders } from './action.types'
 
@@ -87,6 +89,63 @@ export async function setPricingAction(
     const experience = await getExperienceById(experienceId)
     revalidatePath('/[lang]/(dashboard)/dashboard/admin/experiences/[id]', 'page')
     return { success: true, data: experience }
+  } catch (e) {
+    return { success: false, error: (e as Error).message }
+  }
+}
+
+export async function createExperienceSeasonAction(
+  experienceId: string,
+  data: Record<string, unknown>
+): Promise<ActionResult<Experience>> {
+  try {
+    const headers = await getAuthHeaders()
+    await createSeason(data, headers)
+    const experience = await getExperienceById(experienceId)
+    revalidatePath('/[lang]/(dashboard)/dashboard/admin/experiences/[id]', 'page')
+    return { success: true, data: experience }
+  } catch (e) {
+    return { success: false, error: (e as Error).message }
+  }
+}
+
+export async function updateExperienceSeasonAction(
+  experienceId: string,
+  seasonGroupId: string,
+  data: Record<string, unknown>
+): Promise<ActionResult<Experience>> {
+  try {
+    const headers = await getAuthHeaders()
+    await updateSeason(seasonGroupId, data, headers)
+    const experience = await getExperienceById(experienceId)
+    revalidatePath('/[lang]/(dashboard)/dashboard/admin/experiences/[id]', 'page')
+    return { success: true, data: experience }
+  } catch (e) {
+    return { success: false, error: (e as Error).message }
+  }
+}
+
+export async function deleteExperienceSeasonAction(
+  experienceId: string,
+  seasonGroupId: string
+): Promise<ActionResult<Experience>> {
+  try {
+    const headers = await getAuthHeaders()
+    await deleteSeason(seasonGroupId, headers)
+    const experience = await getExperienceById(experienceId)
+    revalidatePath('/[lang]/(dashboard)/dashboard/admin/experiences/[id]', 'page')
+    return { success: true, data: experience }
+  } catch (e) {
+    return { success: false, error: (e as Error).message }
+  }
+}
+
+export async function getExperienceSeasonsAction(
+  listingId: string
+): Promise<ActionResult<ExperienceSeason[]>> {
+  try {
+    const data = await getSeasonsByListingId(listingId)
+    return { success: true, data }
   } catch (e) {
     return { success: false, error: (e as Error).message }
   }

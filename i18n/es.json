@@ -211,6 +211,8 @@
   "exp_detail_choose_date": "Elige la fecha",
   "exp_mobile_bar_cta": "Proceder",
   "exp_detail_photos_more": "+{{count}} foto",
+  "exp_detail_all_photos": "Todas las fotos",
+  "exp_detail_close": "Cerrar",
   "exp_detail_feature_small_group": "Grupos pequeños (máximo 8 personas)",
   "exp_detail_feature_all_levels": "Apto para todos los niveles.",
   "exp_detail_feature_equipment_included": "Equipo incluido",

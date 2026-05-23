@@ -211,6 +211,8 @@
   "exp_detail_choose_date": "Wählen Sie das Datum",
   "exp_mobile_bar_cta": "Fortfahren",
   "exp_detail_photos_more": "+{{count}} Foto",
+  "exp_detail_all_photos": "Alle Fotos",
+  "exp_detail_close": "Schließen",
   "exp_detail_feature_small_group": "Kleingruppen (maximal 8 Personen)",
   "exp_detail_feature_all_levels": "Geeignet für alle Leistungsstufen",
   "exp_detail_feature_equipment_included": "Im Lieferumfang enthaltene Ausrüstung",

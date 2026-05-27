@@ -24,9 +24,12 @@ export default function AccountMenu({ isTransparent }: AccountMenuProps) {
   const t = useTranslation()
 
   const user = session?.user
-  const initials = user
+  const initialsFromName = user
     ? `${user.firstName?.charAt(0) ?? ''}${user.lastName?.charAt(0) ?? ''}`.toUpperCase()
     : ''
+  const initials = initialsFromName || user?.email?.charAt(0)?.toUpperCase() || ''
+  const displayName =
+    [user?.firstName, user?.lastName].filter(Boolean).join(' ').trim() || user?.email || 'Account'
 
   const handleLoginClick = () => {
     setOpen(false)
@@ -55,7 +58,7 @@ export default function AccountMenu({ isTransparent }: AccountMenuProps) {
       {user ? (
         <button
           className={cn(
-            'flex h-9 w-9 items-center justify-center overflow-hidden rounded-full border-2 transition-all duration-200',
+            'flex h-9 w-9 items-center justify-center overflow-hidden rounded-full border-2 bg-muted/70 transition-all duration-200',
             open ? 'border-primary ring-2 ring-primary/20' : 'border-border hover:border-primary/50'
           )}
           aria-label="Account"
@@ -64,13 +67,15 @@ export default function AccountMenu({ isTransparent }: AccountMenuProps) {
           {user.avatar ? (
             <Image
               src={user.avatar}
-              alt={`${user.firstName} ${user.lastName}`}
+              alt={displayName}
               width={36}
               height={36}
               className="h-full w-full object-cover"
             />
-          ) : (
+          ) : initials ? (
             <span className="text-sm font-medium">{initials}</span>
+          ) : (
+            <UserIcon className="size-4 text-muted-foreground" />
           )}
         </button>
       ) : (

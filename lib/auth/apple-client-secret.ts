@@ -7,6 +7,19 @@ function base64url(input: Buffer | string): string {
   return Buffer.from(input).toString('base64').replace(/=+$/g, '').replace(/\+/g, '-').replace(/\//g, '_')
 }
 
+function createApplePrivateKey(raw: string) {
+  const normalized = raw.replace(/\\n/g, '\n').trim()
+  if (normalized.includes('-----BEGIN')) {
+    return createPrivateKey(normalized)
+  }
+
+  return createPrivateKey({
+    key: Buffer.from(normalized.replace(/\s+/g, ''), 'base64'),
+    format: 'der',
+    type: 'pkcs8',
+  })
+}
+
 let cached: { secret: string; expiresAt: number } | null = null
 
 export function generateAppleClientSecret(): string {
@@ -34,8 +47,7 @@ export function generateAppleClientSecret(): string {
   }
 
   const signingInput = `${base64url(JSON.stringify(header))}.${base64url(JSON.stringify(payload))}`
-  const pem = rawKey.replace(/\\n/g, '\n')
-  const privateKey = createPrivateKey(pem)
+  const privateKey = createApplePrivateKey(rawKey)
   const signature = createSign('SHA256')
     .update(signingInput)
     .sign({ key: privateKey, dsaEncoding: 'ieee-p1363' })

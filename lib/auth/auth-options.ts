@@ -150,6 +150,10 @@ function buildProviders(): Provider[] {
 }
 
 export const authOptions: NextAuthOptions = {
+  pages: {
+    signIn: '/auth/signin',
+    error: '/auth/signin',
+  },
   useSecureCookies,
   session: {
     maxAge: 6 * 24 * 60 * 60,

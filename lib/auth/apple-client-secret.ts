@@ -7,13 +7,6 @@ function base64url(input: Buffer | string): string {
   return Buffer.from(input).toString('base64').replace(/=+$/g, '').replace(/\+/g, '-').replace(/\//g, '_')
 }
 
-function normalizePrivateKey(raw: string): string {
-  const withRealNewlines = raw.replace(/\\n/g, '\n').trim()
-  if (withRealNewlines.includes('BEGIN PRIVATE KEY')) return withRealNewlines
-  const body = withRealNewlines.replace(/\s+/g, '')
-  return `-----BEGIN PRIVATE KEY-----\n${body}\n-----END PRIVATE KEY-----`
-}
-
 let cached: { secret: string; expiresAt: number } | null = null
 
 export function generateAppleClientSecret(): string {
@@ -41,7 +34,8 @@ export function generateAppleClientSecret(): string {
   }
 
   const signingInput = `${base64url(JSON.stringify(header))}.${base64url(JSON.stringify(payload))}`
-  const privateKey = createPrivateKey(normalizePrivateKey(rawKey))
+  const pem = rawKey.replace(/\\n/g, '\n')
+  const privateKey = createPrivateKey(pem)
   const signature = createSign('SHA256')
     .update(signingInput)
     .sign({ key: privateKey, dsaEncoding: 'ieee-p1363' })

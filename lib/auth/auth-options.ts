@@ -50,6 +50,7 @@ function buildAppleProvider(): Provider | null {
   return AppleProvider({
     clientId: APPLE_CLIENT_ID,
     clientSecret,
+    checks: ['state'],
     authorization: {
       params: {
         scope: 'name email',

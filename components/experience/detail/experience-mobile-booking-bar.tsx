@@ -17,17 +17,15 @@ type ExperienceMobileBookingBarProps = {
 
 function MobileBookingBarContent({ experience }: { experience: Experience }) {
   const t = useTranslation()
-  const { step } = useBookingContext()
+  const { step, basePrice, pricingMode } = useBookingContext()
   const [open, setOpen] = useState(false)
 
-  const tiers = experience.priceLists?.[0]?.tiers
-  const price = tiers && tiers.length > 0 ? Math.min(...tiers.map(tier => tier.baseAmount)) : 0
-  const formattedPrice = formatCurrency(price)
+  const formattedPrice = formatCurrency(basePrice)
   const resolvedAssetLabel = experience.assetLabel || t.exp_booking_default_asset_label
   const priceLabel =
-    experience.pricingMode === 'PER_ASSET'
+    pricingMode === 'PER_ASSET'
       ? interpolate(t.exp_detail_price_per_asset, { price: formattedPrice, asset: resolvedAssetLabel })
-      : experience.pricingMode === 'PER_EXPERIENCE'
+      : pricingMode === 'PER_EXPERIENCE'
         ? interpolate(t.exp_detail_price_per_experience, { price: formattedPrice })
         : interpolate(t.exp_detail_price_per_person, { price: formattedPrice })
 

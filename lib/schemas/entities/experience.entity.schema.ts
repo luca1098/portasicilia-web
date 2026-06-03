@@ -74,6 +74,14 @@ export const ExperienceTimeSlotSchema = z.object({
 
 export type ExperienceTimeSlot = z.infer<typeof ExperienceTimeSlotSchema>
 
+export const ListingSocialVideoSchema = z.object({
+  id: z.string(),
+  url: z.string(),
+  title: z.string().nullable(),
+})
+
+export type ListingSocialVideo = z.infer<typeof ListingSocialVideoSchema>
+
 export const ReviewSchema = z.object({
   id: z.string(),
   rating: z.number(),
@@ -138,6 +146,7 @@ export const ExperienceSchema = z.object({
   itinerary: z.array(ExperienceItinerarySchema).nullish(),
   timeSlots: z.array(ExperienceTimeSlotSchema).nullish(),
   priceLists: z.array(PriceListSchema).nullish(),
+  socialVideos: z.array(ListingSocialVideoSchema).nullish(),
   reviews: z.array(ReviewSchema).nullish(),
   createdAt: z.string(),
   updatedAt: z.string(),

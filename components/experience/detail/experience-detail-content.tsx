@@ -24,7 +24,11 @@ export default async function ExperienceDetailContent({ experience, lang }: Expe
       <section className="mx-auto max-w-7xl px-4 pt-6 md:px-8 lg:flex lg:gap-10">
         {/* Left column: gallery + info */}
         <div className="min-w-0 flex-1">
-          <ExperienceGallery images={galleryImages} alt={experience.name} />
+          <ExperienceGallery
+            images={galleryImages}
+            alt={experience.name}
+            video={experience.socialVideos?.[0]}
+          />
           <div className="py-8">
             <ExperienceInfo experience={experience} />
           </div>

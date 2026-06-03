@@ -16,7 +16,7 @@ export default async function StayDetailContent({ stay, lang: _ }: StayDetailCon
     <main className="min-h-screen pb-20 lg:pb-0">
       <section className="mx-auto max-w-7xl px-4 pt-6 md:px-8 lg:flex lg:gap-10">
         <div className="min-w-0 flex-1">
-          <StayGallery images={galleryImages} alt={stay.name} />
+          <StayGallery images={galleryImages} alt={stay.name} video={stay.socialVideos?.[0]} />
           <div className="py-8">
             <StayInfo stay={stay} />
           </div>

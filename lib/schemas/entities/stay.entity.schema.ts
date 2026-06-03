@@ -4,6 +4,7 @@ import {
   ListingStatusSchema,
   ExperienceImageSchema,
   ExperienceItinerarySchema,
+  ListingSocialVideoSchema,
   ReviewSchema,
 } from './experience.entity.schema'
 import { OwnerSchema } from './owner.entity.schema'
@@ -91,6 +92,7 @@ export const StaySchema = z.object({
   images: z.array(ExperienceImageSchema).nullish(),
   itinerary: z.array(ExperienceItinerarySchema).nullish(),
   priceLists: z.array(PriceListSchema).nullish(),
+  socialVideos: z.array(ListingSocialVideoSchema).nullish(),
   reviews: z.array(ReviewSchema).nullish(),
   createdAt: z.string(),
   updatedAt: z.string(),

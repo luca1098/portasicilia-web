@@ -2095,6 +2095,7 @@
   "admin_owners_col_created": "Created",
   "admin_owners_badge_manual": "Manual",
   "admin_owners_badge_claimed": "Claimed",
+  "admin_owners_badge_from_application": "From application",
   "admin_owners_new_title": "Create Owner",
   "admin_owners_edit_title": "Edit Owner",
   "admin_owners_section_personal": "Personal details",

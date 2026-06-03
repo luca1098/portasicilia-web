@@ -2081,6 +2081,7 @@
   "admin_owners_col_created": "Erstellt am",
   "admin_owners_badge_manual": "Handbuch",
   "admin_owners_badge_claimed": "Eingetragen",
+  "admin_owners_badge_from_application": "Aus Bewerbung",
   "admin_owners_new_title": "Besitzer erstellen",
   "admin_owners_edit_title": "Eigentümer ändern",
   "admin_owners_section_personal": "Personenbezogene Daten",

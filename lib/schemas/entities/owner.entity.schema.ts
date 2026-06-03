@@ -43,6 +43,7 @@ export const AdminOwnerSchema = z.object({
   notes: z.string().nullable().optional(),
   isManuallyCreated: z.boolean(),
   claimedAt: z.string().nullable().optional(),
+  partnerApplication: z.object({ id: z.string() }).nullable().optional(),
   createdAt: z.string(),
   updatedAt: z.string(),
   experienceCount: z.number().optional(),

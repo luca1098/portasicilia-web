@@ -2081,6 +2081,7 @@
   "admin_owners_col_created": "Creado el",
   "admin_owners_badge_manual": "Manual",
   "admin_owners_badge_claimed": "Registrado",
+  "admin_owners_badge_from_application": "Desde candidatura",
   "admin_owners_new_title": "Crear propietario",
   "admin_owners_edit_title": "Cambiar propietario",
   "admin_owners_section_personal": "datos personales",

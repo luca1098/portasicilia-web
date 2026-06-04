@@ -38,12 +38,11 @@ export default function SearchBar({ shadow = true, size = 'default' }: SearchBar
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const locationId = searchParams.get('location')
-    if (!locationId) return
+    const localityId = searchParams.get('localityId')
     getLocalitiesClient()
       .then(localities => {
-        const match = localities.find(l => l.id === locationId)
-        if (match) setSelectedLocation(match)
+        const match = localityId ? localities.find(l => l.id === localityId) : null
+        setSelectedLocation(match ?? null)
       })
       .catch(() => {})
   }, [searchParams])
@@ -62,7 +61,7 @@ export default function SearchBar({ shadow = true, size = 'default' }: SearchBar
 
   const handleSearch = () => {
     const basePath = `/${lang}/${selectedTypology}`
-    const query = selectedLocation ? `?location=${selectedLocation.id}` : ''
+    const query = selectedLocation ? `?localityId=${selectedLocation.id}` : ''
     router.push(`${basePath}${query}`)
   }
 

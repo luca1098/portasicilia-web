@@ -152,6 +152,19 @@ function BillingStep() {
           </div>
 
           <PhoneFormField<BillingFormValues> name="phone" label={t.checkout_billing_phone} required />
+
+          <InputFormField<BillingFormValues>
+            name="fiscalCode"
+            label={t.checkout_billing_fiscal_code}
+            description={t.checkout_billing_fiscal_code_hint}
+            maxLength={16}
+            normalize={v =>
+              v
+                .toUpperCase()
+                .replace(/[^A-Z0-9]/g, '')
+                .slice(0, 16)
+            }
+          />
         </div>
       )}
     </div>

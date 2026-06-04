@@ -103,7 +103,7 @@ export function mapBillingToDto(values: BillingFormValues) {
     firstName: isCompany ? values.companyName : values.firstName,
     lastName: isCompany ? '' : values.lastName,
     contactPhone: values.phone,
-    fiscalCode: isCompany ? undefined : undefined,
+    fiscalCode: values.fiscalCode?.trim() || undefined,
     street: isCompany ? values.streetAddress : undefined,
     city: isCompany ? values.city : undefined,
     zipCode: isCompany ? values.zipCode : undefined,

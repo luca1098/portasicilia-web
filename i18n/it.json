@@ -864,7 +864,7 @@
   "checkout_billing_first_name": "Nome",
   "checkout_billing_last_name": "Cognome",
   "checkout_billing_fiscal_code": "Codice Fiscale",
-  "checkout_billing_fiscal_code_hint": "16 caratteri alfanumerici",
+  "checkout_billing_fiscal_code_hint": "Solo se desideri ricevere fattura",
   "checkout_billing_company_name": "Ragione sociale",
   "checkout_billing_vat_number": "Partita IVA",
   "checkout_billing_vat_number_hint": "11 cifre",

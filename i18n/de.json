@@ -850,7 +850,7 @@
   "checkout_billing_first_name": "Name",
   "checkout_billing_last_name": "Nachname",
   "checkout_billing_fiscal_code": "Steueridentifikationsnummer",
-  "checkout_billing_fiscal_code_hint": "16 alphanumerische Zeichen",
+  "checkout_billing_fiscal_code_hint": "Nur wenn Sie eine Rechnung erhalten möchten",
   "checkout_billing_company_name": "Name der Firma",
   "checkout_billing_vat_number": "Umsatzsteuer-Identifikationsnummer",
   "checkout_billing_vat_number_hint": "11 Ziffern",

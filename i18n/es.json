@@ -850,7 +850,7 @@
   "checkout_billing_first_name": "Nombre",
   "checkout_billing_last_name": "Apellido",
   "checkout_billing_fiscal_code": "Código de identificación fiscal",
-  "checkout_billing_fiscal_code_hint": "16 caracteres alfanuméricos",
+  "checkout_billing_fiscal_code_hint": "Solo si deseas recibir factura",
   "checkout_billing_company_name": "Nombre de empresa",
   "checkout_billing_vat_number": "Número de IVA",
   "checkout_billing_vat_number_hint": "11 dígitos",

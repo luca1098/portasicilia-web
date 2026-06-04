@@ -864,7 +864,7 @@
   "checkout_billing_first_name": "First name",
   "checkout_billing_last_name": "Last name",
   "checkout_billing_fiscal_code": "Fiscal code",
-  "checkout_billing_fiscal_code_hint": "16 alphanumeric characters",
+  "checkout_billing_fiscal_code_hint": "Only if you want to receive an invoice",
   "checkout_billing_company_name": "Company name",
   "checkout_billing_vat_number": "VAT number",
   "checkout_billing_vat_number_hint": "11 digits",

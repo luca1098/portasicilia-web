@@ -30,6 +30,16 @@ export const DayOfWeekSchema = z.union([
 
 export type DayOfWeek = z.infer<typeof DayOfWeekSchema>
 
+export const CancellationPolicySchema = z.union([
+  z.literal('FREE_24H'),
+  z.literal('FREE_48H'),
+  z.literal('NON_REFUNDABLE'),
+  z.literal('PARTIAL_REFUND'),
+  z.literal('CUSTOM'),
+])
+
+export type CancellationPolicy = z.infer<typeof CancellationPolicySchema>
+
 // ==================== SUB-ENTITIES ====================
 
 export const ExperienceImageSchema = z.object({
@@ -117,7 +127,10 @@ export const ExperienceSchema = z.object({
   included: z.array(z.string()),
   notIncluded: z.array(z.string()),
   policy: z.array(z.string()),
-  cancellationTerms: z.array(z.string()),
+  cancellationPolicy: CancellationPolicySchema,
+  cancellationRefundPercent: z.number().int().nullable(),
+  cancellationCutoffHours: z.number().int().nullable(),
+  cancellationCustomText: z.string().nullable(),
   maxCapacity: z.number().int(),
   capacityMode: CapacityModeSchema.optional(),
   assetLabel: z.string().nullable().optional(),

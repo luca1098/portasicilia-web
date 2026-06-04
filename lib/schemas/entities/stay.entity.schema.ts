@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import {
+  CancellationPolicySchema,
   CommissionTypeSchema,
   ListingStatusSchema,
   ExperienceImageSchema,
@@ -59,7 +60,10 @@ export const StaySchema = z.object({
   included: z.array(z.string()),
   notIncluded: z.array(z.string()),
   policy: z.array(z.string()),
-  cancellationTerms: z.array(z.string()),
+  cancellationPolicy: CancellationPolicySchema,
+  cancellationRefundPercent: z.number().int().nullable(),
+  cancellationCutoffHours: z.number().int().nullable(),
+  cancellationCustomText: z.string().nullable(),
   status: ListingStatusSchema,
   highlighted: z.boolean().optional(),
   popular: z.boolean().optional(),

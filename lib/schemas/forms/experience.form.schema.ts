@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { CANCELLATION_POLICIES } from './experience-tab.form.schema'
 
 export const ExperienceFormSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -13,7 +14,9 @@ export const ExperienceFormSchema = z.object({
   included: z.string(),
   notIncluded: z.string(),
   policy: z.string(),
-  cancellationTerms: z.string(),
+  cancellationPolicy: z.enum(CANCELLATION_POLICIES),
+  cancellationRefundPercent: z.number().int().min(1).max(100).nullable(),
+  cancellationCustomText: z.string(),
   languages: z.string(),
   status: z.enum(['DRAFT', 'PENDING_REVIEW', 'ACTIVE', 'PAUSED', 'ARCHIVED']),
   localityId: z.string().min(1, 'Locality is required'),

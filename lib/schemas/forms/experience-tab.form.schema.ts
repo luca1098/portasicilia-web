@@ -2,42 +2,66 @@ import { z } from 'zod'
 
 const CAPACITY_MODES = ['PER_PERSON', 'PER_ASSET'] as const
 
-export const ExperienceTabSchema = z.object({
-  // Basics
-  name: z.string().min(1, 'Name is required'),
-  description: z.string().min(1, 'Description is required'),
-  cover: z.union([z.instanceof(File), z.string(), z.null()]),
-  localityId: z.string().min(1, 'Locality is required'),
-  ownerId: z.string().min(1, 'Owner is required'),
-  categoryIds: z.array(z.string()).optional(),
+export const CANCELLATION_POLICIES = ['FREE_24H', 'FREE_48H', 'NON_REFUNDABLE', 'PARTIAL_REFUND'] as const
 
-  // Location
-  street: z.string().min(1, 'Street is required'),
-  city: z.string().min(1, 'City is required'),
-  zipCode: z.string().min(1, 'Zip code is required'),
-  latitude: z.number(),
-  longitude: z.number(),
+export const ExperienceTabSchema = z
+  .object({
+    // Basics
+    name: z.string().min(1, 'Name is required'),
+    description: z.string().min(1, 'Description is required'),
+    cover: z.union([z.instanceof(File), z.string(), z.null()]),
+    localityId: z.string().min(1, 'Locality is required'),
+    ownerId: z.string().min(1, 'Owner is required'),
+    categoryIds: z.array(z.string()).optional(),
 
-  // Details
-  included: z.string(),
-  notIncluded: z.string(),
-  policy: z.string(),
-  cancellationTerms: z.string(),
-  languages: z.string(),
+    // Location
+    street: z.string().min(1, 'Street is required'),
+    city: z.string().min(1, 'City is required'),
+    zipCode: z.string().min(1, 'Zip code is required'),
+    latitude: z.number(),
+    longitude: z.number(),
 
-  // Capacity (sent with experience, not pricing)
-  capacityMode: z.enum(CAPACITY_MODES),
-  maxCapacity: z.number().int().min(1, 'Capacity is required'),
-  assetLabel: z.string().optional(),
+    // Details
+    included: z.string(),
+    notIncluded: z.string(),
+    policy: z.string(),
+    cancellationPolicy: z.enum(CANCELLATION_POLICIES),
+    cancellationRefundPercent: z.number().int().min(1).max(100).nullable(),
+    cancellationCutoffHours: z.number().int().min(0).nullable(),
+    cancellationCustomText: z.string(),
+    languages: z.string(),
 
-  // Status
-  status: z.enum(['DRAFT', 'PENDING_REVIEW', 'ACTIVE', 'PAUSED', 'ARCHIVED']).nullish(),
+    // Capacity (sent with experience, not pricing)
+    capacityMode: z.enum(CAPACITY_MODES),
+    maxCapacity: z.number().int().min(1, 'Capacity is required'),
+    assetLabel: z.string().optional(),
 
-  // Highlighted
-  highlighted: z.boolean(),
+    // Status
+    status: z.enum(['DRAFT', 'PENDING_REVIEW', 'ACTIVE', 'PAUSED', 'ARCHIVED']).nullish(),
 
-  // Popular (sells out fast)
-  popular: z.boolean(),
-})
+    // Highlighted
+    highlighted: z.boolean(),
+
+    // Popular (sells out fast)
+    popular: z.boolean(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.cancellationPolicy === 'PARTIAL_REFUND') {
+      if (data.cancellationRefundPercent === null) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['cancellationRefundPercent'],
+          message: 'Refund percentage is required',
+        })
+      }
+      if (data.cancellationCutoffHours === null) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['cancellationCutoffHours'],
+          message: 'Cutoff hours are required',
+        })
+      }
+    }
+  })
 
 export type ExperienceTabValues = z.infer<typeof ExperienceTabSchema>

@@ -4,6 +4,7 @@ import { TagIcon, CalendarCheck2Icon, ShieldCheckIcon } from '@/lib/constants/ic
 import { categoryIconMap } from '@/lib/constants/category-icons'
 import { useTranslation } from '@/lib/context/translation.context'
 import { interpolate } from '@/lib/utils/i18n.utils'
+import { formatCancellationPolicy } from '@/lib/utils/cancellation.utils'
 import type { Stay } from '@/lib/schemas/entities/stay.entity.schema'
 
 type StayHighlightsProps = {
@@ -17,6 +18,7 @@ export default function StayHighlights({ stay }: StayHighlightsProps) {
   const categoryName = firstCategory?.name
   const categoryIcon =
     firstCategory?.icon && categoryIconMap[firstCategory.icon] ? categoryIconMap[firstCategory.icon] : TagIcon
+  const cancellationLine = formatCancellationPolicy(stay, t as Record<string, string>)
 
   const highlights = [
     ...(categoryName
@@ -28,12 +30,12 @@ export default function StayHighlights({ stay }: StayHighlightsProps) {
           },
         ]
       : []),
-    ...(stay.cancellationTerms.length > 0
+    ...(cancellationLine
       ? [
           {
             icon: CalendarCheck2Icon,
             title: t.stay_detail_highlight_cancellation,
-            description: stay.cancellationTerms.join('. '),
+            description: cancellationLine,
           },
         ]
       : []),

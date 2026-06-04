@@ -22,7 +22,7 @@ type BookingDialogProps = {
 
 function Field({ label, value }: { label: string; value: ReactNode }) {
   return (
-    <div>
+    <div className="min-w-0">
       <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{label}</p>
       <div className="mt-1 text-sm">{value}</div>
     </div>
@@ -116,8 +116,8 @@ function CustomerField({ booking }: { booking: AdminBooking }) {
       label={t.booking_detail_customer}
       value={
         <div className="space-y-0.5">
-          <p>{customerName}</p>
-          <p className="text-xs text-muted-foreground">{booking.user.email}</p>
+          <p className="break-all">{customerName}</p>
+          <p className="break-all text-xs text-muted-foreground">{booking.user.email}</p>
         </div>
       }
     />
@@ -146,8 +146,8 @@ function ContactField({ booking }: { booking: AdminBooking }) {
       label={t.booking_detail_contact}
       value={
         <div className="space-y-0.5">
-          <p>{booking.contactEmail}</p>
-          <p className="text-muted-foreground">{booking.contactPhone}</p>
+          <p className="break-all">{booking.contactEmail}</p>
+          <p className="break-all text-muted-foreground">{booking.contactPhone}</p>
         </div>
       }
     />

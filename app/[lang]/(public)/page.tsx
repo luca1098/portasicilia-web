@@ -20,6 +20,7 @@ import { getFeaturedSocialVideos } from '@/lib/api/social-videos'
 import { Button } from '@/components/ui/button'
 import SocialVideoSection from '@/components/social-video/social-video-section'
 import HeroVideoBackground from '@/components/home/hero-video-background'
+import WhyChooseSection from '@/components/home/why-choose-section'
 
 export async function generateMetadata({ params }: PageParamsProps): Promise<Metadata> {
   const { lang } = await params
@@ -150,6 +151,9 @@ export default async function Home({ params }: PageParamsProps) {
       {socialVideos.length > 0 && (
         <SocialVideoSection videos={socialVideos} title={t.home_social_videos_title} lang={lang} />
       )}
+
+      {/* Why Choose Porta Sicilia */}
+      <WhyChooseSection t={t} />
 
       {/* Become Partner Banner */}
       <section className="mx-auto max-w-7xl px-4 py-14 md:px-8">

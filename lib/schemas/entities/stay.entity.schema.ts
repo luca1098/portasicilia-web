@@ -1,9 +1,11 @@
 import { z } from 'zod'
 import {
+  CancellationPolicySchema,
   CommissionTypeSchema,
   ListingStatusSchema,
   ExperienceImageSchema,
   ExperienceItinerarySchema,
+  ListingSocialVideoSchema,
   ReviewSchema,
 } from './experience.entity.schema'
 import { OwnerSchema } from './owner.entity.schema'
@@ -58,7 +60,10 @@ export const StaySchema = z.object({
   included: z.array(z.string()),
   notIncluded: z.array(z.string()),
   policy: z.array(z.string()),
-  cancellationTerms: z.array(z.string()),
+  cancellationPolicy: CancellationPolicySchema,
+  cancellationRefundPercent: z.number().int().nullable(),
+  cancellationCutoffHours: z.number().int().nullable(),
+  cancellationCustomText: z.string().nullable(),
   status: ListingStatusSchema,
   highlighted: z.boolean().optional(),
   popular: z.boolean().optional(),
@@ -91,6 +96,7 @@ export const StaySchema = z.object({
   images: z.array(ExperienceImageSchema).nullish(),
   itinerary: z.array(ExperienceItinerarySchema).nullish(),
   priceLists: z.array(PriceListSchema).nullish(),
+  socialVideos: z.array(ListingSocialVideoSchema).nullish(),
   reviews: z.array(ReviewSchema).nullish(),
   createdAt: z.string(),
   updatedAt: z.string(),

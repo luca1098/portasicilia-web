@@ -48,8 +48,10 @@ export default async function EditAdminOwnerPage({ params }: EditAdminOwnerPageP
           </h1>
           <OwnerStatusBadge
             claimedAt={owner.claimedAt}
+            fromPartnerApplication={!!owner.partnerApplication}
             manualLabel={t.admin_owners_badge_manual}
             claimedLabel={t.admin_owners_badge_claimed}
+            partnerApplicationLabel={t.admin_owners_badge_from_application}
           />
         </div>
       </div>

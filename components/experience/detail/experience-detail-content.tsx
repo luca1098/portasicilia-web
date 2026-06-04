@@ -7,6 +7,7 @@ import ExperienceSuggestions from '@/components/experience/detail/experience-sug
 import { CheckIcon } from '@/lib/constants/icons'
 import { getTranslations } from '@/lib/configs/locales/i18n'
 import { interpolate } from '@/lib/utils/i18n.utils'
+import { formatCancellationPolicy } from '@/lib/utils/cancellation.utils'
 import { formatCurrency } from '@/core/utils/currency.utils'
 import { SupportedLocale } from '@/lib/configs/locales'
 
@@ -18,13 +19,18 @@ type ExperienceDetailContentProps = {
 export default async function ExperienceDetailContent({ experience, lang }: ExperienceDetailContentProps) {
   const t = await getTranslations(lang as SupportedLocale)
   const galleryImages = experience.images?.map(img => img.url) ?? []
+  const cancellationLine = formatCancellationPolicy(experience, t as Record<string, string>)
 
   return (
     <main className="min-h-screen pb-20 lg:pb-0">
       <section className="mx-auto max-w-7xl px-4 pt-6 md:px-8 lg:flex lg:gap-10">
         {/* Left column: gallery + info */}
         <div className="min-w-0 flex-1">
-          <ExperienceGallery images={galleryImages} alt={experience.name} />
+          <ExperienceGallery
+            images={galleryImages}
+            alt={experience.name}
+            video={experience.socialVideos?.[0]}
+          />
           <div className="py-8">
             <ExperienceInfo experience={experience} />
           </div>
@@ -36,14 +42,12 @@ export default async function ExperienceDetailContent({ experience, lang }: Expe
             <ExperienceBookingCard experience={experience} />
 
             {/* policy items */}
-            {experience.cancellationTerms.length ? (
+            {cancellationLine ? (
               <ul className="mt-5 space-y-2">
-                {experience.cancellationTerms.map(item => (
-                  <li key={item} className="flex items-start gap-2 text-xs text-muted-foreground">
-                    <CheckIcon className="mt-0.5 size-3 shrink-0" />
-                    {item}
-                  </li>
-                ))}
+                <li className="flex items-start gap-2 text-xs text-muted-foreground">
+                  <CheckIcon className="mt-0.5 size-3 shrink-0" />
+                  {cancellationLine}
+                </li>
                 <li className="flex items-start gap-2 text-xs text-muted-foreground">
                   <CheckIcon className="mt-0.5 size-3 shrink-0" />
                   {experience.depositValue

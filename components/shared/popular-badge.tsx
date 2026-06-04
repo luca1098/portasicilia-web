@@ -13,7 +13,7 @@ export default function PopularBadge({ className }: PopularBadgeProps) {
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1 rounded-full bg-white/70 px-2.5 py-1 text-[11px] font-semibold text-foreground shadow-sm ring-1 ring-black/5 backdrop-blur-md',
+        'inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-white/70 px-2 py-1 text-[10px] font-semibold text-foreground shadow-sm ring-1 ring-black/5 backdrop-blur-md sm:text-[11px]',
         className
       )}
     >

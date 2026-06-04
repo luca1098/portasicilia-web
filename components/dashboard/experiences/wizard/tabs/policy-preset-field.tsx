@@ -14,7 +14,7 @@ type PresetOption = {
 }
 
 type PolicyPresetFieldProps = {
-  name: 'policy' | 'cancellationTerms'
+  name: 'policy'
   label: string
   presets: PresetOption[]
   customLabel: string

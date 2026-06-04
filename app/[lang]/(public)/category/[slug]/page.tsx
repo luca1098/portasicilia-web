@@ -84,7 +84,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       {experienceCards.data.length > 0 && (
         <CategoryListingsSection title={t.category_experiences_title}>
           {experienceCards.data.map(exp => (
-            <div key={exp.id} className="w-[200px] shrink-0">
+            <div key={exp.id} className="w-[200px] shrink-0 py-2">
               <ExperienceCardItem experience={exp} lang={lang} />
             </div>
           ))}

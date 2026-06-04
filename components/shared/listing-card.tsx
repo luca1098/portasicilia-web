@@ -69,7 +69,7 @@ export default function ListingCard({
             />
           </div>
 
-          {popular && <PopularBadge className="absolute -left-1 -top-1" />}
+          {popular && <PopularBadge className="absolute -left-1 -top-1 z-10" />}
 
           {categoryLabel && (
             <span

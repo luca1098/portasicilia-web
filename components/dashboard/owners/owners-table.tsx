@@ -123,8 +123,10 @@ export default function OwnersTable({ initialData }: OwnersTableProps) {
                   <TableCell>
                     <OwnerStatusBadge
                       claimedAt={owner.claimedAt}
+                      fromPartnerApplication={!!owner.partnerApplication}
                       manualLabel={t.admin_owners_badge_manual}
                       claimedLabel={t.admin_owners_badge_claimed}
+                      partnerApplicationLabel={t.admin_owners_badge_from_application}
                     />
                   </TableCell>
                   <TableCell className="text-muted-foreground text-sm">

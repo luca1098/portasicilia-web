@@ -23,7 +23,7 @@ import { LoaderIcon, CheckIcon, XIcon } from '@/lib/constants/icons'
 import { cn } from '@/lib/utils/shadcn.utils'
 import { StayTabSchema, type StayTabValues } from '@/lib/schemas/forms/stay-tab.form.schema'
 import { STAY_AMENITIES } from '@/lib/constants/stay-amenities'
-import PolicyPresetField from '../../../experiences/wizard/tabs/policy-preset-field'
+import CancellationPolicyField from '../../../experiences/wizard/tabs/cancellation-policy-field'
 import type { Stay } from '@/lib/schemas/entities/stay.entity.schema'
 import type { ListingStatus } from '@/lib/schemas/entities/experience.entity.schema'
 import type { Locality } from '@/lib/schemas/entities/locality.entity.schema'
@@ -120,7 +120,7 @@ function AmenityChipSelector({
   )
 }
 
-const NEWLINE_ARRAY_FIELDS = ['included', 'notIncluded', 'cancellationTerms', 'houseRules'] as const
+const NEWLINE_ARRAY_FIELDS = ['included', 'notIncluded', 'houseRules'] as const
 
 const STATUS_OPTIONS: { value: ListingStatus; labelKey: string }[] = [
   { value: 'DRAFT', labelKey: 'admin_exp_status_draft' },
@@ -162,7 +162,13 @@ export default function StayTab({ mode, stay, localities, categories, onCreated 
       longitude: Number(stay?.longitude ?? 0),
       included: stay?.included?.join('\n') ?? '',
       notIncluded: stay?.notIncluded?.join('\n') ?? '',
-      cancellationTerms: stay?.cancellationTerms?.join('\n') ?? '',
+      cancellationPolicy:
+        stay?.cancellationPolicy && stay.cancellationPolicy !== 'CUSTOM'
+          ? stay.cancellationPolicy
+          : 'NON_REFUNDABLE',
+      cancellationRefundPercent: stay?.cancellationRefundPercent ?? null,
+      cancellationCutoffHours: stay?.cancellationCutoffHours ?? null,
+      cancellationCustomText: stay?.cancellationCustomText ?? '',
       maxPeople: detail?.maxPeople ?? stay?.maxPeople ?? 1,
       bedNumber: detail?.bedNumber ?? stay?.bedNumber ?? 1,
       bathroomNumber: detail?.bathroomNumber ?? stay?.bathroomNumber ?? 1,
@@ -371,26 +377,7 @@ export default function StayTab({ mode, stay, localities, categories, onCreated 
           <h3 className="text-sm font-semibold">{t.admin_exp_details_section}</h3>
           <TextareaFormField<StayTabValues> name="included" label={t.admin_exp_included} rows={3} />
           <TextareaFormField<StayTabValues> name="notIncluded" label={t.admin_exp_not_included} rows={3} />
-          <PolicyPresetField
-            name="cancellationTerms"
-            label={t.admin_exp_cancellation_terms}
-            presets={[
-              { value: t.admin_cancellation_preset_24h, label: t.admin_cancellation_preset_24h },
-              { value: t.admin_cancellation_preset_48h, label: t.admin_cancellation_preset_48h },
-              {
-                value: t.admin_cancellation_preset_non_refundable,
-                label: t.admin_cancellation_preset_non_refundable,
-              },
-              {
-                value: t.admin_cancellation_preset_partial_refund,
-                label: t.admin_cancellation_preset_partial_refund_label,
-                hasPercentage: true,
-              },
-            ]}
-            customLabel={t.admin_cancellation_preset_custom}
-            customPlaceholder={t.admin_cancellation_preset_custom_placeholder}
-            percentageLabel={t.admin_policy_preset_percentage}
-          />
+          <CancellationPolicyField label={t.admin_exp_cancellation_terms} />
         </div>
         <p className="text-xs text-muted-foreground">{t.admin_wizard_details_hint}</p>
 

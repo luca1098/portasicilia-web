@@ -24,6 +24,7 @@ import { LoaderIcon, CheckIcon, XIcon } from '@/lib/constants/icons'
 import { cn } from '@/lib/utils/shadcn.utils'
 import { ExperienceTabSchema, type ExperienceTabValues } from '@/lib/schemas/forms/experience-tab.form.schema'
 import PolicyPresetField from './policy-preset-field'
+import CancellationPolicyField from './cancellation-policy-field'
 import type { Experience, ListingStatus } from '@/lib/schemas/entities/experience.entity.schema'
 import type { Locality } from '@/lib/schemas/entities/locality.entity.schema'
 import type { Owner } from '@/lib/schemas/entities/owner.entity.schema'
@@ -79,7 +80,7 @@ function CategoryChipSelector({
   )
 }
 
-const NEWLINE_ARRAY_FIELDS = ['included', 'notIncluded', 'policy', 'cancellationTerms', 'languages'] as const
+const NEWLINE_ARRAY_FIELDS = ['included', 'notIncluded', 'policy', 'languages'] as const
 
 const STATUS_OPTIONS: { value: ListingStatus; labelKey: string }[] = [
   { value: 'DRAFT', labelKey: 'admin_exp_status_draft' },
@@ -127,7 +128,13 @@ export default function ExperienceTab({
       included: experience?.included?.join('\n') ?? '',
       notIncluded: experience?.notIncluded?.join('\n') ?? '',
       policy: experience?.policy?.join('\n') ?? '',
-      cancellationTerms: experience?.cancellationTerms?.join('\n') ?? '',
+      cancellationPolicy:
+        experience?.cancellationPolicy && experience.cancellationPolicy !== 'CUSTOM'
+          ? experience.cancellationPolicy
+          : 'NON_REFUNDABLE',
+      cancellationRefundPercent: experience?.cancellationRefundPercent ?? null,
+      cancellationCutoffHours: experience?.cancellationCutoffHours ?? null,
+      cancellationCustomText: experience?.cancellationCustomText ?? '',
       languages: experience?.languages?.join('\n') ?? '',
       capacityMode: experience?.capacityMode ?? 'PER_PERSON',
       maxCapacity: experience?.maxCapacity ?? 1,
@@ -332,26 +339,7 @@ export default function ExperienceTab({
             customPlaceholder={t.admin_policy_preset_custom_placeholder}
             percentageLabel={t.admin_policy_preset_percentage}
           />
-          <PolicyPresetField
-            name="cancellationTerms"
-            label={t.admin_exp_cancellation_terms}
-            presets={[
-              { value: t.admin_cancellation_preset_24h, label: t.admin_cancellation_preset_24h },
-              { value: t.admin_cancellation_preset_48h, label: t.admin_cancellation_preset_48h },
-              {
-                value: t.admin_cancellation_preset_non_refundable,
-                label: t.admin_cancellation_preset_non_refundable,
-              },
-              {
-                value: t.admin_cancellation_preset_partial_refund,
-                label: t.admin_cancellation_preset_partial_refund_label,
-                hasPercentage: true,
-              },
-            ]}
-            customLabel={t.admin_cancellation_preset_custom}
-            customPlaceholder={t.admin_cancellation_preset_custom_placeholder}
-            percentageLabel={t.admin_policy_preset_percentage}
-          />
+          <CancellationPolicyField label={t.admin_exp_cancellation_terms} />
           <TextareaFormField<ExperienceTabValues> name="languages" label={t.admin_exp_languages} rows={2} />
         </div>
         <p className="text-xs text-muted-foreground">{t.admin_wizard_details_hint}</p>

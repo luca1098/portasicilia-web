@@ -7,7 +7,10 @@ import { getExperienceCards } from '@/lib/api/experiences'
 import { getLocalityById } from '@/lib/api/localities'
 import { interpolate } from '@/lib/utils/i18n.utils'
 import ExperienceCardGrid from '@/components/experience/experience-card-grid'
+import ExperienceListing from '@/components/experience/experience-listing'
 import ListingEmptyState from '@/components/shared/listing-empty-state'
+
+const LISTING_PAGE_SIZE = 30
 
 export async function generateMetadata({ params }: PageParamsProps): Promise<Metadata> {
   const { lang } = await params
@@ -27,9 +30,9 @@ export default async function ExperiencesPage({
   const { lang } = await params
   const { localityId } = await searchParams
 
-  const [t, { data: experienceCards }] = await Promise.all([
+  const [t, { data: experienceCards, nextCursor }] = await Promise.all([
     getTranslations(lang as SupportedLocale),
-    getExperienceCards({ localityId }),
+    getExperienceCards({ localityId, limit: LISTING_PAGE_SIZE }),
   ])
 
   const isEmpty = experienceCards.length === 0
@@ -71,7 +74,13 @@ export default async function ExperiencesPage({
           {fallback.length > 0 && <ExperienceCardGrid experiences={fallback} lang={lang} />}
         </ListingEmptyState>
       ) : (
-        <ExperienceCardGrid experiences={experienceCards} lang={lang} />
+        <ExperienceListing
+          initialExperiences={experienceCards}
+          initialCursor={nextCursor}
+          limit={LISTING_PAGE_SIZE}
+          lang={lang}
+          localityId={localityId as string | undefined}
+        />
       )}
     </main>
   )

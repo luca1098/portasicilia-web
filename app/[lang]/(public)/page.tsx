@@ -116,29 +116,33 @@ export default async function Home({ params }: PageParamsProps) {
       </section>
 
       {/* Stays */}
-      <section className="relative px-4 py-16 md:px-8 min-h-screen flex items-center">
-        <Image
-          src="/images/cover-stays.jpg"
-          alt={t.seo_stays_cover_alt}
-          fill
-          className="object-cover"
-          style={{ objectPosition: '70%' }}
-          sizes="100vw"
-        />
-        <div className="absolute inset-0 bg-black/40" />
-        <div className="relative z-10 mx-auto max-w-7xl w-full">
-          <div className="mb-10 text-center">
-            <h2 className="text-3xl font-bold text-white drop-shadow-lg md:text-4xl">{t.home_stays_title}</h2>
-            <p className="mt-2 text-sm text-white/85 drop-shadow md:text-base">{t.home_stays_subtitle}</p>
+      {stayCards.length > 0 && (
+        <section className="relative px-4 py-16 md:px-8 min-h-screen flex items-center">
+          <Image
+            src="/images/cover-stays.jpg"
+            alt={t.seo_stays_cover_alt}
+            fill
+            className="object-cover"
+            style={{ objectPosition: '70%' }}
+            sizes="100vw"
+          />
+          <div className="absolute inset-0 bg-black/40" />
+          <div className="relative z-10 mx-auto max-w-7xl w-full">
+            <div className="mb-10 text-center">
+              <h2 className="text-3xl font-bold text-white drop-shadow-lg md:text-4xl">
+                {t.home_stays_title}
+              </h2>
+              <p className="mt-2 text-sm text-white/85 drop-shadow md:text-base">{t.home_stays_subtitle}</p>
+            </div>
+            <StayList stays={stayCards} lang={lang} darkBg />
+            <div className="mt-10 flex justify-center">
+              <Button asChild>
+                <Link href={`/${lang}/stays`}>{t.home_stays_cta}</Link>
+              </Button>
+            </div>
           </div>
-          <StayList stays={stayCards} lang={lang} darkBg />
-          <div className="mt-10 flex justify-center">
-            <Button asChild>
-              <Link href={`/${lang}/stays`}>{t.home_stays_cta}</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Categories */}
       {highlightedCategories.length > 0 && (
@@ -149,7 +153,12 @@ export default async function Home({ params }: PageParamsProps) {
 
       {/* Social Videos */}
       {socialVideos.length > 0 && (
-        <SocialVideoSection videos={socialVideos} title={t.home_social_videos_title} lang={lang} />
+        <SocialVideoSection
+          videos={socialVideos}
+          title={t.home_social_videos_title}
+          subtitle={t.home_social_videos_subtitle}
+          lang={lang}
+        />
       )}
 
       {/* Why Choose Porta Sicilia */}

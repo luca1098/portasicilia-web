@@ -102,7 +102,7 @@ export default async function Home({ params }: PageParamsProps) {
             <h2 className="text-3xl font-bold text-white drop-shadow-lg md:text-4xl">
               {t.home_experiences_title}
             </h2>
-            <p className="mt-2 text-sm text-white/85 drop-shadow md:text-base">
+            <p className="mt-2 text-base text-white/85 drop-shadow md:text-lg">
               {t.home_experiences_subtitle}
             </p>
           </div>
@@ -122,17 +122,16 @@ export default async function Home({ params }: PageParamsProps) {
             src="/images/cover-stays.jpg"
             alt={t.seo_stays_cover_alt}
             fill
-            className="object-cover"
-            style={{ objectPosition: '70%' }}
+            className="object-cover object-top"
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-black/40" />
+          <div className="absolute inset-0 bg-black/45" />
           <div className="relative z-10 mx-auto max-w-7xl w-full">
             <div className="mb-10 text-center">
               <h2 className="text-3xl font-bold text-white drop-shadow-lg md:text-4xl">
                 {t.home_stays_title}
               </h2>
-              <p className="mt-2 text-sm text-white/85 drop-shadow md:text-base">{t.home_stays_subtitle}</p>
+              <p className="mt-2 text-base text-white/85 drop-shadow md:text-lg">{t.home_stays_subtitle}</p>
             </div>
             <StayList stays={stayCards} lang={lang} darkBg />
             <div className="mt-10 flex justify-center">

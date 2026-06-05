@@ -16,7 +16,7 @@ export default function BookingCardHeader({ name, cover, imageUrl, avgRating }: 
       <div className="flex items-start gap-3">
         {src ? (
           <div className="relative size-12 shrink-0 overflow-hidden rounded-lg">
-            <Image src={src} alt={name} fill className="object-cover" />
+            <Image src={src} alt={name} fill sizes="48px" className="object-cover" />
           </div>
         ) : (
           <div className="size-12 shrink-0 rounded-lg bg-muted" />

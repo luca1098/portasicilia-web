@@ -70,7 +70,14 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       />
       {category.cover && (
         <section className="relative h-[40vh] w-full overflow-hidden">
-          <Image src={category.cover} alt={category.name} fill className="object-cover" priority />
+          <Image
+            src={category.cover}
+            alt={category.name}
+            fill
+            sizes="100vw"
+            className="object-cover"
+            priority
+          />
         </section>
       )}
 

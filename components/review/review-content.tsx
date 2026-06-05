@@ -109,7 +109,13 @@ export default function ReviewContent({ token, listingInfo }: ReviewContentProps
       <div className="flex items-center gap-4">
         {listingInfo.cover && (
           <div className="relative size-16 shrink-0 overflow-hidden rounded-xl">
-            <Image src={listingInfo.cover} alt={listingInfo.name} fill className="object-cover" />
+            <Image
+              src={listingInfo.cover}
+              alt={listingInfo.name}
+              fill
+              sizes="64px"
+              className="object-cover"
+            />
           </div>
         )}
         <div>

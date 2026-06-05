@@ -123,26 +123,28 @@ export default function StayGallery({ images, alt, video }: StayGalleryProps) {
           <CarouselContent>
             {hasVideo && videoThumbnail && (
               <CarouselItem key="video">
-                <button
-                  type="button"
-                  onClick={() => setVideoOpen(true)}
-                  className="group relative mx-auto block aspect-9/16 h-[70vh] cursor-pointer overflow-hidden"
-                >
-                  <Image
-                    src={videoThumbnail}
-                    alt={videoAlt}
-                    fill
-                    unoptimized
-                    className="object-cover"
-                    sizes="100vw"
-                  />
-                  <div className="absolute inset-0 bg-black/15" />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="flex size-16 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
-                      <PlayCircleIcon className="size-10 text-white" />
+                <div className="relative flex aspect-4/3 w-full items-center justify-center overflow-hidden bg-black">
+                  <button
+                    type="button"
+                    onClick={() => setVideoOpen(true)}
+                    className="group relative aspect-9/16 h-full cursor-pointer overflow-hidden"
+                  >
+                    <Image
+                      src={videoThumbnail}
+                      alt={videoAlt}
+                      fill
+                      unoptimized
+                      className="object-cover"
+                      sizes="100vw"
+                    />
+                    <div className="absolute inset-0 bg-black/15" />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="flex size-16 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
+                        <PlayCircleIcon className="size-10 text-white" />
+                      </div>
                     </div>
-                  </div>
-                </button>
+                  </button>
+                </div>
               </CarouselItem>
             )}
             {images.map((image, index) => (

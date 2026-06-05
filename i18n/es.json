@@ -928,6 +928,7 @@
   "admin_bookings_no_results": "No hay reservas confirmadas",
   "admin_bookings_stays_coming_soon": "La gestión de estancias estará disponible próximamente.",
   "admin_load_more": "Cargar más",
+  "listing_load_more": "Cargar más",
   "admin_booking_col_date": "Fecha",
   "admin_booking_col_experience": "Anuncio",
   "admin_booking_col_user": "Usuario",

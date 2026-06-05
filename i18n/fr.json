@@ -928,6 +928,7 @@
   "admin_bookings_no_results": "Aucune réservation confirmée",
   "admin_bookings_stays_coming_soon": "La gestion du séjour sera bientôt disponible.",
   "admin_load_more": "Charger plus",
+  "listing_load_more": "Charger plus",
   "admin_booking_col_date": "Date",
   "admin_booking_col_experience": "Annonce",
   "admin_booking_col_user": "Utilisateur",

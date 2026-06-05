@@ -942,6 +942,7 @@
   "admin_bookings_no_results": "No confirmed bookings",
   "admin_bookings_stays_coming_soon": "Stay management will be available soon",
   "admin_load_more": "Load more",
+  "listing_load_more": "Load more",
   "admin_booking_col_date": "Date",
   "admin_booking_col_experience": "Listing",
   "admin_booking_col_user": "User",

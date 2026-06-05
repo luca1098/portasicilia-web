@@ -7,7 +7,10 @@ import { getStayCards } from '@/lib/api/stays'
 import { getLocalityById } from '@/lib/api/localities'
 import { interpolate } from '@/lib/utils/i18n.utils'
 import StayGrid from '@/components/stay/stay-grid'
+import StayListing from '@/components/stay/stay-listing'
 import ListingEmptyState from '@/components/shared/listing-empty-state'
+
+const LISTING_PAGE_SIZE = 30
 
 export async function generateMetadata({ params }: PageParamsProps): Promise<Metadata> {
   const { lang } = await params
@@ -24,9 +27,9 @@ export default async function StaysPage({ params, searchParams }: PageParamsProp
   const { lang } = await params
   const { localityId } = await searchParams
 
-  const [t, { data: stayCards }] = await Promise.all([
+  const [t, { data: stayCards, nextCursor }] = await Promise.all([
     getTranslations(lang as SupportedLocale),
-    getStayCards({ localityId }),
+    getStayCards({ localityId, limit: LISTING_PAGE_SIZE }),
   ])
 
   const isEmpty = stayCards.length === 0
@@ -64,7 +67,13 @@ export default async function StaysPage({ params, searchParams }: PageParamsProp
           {fallback.length > 0 && <StayGrid stays={fallback} lang={lang} />}
         </ListingEmptyState>
       ) : (
-        <StayGrid stays={stayCards} lang={lang} />
+        <StayListing
+          initialStays={stayCards}
+          initialCursor={nextCursor}
+          limit={LISTING_PAGE_SIZE}
+          lang={lang}
+          localityId={localityId as string | undefined}
+        />
       )}
     </main>
   )

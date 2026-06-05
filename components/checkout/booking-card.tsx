@@ -66,7 +66,13 @@ function Header({ variant = 'compact' }: { variant?: 'compact' | 'large' }) {
         <div
           className={`relative ${isLarge ? 'h-25' : 'h-15'} aspect-square shrink-0 overflow-hidden rounded-lg`}
         >
-          <Image src={state.coverUrl} alt={state.experienceName} fill className="object-cover" />
+          <Image
+            src={state.coverUrl}
+            alt={state.experienceName}
+            fill
+            sizes="100px"
+            className="object-cover"
+          />
         </div>
       )}
       <div className={`flex min-w-0 flex-col justify-center ${isLarge ? 'pt-4' : ''}`}>

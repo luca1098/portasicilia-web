@@ -67,30 +67,56 @@ export default async function CheckoutPage({ searchParams, params }: CheckoutPag
 
     if (nights < 1) redirect(`/${lang}`)
 
-    // Build nightly price tier
-    const nightlyTier = tiers.find(t => t.tierType === 'NIGHTLY')
-    if (nightlyTier) {
-      const subtotal = nightlyTier.baseAmount * nights
-      priceTiers.push({ tierType: 'NIGHTLY', baseAmount: nightlyTier.baseAmount, quantity: nights, subtotal })
-      totalPrice = subtotal
-    }
+    let depositAmount: number | null = stay.depositValue ?? null
 
-    // Build extra tiers (e.g., breakfast, cleaning fee)
-    for (const tier of tiers) {
-      if (tier.tierType === 'NIGHTLY') continue
-      const quantity = tier.tierType === 'CLEANING_FEE' ? 1 : nights
-      const subtotal = tier.baseAmount * quantity
-      priceTiers.push({
-        tierType: tier.tierType,
-        baseAmount: tier.baseAmount,
-        quantity,
-        subtotal,
-        label: tier.label ?? tier.tierType.toLowerCase(),
-      })
-      totalPrice = (totalPrice ?? 0) + subtotal
-    }
+    try {
+      // Resolve the price through the engine so per-night overrides (recurring
+      // weekend rates, etc.) are reflected, instead of multiplying the base
+      // nightly rate by the number of nights.
+      const breakdown = await calculatePrice({ listingId, date, numberOfNights: nights })
 
-    const depositAmount = stay.depositValue ?? null
+      totalPrice = Number(breakdown.total)
+      // Actual deposit charged is the commission on the full stay total (mirrors
+      // booking.service.ts), so it reflects the per-night/weekend pricing.
+      depositAmount = Number(breakdown.commissionAmount)
+
+      for (const li of breakdown.lineItems) {
+        priceTiers.push({
+          tierType: li.tierType,
+          baseAmount: Number(li.effectiveUnitPrice),
+          quantity: li.quantity,
+          subtotal: Number(li.subtotal),
+          ...(li.label ? { label: li.label } : {}),
+        })
+      }
+    } catch {
+      // Fallback: backend pricing unavailable — degrade to base nightly rate ×
+      // nights so the page still renders (this does not reflect overrides).
+      const nightlyTier = tiers.find(t => t.tierType === 'NIGHTLY')
+      if (nightlyTier) {
+        const subtotal = nightlyTier.baseAmount * nights
+        priceTiers.push({
+          tierType: 'NIGHTLY',
+          baseAmount: nightlyTier.baseAmount,
+          quantity: nights,
+          subtotal,
+        })
+        totalPrice = subtotal
+      }
+      for (const tier of tiers) {
+        if (tier.tierType === 'NIGHTLY') continue
+        const quantity = tier.tierType === 'CLEANING_FEE' ? 1 : nights
+        const subtotal = tier.baseAmount * quantity
+        priceTiers.push({
+          tierType: tier.tierType,
+          baseAmount: tier.baseAmount,
+          quantity,
+          subtotal,
+          label: tier.label ?? tier.tierType.toLowerCase(),
+        })
+        totalPrice = (totalPrice ?? 0) + subtotal
+      }
+    }
 
     return (
       <CheckoutContent

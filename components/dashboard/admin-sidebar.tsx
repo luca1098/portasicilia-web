@@ -28,6 +28,7 @@ import {
   ReceiptIcon,
   StoreIcon,
   HandshakeIcon,
+  MessageSquareIcon,
 } from '@/lib/constants/icons'
 import { Button } from '@/components/ui/button'
 
@@ -49,6 +50,7 @@ const sidebarSections: SidebarSection[] = [
       { key: 'admin_sidebar_requests', icon: ClipboardListIcon, href: '/requests' },
       { key: 'admin_sidebar_bookings', icon: CalendarCheck2Icon, href: '/bookings' },
       { key: 'admin_sidebar_reviews', icon: StarIcon, href: '/reviews' },
+      { key: 'admin_sidebar_feedbacks', icon: MessageSquareIcon, href: '/feedbacks' },
     ],
   },
   {

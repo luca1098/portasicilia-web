@@ -8,6 +8,7 @@ import { useTranslation } from '@/lib/context/translation.context'
 import { interpolate } from '@/lib/utils/i18n.utils'
 import { formatCurrency } from '@/lib/utils/format.utils'
 import { Button } from '@/components/ui/button'
+import CheckoutFeedback from './checkout-feedback'
 import type { OrderResponse } from '@/lib/api/orders'
 
 type OrderSuccessProps = {
@@ -30,6 +31,9 @@ export default function OrderSuccess({ order }: OrderSuccessProps) {
       <p className="mt-2 text-center text-sm text-muted-foreground">
         {interpolate(t.order_success_subtitle, { number: order.number })}
       </p>
+
+      {/* Checkout feedback */}
+      <CheckoutFeedback />
 
       <div className="mt-8 rounded-xl border bg-background">
         <div className="px-5 py-4">

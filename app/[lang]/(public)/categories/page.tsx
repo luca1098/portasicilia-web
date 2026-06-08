@@ -29,7 +29,7 @@ export default async function CategoriesPage({ params }: CategoriesPageProps) {
   return (
     <PageWrapper>
       <main className="min-h-screen">
-        <section className="mx-auto max-w-7xl px-4 pb-16 pt-12 md:px-8 md:pt-16">
+        <section className="mx-auto max-w-7xl px-4 pb-16 pt-20 md:px-8 md:pt-16">
           <div className="mb-12 text-center">
             <h1 className="text-3xl font-bold tracking-tight md:text-4xl">{t.categories_page_title}</h1>
             <p className="mt-3 text-muted-foreground">{t.categories_page_subtitle}</p>

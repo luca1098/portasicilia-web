@@ -15,7 +15,7 @@ export default async function PartnerApplicationPage({ params }: PageParamsProps
   const t = await getTranslations(lang as SupportedLocale)
 
   return (
-    <main className="px-4 py-12">
+    <main className="px-4 pb-12 pt-24 md:pt-28">
       <div className="mx-auto max-w-2xl text-center">
         <h1 className="text-3xl font-bold">{t.partner_form_title}</h1>
         <p className="mt-2 text-muted-foreground">{t.partner_form_subtitle}</p>

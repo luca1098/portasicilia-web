@@ -26,7 +26,7 @@ export default async function ReviewErrorPage({ params, searchParams }: ReviewEr
   const message = getErrorMessage(reason, t)
 
   return (
-    <main className="mx-auto max-w-lg px-4 py-12">
+    <main className="mx-auto max-w-lg px-4 pb-12 pt-24">
       <div className="rounded-2xl border bg-card p-6 shadow-sm">
         <div className="flex flex-col items-center gap-4 py-8 text-center">
           <AlertCircleIcon className="size-16 text-destructive" />

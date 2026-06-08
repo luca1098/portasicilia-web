@@ -1414,11 +1414,9 @@
   "social_video_view_detail": "Vai al dettaglio",
   "social_video_featured": "In evidenza",
   "social_video_featured_description": "Mostra questo video nella sezione Social della homepage (max 3)",
-
   "privacy_title": "Informativa sulla Privacy",
   "privacy_last_updated": "Ultima revisione: 21 maggio 2026",
   "privacy_intro": "La presente Informativa descrive il trattamento dei dati personali effettuato da Sicily Good di Salvatore Guarneri (di seguito \"Porta Sicilia\") nell'ambito del sito www.portasicilia.com (di seguito \"Piattaforma\") ai sensi del Regolamento (UE) 2016/679 (GDPR) e del D.Lgs. 196/2003 (Codice Privacy).",
-
   "privacy_operator_title": "1. Titolare del trattamento",
   "privacy_operator_intro": "Il titolare del trattamento è:",
   "privacy_operator_company": "Sicily Good di Salvatore Guarneri (ditta individuale)",
@@ -1429,10 +1427,8 @@
   "privacy_operator_email": "Email: info@portasicilia.com",
   "privacy_operator_phone": "Telefono: +39 327 4522382",
   "privacy_operator_no_dpo": "Porta Sicilia non ha designato un Responsabile della protezione dei dati (DPO), non sussistendo gli obblighi previsti dall'art. 37 GDPR. Per ogni richiesta relativa al trattamento dei dati personali, l'interessato può rivolgersi all'indirizzo info@portasicilia.com.",
-
   "privacy_scope_title": "2. Ambito di applicazione",
   "privacy_scope_text": "La presente Informativa si applica al trattamento dei dati personali degli interessati che accedono alla Piattaforma, si registrano come utenti, prenotano servizi o acquistano prodotti, candidano la propria attività come Partner, ricevono comunicazioni commerciali o interagiscono con i canali ufficiali di Porta Sicilia.",
-
   "privacy_subjects_title": "3. Categorie di interessati",
   "privacy_subjects_intro": "I dati personali trattati riguardano le seguenti categorie di interessati:",
   "privacy_subjects_visitor": "Visitatori della Piattaforma (anche non registrati).",
@@ -1440,7 +1436,6 @@
   "privacy_subjects_host": "Host / Partner che pubblicano listing sulla Piattaforma.",
   "privacy_subjects_applicant": "Soggetti che presentano candidatura per diventare Partner.",
   "privacy_subjects_subscriber": "Iscritti alla newsletter e destinatari di comunicazioni commerciali.",
-
   "privacy_categories_title": "4. Categorie di dati personali trattati",
   "privacy_categories_intro": "Le categorie di dati personali trattati variano in funzione del rapporto con Porta Sicilia. Sono i seguenti:",
   "privacy_categories_identification": "Dati identificativi: nome, cognome, data di nascita (ove fornita), eventuale ragione sociale del Partner, codice fiscale o partita IVA (per i Partner).",
@@ -1453,11 +1448,9 @@
   "privacy_categories_marketing": "Dati relativi a comunicazioni commerciali: indirizzo email di iscrizione alla newsletter, eventi di apertura/click, stato del consenso, data di iscrizione e di eventuale disiscrizione.",
   "privacy_categories_consent": "Dati relativi al consenso ai cookie: scelte effettuate sul banner CMP, data e versione del consenso registrato.",
   "privacy_categories_special": "Porta Sicilia non raccoglie deliberatamente categorie particolari di dati personali ai sensi dell'art. 9 GDPR (dati relativi a salute, origine etnica, orientamento religioso, dati biometrici, ecc.). Qualora l'interessato fornisca spontaneamente tali informazioni nell'ambito di una recensione o di una comunicazione, gli sarà richiesto di rimuoverle.",
-
   "privacy_sources_title": "5. Origine dei dati",
   "privacy_sources_direct": "I dati sono raccolti direttamente dall'interessato (registrazione, modulo di candidatura Partner, modulo newsletter, prenotazioni, acquisti, comunicazioni).",
   "privacy_sources_third_party": "Una parte limitata dei dati può essere ricevuta da terzi: (i) Google e Apple, in caso di registrazione tramite OAuth (email, nome, eventuale avatar); (ii) Stripe, in caso di pagamento (esito tokenizzato e identificativo transazione); (iii) sincronizzazione iCal del calendario dell'Host con piattaforme esterne (Airbnb, Booking) — limitata alle disponibilità, senza dati personali del cliente.",
-
   "privacy_purposes_title": "6. Finalità del trattamento e basi giuridiche",
   "privacy_purposes_intro": "I dati personali sono trattati per le seguenti finalità e con le rispettive basi giuridiche:",
   "privacy_purposes_account": "(a) Creazione e gestione dell'account utente, autenticazione, manutenzione della sicurezza dell'account.",
@@ -1482,10 +1475,8 @@
   "privacy_purposes_dsa_basis": "Base giuridica: obbligo legale — art. 6(1)(c) GDPR.",
   "privacy_purposes_legal": "(k) Adempimento di obblighi di legge (fiscali, contabili, antiriciclaggio ove applicabili), risposta a richieste di autorità pubbliche, esercizio o difesa di diritti in sede giudiziaria.",
   "privacy_purposes_legal_basis": "Base giuridica: obbligo legale — art. 6(1)(c) GDPR; legittimo interesse — art. 6(1)(f) GDPR per la difesa dei diritti.",
-
   "privacy_modality_title": "7. Modalità del trattamento",
   "privacy_modality_text": "Il trattamento è effettuato con strumenti elettronici e organizzativi idonei a garantire la riservatezza, integrità e disponibilità dei dati. I dati sono trattati da personale autorizzato di Porta Sicilia e dai fornitori designati come responsabili del trattamento, vincolati da accordi (DPA) conformi all'art. 28 GDPR.",
-
   "privacy_retention_title": "8. Periodi di conservazione",
   "privacy_retention_intro": "I dati personali sono conservati per il tempo strettamente necessario al perseguimento delle finalità per le quali sono stati raccolti e secondo i seguenti criteri:",
   "privacy_retention_account": "Dati dell'account utente: per la durata del rapporto contrattuale e fino a 24 mesi dopo l'ultima attività (in caso di inattività prolungata l'account può essere disattivato).",
@@ -1497,7 +1488,6 @@
   "privacy_retention_logs": "Log di sistema, accessi e sicurezza: 12 mesi.",
   "privacy_retention_applications": "Candidature Partner non approvate: 24 mesi dalla decisione di non procedere; candidature approvate: per la durata del rapporto con il Partner.",
   "privacy_retention_legal_hold": "In caso di contenzioso o di legittimo interesse alla difesa di diritti, i dati possono essere conservati per il tempo necessario, fino al passaggio in giudicato della decisione finale.",
-
   "privacy_recipients_title": "9. Destinatari e categorie di destinatari",
   "privacy_recipients_intro": "I dati personali possono essere comunicati a fornitori di servizi che operano in qualità di responsabili del trattamento ai sensi dell'art. 28 GDPR. La lista aggiornata è la seguente:",
   "privacy_recipients_stripe": "Stripe Payments Europe Ltd (Irlanda) e, per alcune funzionalità, Stripe, Inc. (Stati Uniti) — elaborazione dei pagamenti, prevenzione frodi, SCA. Informativa: https://stripe.com/it/privacy.",
@@ -1510,13 +1500,11 @@
   "privacy_recipients_hosts": "Host / Partner: ricevono dal Porta Sicilia esclusivamente i dati strettamente necessari all'esecuzione del servizio prenotato (nome, contatti, eventuali esigenze) e operano in qualità di titolari autonomi del trattamento per la fornitura del servizio.",
   "privacy_recipients_authorities": "Autorità giudiziarie, autorità di vigilanza (Garante, AGCM, AGCOM) e altre autorità pubbliche, su richiesta motivata o per obbligo di legge.",
   "privacy_recipients_advisors": "Consulenti professionali (avvocati, commercialisti) vincolati da segreto professionale, nei limiti necessari all'adempimento di obblighi di legge o alla difesa di diritti.",
-
   "privacy_transfers_title": "10. Trasferimenti di dati extra-SEE",
   "privacy_transfers_intro": "Alcuni fornitori sopra elencati hanno sede o operano negli Stati Uniti (Stripe Inc., Google LLC, Apple Inc.). I trasferimenti dei dati personali verso tali destinazioni avvengono in conformità al Capo V del GDPR e in particolare:",
   "privacy_transfers_dpf": "in base al Data Privacy Framework UE-USA (Decisione di adeguatezza della Commissione Europea del 10 luglio 2023) per i fornitori certificati;",
   "privacy_transfers_scc": "in subordine, sulla base delle Clausole Contrattuali Standard adottate dalla Commissione Europea con Decisione 2021/914/UE, integrate da misure tecniche e organizzative supplementari ove necessario (Transfer Impact Assessment).",
   "privacy_transfers_rights": "L'interessato può ottenere una copia delle garanzie adottate scrivendo a info@portasicilia.com.",
-
   "privacy_rights_title": "11. Diritti dell'interessato",
   "privacy_rights_intro": "L'interessato ha diritto, ai sensi degli artt. 15-22 GDPR, di:",
   "privacy_rights_access": "ottenere conferma dell'esistenza di un trattamento dei propri dati personali e accedervi (art. 15 GDPR);",
@@ -1527,37 +1515,26 @@
   "privacy_rights_objection": "opporsi al trattamento basato sul legittimo interesse o per finalità di marketing diretto (art. 21 GDPR);",
   "privacy_rights_withdraw": "revocare il consenso prestato in qualsiasi momento, senza pregiudicare la liceità del trattamento basato sul consenso prima della revoca (art. 7, par. 3 GDPR);",
   "privacy_rights_adm": "non essere sottoposto a una decisione basata unicamente sul trattamento automatizzato, compresa la profilazione, che produca effetti giuridici o significativamente analoghi (art. 22 GDPR).",
-
   "privacy_exercise_title": "12. Modalità di esercizio dei diritti",
   "privacy_exercise_text": "L'interessato può esercitare i propri diritti scrivendo a info@portasicilia.com, allegando copia di un documento di identità ove necessario alla verifica. Porta Sicilia risponderà entro 30 giorni dalla ricezione della richiesta, prorogabili di ulteriori 60 giorni in caso di complessità, con motivata comunicazione all'interessato. L'esercizio dei diritti è gratuito, salvo richieste manifestamente infondate o eccessive (art. 12, par. 5 GDPR).",
-
   "privacy_complaint_title": "13. Reclamo all'autorità di controllo",
   "privacy_complaint_text": "L'interessato ha diritto di proporre reclamo al Garante per la protezione dei dati personali (Piazza Venezia 11, 00187 Roma — https://www.garanteprivacy.it) o all'autorità di controllo del proprio Stato membro di residenza abituale o del luogo della presunta violazione (art. 77 GDPR).",
-
   "privacy_cookies_title": "14. Cookie e tecnologie di tracciamento",
   "privacy_cookies_text": "L'utilizzo di cookie e tecnologie analoghe è disciplinato dalla Cookie Policy, parte integrante della presente Informativa. Il consenso è raccolto tramite la Consent Management Platform di Usercentrics GmbH e può essere modificato in qualsiasi momento dal pannello \"Impostazioni cookie\" presente nel footer del sito.",
-
   "privacy_marketing_title": "15. Marketing e comunicazioni commerciali",
   "privacy_marketing_text": "L'iscrizione alla newsletter è basata sul consenso libero, specifico, informato e revocabile dell'interessato, raccolto al momento dell'iscrizione. Ogni email contiene un link diretto per la disiscrizione. In caso di pregresso acquisto di servizi/prodotti, Porta Sicilia può inviare comunicazioni relative a offerte simili (soft-spam, art. 130, comma 4, Codice Privacy), con possibilità di opposizione gratuita in qualsiasi momento.",
-
   "privacy_profiling_title": "16. Profilazione e decisioni automatizzate",
   "privacy_profiling_text": "Porta Sicilia non effettua decisioni basate unicamente sul trattamento automatizzato, ivi inclusa la profilazione, che producano effetti giuridici o significativamente analoghi nei confronti dell'interessato (art. 22 GDPR). Sono utilizzati algoritmi di posizionamento dei listing nei risultati di ricerca, descritti nelle Condizioni Partner ai sensi dell'art. 5 del Reg. P2B (UE 2019/1150): tali algoritmi non producono effetti significativi sugli utenti finali e non costituiscono profilazione ai sensi dell'art. 22 GDPR.",
-
   "privacy_security_title": "17. Sicurezza dei dati",
   "privacy_security_text": "Porta Sicilia adotta misure tecniche e organizzative adeguate al rischio, tra cui: cifratura dei dati in transito (HTTPS/TLS) e a riposo per i dati sensibili, hashing delle password con algoritmi robusti, controlli di accesso basati su ruoli, principio del minimo privilegio, log degli accessi e degli eventi di sicurezza, segregazione degli ambienti, audit periodici, backup criptati, formazione del personale e gestione delle vulnerabilità. Nonostante l'adozione di tali misure, nessun sistema può garantire una sicurezza assoluta; in caso di violazione, Porta Sicilia notificherà il Garante entro 72 ore (art. 33 GDPR) e gli interessati nei casi previsti dall'art. 34 GDPR.",
-
   "privacy_minors_title": "18. Dati relativi a minori",
   "privacy_minors_text": "La Piattaforma non è rivolta a minori di 18 anni; la registrazione e gli acquisti sono riservati a maggiorenni. Per il trattamento dei dati di minori tra i 14 e i 18 anni nell'ambito di prenotazioni effettuate da un genitore, è necessaria l'autorizzazione del titolare della responsabilità genitoriale. Il trattamento dei dati di minori sotto i 14 anni richiede il consenso del titolare della responsabilità genitoriale ai sensi dell'art. 2-quinquies del Codice Privacy. Qualora Porta Sicilia venga a conoscenza del trattamento di dati di minori in assenza di autorizzazione, procederà alla loro cancellazione.",
-
   "privacy_changes_title": "19. Modifiche all'Informativa",
   "privacy_changes_text": "La presente Informativa può essere aggiornata in qualsiasi momento per adeguarla a modifiche normative, a nuove modalità di trattamento o a evoluzioni del servizio. La versione aggiornata sarà pubblicata su questa pagina con indicazione della data di ultima revisione. Modifiche sostanziali saranno comunicate agli interessati tramite email o avviso sulla Piattaforma.",
-
   "privacy_contact_title": "20. Contatti",
   "privacy_contact_text": "Per qualsiasi domanda, richiesta o chiarimento in merito al trattamento dei dati personali, l'interessato può scrivere a info@portasicilia.com o tramite posta ordinaria a: Sicily Good di Salvatore Guarneri, Cortile Gonzales 7, 90025 Lercara Friddi (PA), Italia.",
-
   "terms_title": "Termini e Condizioni",
   "terms_last_updated": "Ultima revisione: 21 maggio 2026",
-
   "terms_operator_title": "1. Identificazione del Titolare",
   "terms_operator_intro": "Il sito www.portasicilia.com (di seguito anche \"Piattaforma\" o \"Sito\") è gestito da:",
   "terms_operator_company": "Sicily Good di Salvatore Guarneri (ditta individuale).",
@@ -1568,7 +1545,6 @@
   "terms_operator_email": "Email: info@portasicilia.com.",
   "terms_operator_phone": "Telefono: +39 327 4522382.",
   "terms_operator_brand": "Ai fini delle presenti Condizioni, il soggetto sopra identificato è di seguito denominato \"Porta Sicilia\".",
-
   "terms_defs_title": "2. Definizioni",
   "terms_defs_intro": "Nei presenti Termini e Condizioni i seguenti termini hanno il significato a fianco indicato:",
   "terms_defs_user": "\"Utente\": la persona fisica che accede o utilizza la Piattaforma per consultare, prenotare o acquistare i Servizi o i Prodotti.",
@@ -1578,21 +1554,17 @@
   "terms_defs_product": "\"Prodotti\": i beni, in particolare prodotti alimentari, commercializzati direttamente da Porta Sicilia attraverso la sezione Shop della Piattaforma.",
   "terms_defs_booking": "\"Prenotazione\": la richiesta di prenotazione di un Servizio formalizzata tramite la Piattaforma con il pagamento della relativa Commissione di servizio.",
   "terms_defs_commission": "\"Commissione di servizio\": l'importo trattenuto da Porta Sicilia in qualità di compenso per l'attività di intermediazione, distinto dall'eventuale saldo dovuto all'Host.",
-
   "terms_acceptance_title": "3. Accettazione dei Termini",
   "terms_acceptance_text_1": "L'accesso, la registrazione o l'utilizzo della Piattaforma comportano l'accettazione integrale dei presenti Termini e Condizioni, dell'Informativa Privacy e della Cookie Policy, che ne costituiscono parte integrante.",
   "terms_acceptance_text_2": "Eventuali contratti aggiuntivi o specifiche condizioni applicabili a determinati Servizi o Prodotti prevarranno, in caso di conflitto, sulle disposizioni generali dei presenti Termini.",
   "terms_acceptance_text_3": "Utilizzando la Piattaforma o comunicando con Porta Sicilia per via elettronica, l'Utente accetta che le comunicazioni avvengano via email o tramite gli strumenti della Piattaforma e che tali comunicazioni soddisfino qualsiasi requisito di forma scritta previsto dalla legge.",
-
   "terms_age_title": "4. Requisiti di accesso ed età minima",
   "terms_age_text": "La registrazione e l'effettuazione di Prenotazioni o acquisti sulla Piattaforma sono riservate a soggetti che abbiano compiuto 18 anni e che abbiano la capacità di concludere contratti vincolanti ai sensi della legge italiana. Il trattamento dei dati personali di minori di 14 anni richiede il consenso del titolare della responsabilità genitoriale ai sensi dell'art. 2-quinquies del D.Lgs. 196/2003 (Codice Privacy).",
-
   "terms_auth_title": "5. Registrazione e autenticazione",
   "terms_auth_intro": "L'Utente può registrarsi e accedere alla Piattaforma tramite email e password o tramite i provider di autenticazione di terze parti supportati.",
   "terms_auth_google": "L'autenticazione tramite Google avviene secondo il protocollo OAuth 2.0 con Google Ireland Ltd. In tal caso si applica anche l'informativa privacy di Google (https://policies.google.com/privacy).",
   "terms_auth_apple": "L'autenticazione tramite Apple avviene secondo il protocollo Sign in with Apple con Apple Distribution International Ltd. Se l'Utente utilizza la funzione \"Nascondi la mia email\", le comunicazioni transazionali saranno recapitate tramite il servizio di relay Apple; la disattivazione del relay impedirà la consegna di comunicazioni successive, incluse quelle relative alle Prenotazioni.",
   "terms_auth_credentials": "L'Utente è responsabile della riservatezza delle credenziali di accesso e di ogni attività svolta tramite il proprio account. È tenuto a comunicare tempestivamente a Porta Sicilia ogni utilizzo non autorizzato o sospetto del proprio account.",
-
   "terms_platform_title": "6. Ruolo di Porta Sicilia",
   "terms_platform_intro": "Porta Sicilia opera come intermediario tecnologico tra Utenti e Host per le esperienze, i tour e gli alloggi, e come venditore diretto per i Prodotti commercializzati nella sezione Shop.",
   "terms_platform_exp_title": "6.1 Esperienze e tour",
@@ -1608,7 +1580,6 @@
   "terms_platform_stay_item_3": "Porta Sicilia trasmette la richiesta all'Host, che si impegna a contattare l'Utente entro 24 ore per fornire i dettagli pratici e definire il pagamento del saldo. Il contratto di soggiorno si conclude direttamente tra Utente e Host.",
   "terms_platform_shop_title": "6.3 Prodotti alimentari (Shop)",
   "terms_platform_shop_text": "I Prodotti acquistati nella sezione Shop sono venduti direttamente da Porta Sicilia. Il contratto di compravendita si conclude con la conferma dell'ordine successiva al pagamento. Per la disciplina specifica si rinvia alle Sezioni 9 e 10.",
-
   "terms_payments_title": "7. Pagamenti",
   "terms_payments_stripe": "I pagamenti sono elaborati tramite Stripe Payments Europe Ltd (Irlanda) e, per alcune funzionalità, da Stripe, Inc. (USA), in qualità di prestatori di servizi di pagamento autorizzati. Porta Sicilia non raccoglie né conserva i dati della carta dell'Utente: tali dati sono trasmessi direttamente a Stripe in modalità tokenizzata e protetti secondo lo standard PCI-DSS.",
   "terms_payments_sca": "Per le operazioni soggette alla Direttiva (UE) 2015/2366 (PSD2) può essere richiesta l'autenticazione forte del cliente (Strong Customer Authentication / 3D-Secure).",
@@ -1616,7 +1587,6 @@
   "terms_payments_methods": "Sono accettati i metodi di pagamento indicati nella pagina di checkout, tra cui carte di credito e debito dei principali circuiti internazionali e, ove abilitati, wallet digitali (Apple Pay, Google Pay).",
   "terms_payments_prices": "I prezzi visualizzati sulla Piattaforma sono espressi in Euro e comprensivi di IVA quando dovuta. Prima della conclusione dell'ordine sono indicati in modo distinto e chiaro: il prezzo del Servizio o del Prodotto, la Commissione di servizio dovuta a Porta Sicilia, l'eventuale saldo da corrispondere all'Host e le spese di spedizione, ove applicabili.",
   "terms_payments_invoice": "Su richiesta dell'Utente, Porta Sicilia rilascia documento fiscale relativo alla Commissione di servizio o al Prodotto acquistato secondo la normativa fiscale italiana.",
-
   "terms_cancel_title": "8. Politiche di cancellazione e rimborso (Servizi)",
   "terms_cancel_framework": "Ai sensi dell'art. 59, comma 1, lett. n) del D.Lgs. 206/2005 (Codice del Consumo) e dell'art. 51 del D.Lgs. 79/2011 (Codice del Turismo), il diritto di recesso di 14 giorni non si applica ai contratti relativi ad attività del tempo libero (esperienze, tour, servizi turistici) e ai contratti di alloggio quando il contratto prevede una data o un periodo di esecuzione specifici. Una volta confermata la Prenotazione, l'Utente potrà cancellare esclusivamente secondo le politiche di seguito indicate.",
   "terms_cancel_exp_title": "8.1 Esperienze e tour",
@@ -1633,19 +1603,16 @@
   "terms_cancel_refund_title": "8.3 Tempistiche di rimborso",
   "terms_cancel_refund_text_1": "I rimborsi di competenza di Porta Sicilia saranno effettuati entro 14 giorni lavorativi dalla conferma della cancellazione, sul medesimo metodo di pagamento utilizzato per l'acquisto, salvo diverso accordo scritto.",
   "terms_cancel_refund_text_2": "I tempi di riaccredito effettivi possono variare in base al circuito di pagamento utilizzato e alle policy di Stripe.",
-
   "terms_food_title": "9. Vendita di prodotti alimentari (Shop)",
   "terms_food_labeling": "I Prodotti alimentari sono venduti in conformità al Regolamento (UE) 1169/2011 sull'informazione ai consumatori sugli alimenti. Nella scheda di ogni Prodotto sono indicati: denominazione, lista degli ingredienti, allergeni evidenziati, valori nutrizionali, peso netto, lotto, termine minimo di conservazione o data di scadenza, nome e sede del produttore o del confezionatore.",
   "terms_food_shipping": "La spedizione avviene tramite corriere selezionato da Porta Sicilia. I tempi di consegna stimati sono indicati in fase di acquisto e decorrono dalla conferma dell'ordine.",
   "terms_food_delays": "Eventuali ritardi nella consegna non imputabili a Porta Sicilia (cause di forza maggiore, indisponibilità del corriere, condizioni meteorologiche, errori nell'indirizzo fornito dall'Utente) non costituiscono inadempimento contrattuale e non danno luogo a rimborso, ferma restando l'applicazione delle norme imperative a tutela del consumatore.",
   "terms_food_orders": "Porta Sicilia si riserva il diritto di annullare ordini incompleti, manifestamente erronei o sospetti, comunicandolo tempestivamente all'Utente e rimborsando integralmente le somme eventualmente versate.",
   "terms_food_guarantee": "Ai Prodotti alimentari si applica la garanzia legale di conformità prevista dagli artt. 128 e seguenti del Codice del Consumo, nei limiti compatibili con la natura del Prodotto.",
-
   "terms_food_withdrawal_title": "10. Diritto di recesso per Prodotti alimentari",
   "terms_food_withdrawal_text_1": "Per i Prodotti acquistati nella sezione Shop l'Utente consumatore ha diritto di recedere dal contratto entro 14 giorni dalla consegna ai sensi degli artt. 52 e seguenti del Codice del Consumo, senza dover fornire alcuna motivazione.",
   "terms_food_withdrawal_exceptions": "Ai sensi dell'art. 59, comma 1, del Codice del Consumo il diritto di recesso non si applica ai Prodotti che possono deteriorarsi o scadere rapidamente (lett. d), ai Prodotti sigillati che non si prestano a essere restituiti per ragioni igieniche o connessi alla protezione della salute e sono stati aperti dopo la consegna (lett. e), nonché ai Prodotti che, dopo la consegna, risultano per loro natura inscindibilmente mescolati con altri beni (lett. f). Tali esclusioni sono evidenziate, ove applicabili, nella scheda Prodotto.",
   "terms_food_withdrawal_procedure": "Per esercitare il diritto di recesso l'Utente comunica la propria decisione a Porta Sicilia tramite email all'indirizzo info@portasicilia.com entro 14 giorni dalla consegna. Porta Sicilia rimborsa le somme ricevute, comprese le spese di consegna standard, entro 14 giorni dalla ricezione della comunicazione, fatta salva la facoltà di sospendere il rimborso fino alla restituzione del Prodotto o alla prova della spedizione dello stesso. I costi diretti di restituzione sono a carico dell'Utente.",
-
   "terms_user_obligations_title": "11. Obblighi dell'Utente e no-show",
   "terms_user_obligations_text": "L'Utente è tenuto a presentarsi puntualmente nel luogo, alla data e nell'orario indicati per lo svolgimento dell'attività o per il check-in dell'alloggio, nonché a fornire informazioni complete e veritiere in fase di prenotazione.",
   "terms_user_obligations_cases": "In caso di:",
@@ -1654,12 +1621,10 @@
   "terms_user_obligations_item_3": "rinuncia volontaria;",
   "terms_user_obligations_note": "la Prenotazione sarà considerata utilizzata e non sarà dovuto alcun rimborso, salvo diversa indicazione espressa dell'Host.",
   "terms_user_obligations_responsible_use": "L'Utente si impegna a utilizzare la Piattaforma in conformità alla legge e alla buona fede, astenendosi da condotte che possano compromettere la sicurezza, la disponibilità o l'integrità della Piattaforma stessa, ivi inclusi tentativi di accesso non autorizzato, scraping automatizzato, distribuzione di malware o uso dei dati raccolti per attività di marketing diretto non autorizzato.",
-
   "terms_chargeback_title": "12. Procedura per contestazioni e chargeback",
   "terms_chargeback_text_1": "In caso di problemi relativi a una Prenotazione o a un acquisto, l'Utente è invitato a contattare preventivamente Porta Sicilia all'indirizzo info@portasicilia.com, al fine di consentire una valutazione e un'eventuale risoluzione bonaria della controversia.",
   "terms_chargeback_text_2": "Resta in ogni caso impregiudicato il diritto dell'Utente di esercitare le procedure di contestazione (chargeback) previste dai circuiti di pagamento e dalla normativa applicabile. Porta Sicilia si riserva la facoltà di fornire all'istituto di pagamento la documentazione contrattuale relativa alla Prenotazione contestata.",
   "terms_chargeback_text_3": "Resta fermo ogni diritto dell'Utente previsto dalla normativa a tutela del consumatore.",
-
   "terms_liability_title": "13. Responsabilità",
   "terms_liability_intermediary": "Con riferimento ai Servizi forniti dagli Host (esperienze, tour, alloggi), Porta Sicilia opera esclusivamente come intermediario tecnologico. L'Utente riconosce che:",
   "terms_liability_item_1": "il contratto di fornitura del Servizio è concluso direttamente con l'Host;",
@@ -1667,110 +1632,87 @@
   "terms_liability_item_3": "Porta Sicilia non risponde di inadempimenti, cancellazioni, ritardi, modifiche del programma o difformità del Servizio imputabili all'Host.",
   "terms_liability_limits": "Nei limiti consentiti dalla legge, Porta Sicilia non sarà responsabile per: (i) disservizi imputabili agli Host; (ii) interruzioni o modifiche per cause non dipendenti dalla propria volontà; (iii) danni indiretti, perdita di profitto o danni conseguenziali; (iv) eventi di forza maggiore e caso fortuito ai sensi dell'art. 1218 c.c.",
   "terms_liability_carveout": "Le limitazioni ed esclusioni di responsabilità previste dai presenti Termini non si applicano nei casi di dolo o colpa grave, di danni alla persona o alla salute, di violazione di obblighi essenziali, né nelle ulteriori ipotesi in cui la limitazione sia inderogabilmente esclusa dalla legge a tutela del consumatore (artt. 33–36 D.Lgs. 206/2005 e art. 1229 c.c.).",
-
   "terms_reviews_title": "14. Recensioni",
   "terms_reviews_authenticity": "Le recensioni pubblicate sulla Piattaforma provengono esclusivamente da Utenti che hanno effettivamente prenotato e usufruito del Servizio o acquistato il Prodotto recensito, conformemente all'art. 27-quater del Codice del Consumo. Porta Sicilia non pubblica recensioni provenienti da Utenti non verificati e non corrisponde alcun compenso, vantaggio o premio in cambio di recensioni.",
   "terms_reviews_rules": "Le recensioni devono essere veritiere, basate su esperienze personali e rispettose. Sono vietate recensioni contenenti dati personali di terzi, contenuti diffamatori, offensivi, discriminatori, illeciti o lesivi della reputazione dell'Host o di Porta Sicilia.",
   "terms_reviews_moderation": "Porta Sicilia si riserva la facoltà di rimuovere, declassare o non pubblicare recensioni che violino la presente policy, dandone comunicazione motivata all'Utente, nel rispetto delle previsioni del Regolamento (UE) 2022/2065.",
-
   "terms_ip_title": "15. Proprietà intellettuale e contenuti dell'Utente",
   "terms_ip_ownership": "Tutti i diritti di proprietà intellettuale relativi alla Piattaforma — inclusi codice sorgente, design, marchi, loghi, testi editoriali, banche dati e ogni altra opera dell'ingegno — appartengono a Porta Sicilia o ai suoi licenzianti e sono protetti dalle norme applicabili in materia di diritto d'autore e proprietà industriale.",
   "terms_ip_reserved": "All'Utente non viene concessa alcuna licenza o diritto sulla Piattaforma, salvo l'uso strettamente necessario alla fruizione dei Servizi. È vietato copiare, riprodurre, distribuire, modificare, decompilare, commercializzare o creare opere derivate, salvo nei limiti consentiti dalle norme imperative (ad es. diritto di citazione).",
   "terms_ip_user_content": "I contenuti caricati dall'Utente sulla Piattaforma (testi, immagini, recensioni) restano di proprietà dell'Utente. Con il caricamento, l'Utente concede a Porta Sicilia una licenza non esclusiva, gratuita, valida in tutto il mondo per la durata di permanenza del contenuto sulla Piattaforma, per utilizzare, riprodurre, adattare, tradurre (anche tramite traduzione automatica) e pubblicare detti contenuti nel contesto della Piattaforma e dei suoi canali di promozione. L'Utente garantisce di disporre di tutti i diritti necessari per concedere la presente licenza.",
   "terms_ip_third_party": "La Piattaforma può contenere link a siti web di terzi. Porta Sicilia non controlla né è responsabile del contenuto, delle politiche di privacy o delle pratiche di tali siti.",
-
   "terms_dsa_title": "16. Segnalazione di contenuti illeciti (DSA)",
   "terms_dsa_intro": "Ai sensi degli artt. 16 e 20 del Regolamento (UE) 2022/2065 (Digital Services Act), gli Utenti possono segnalare a Porta Sicilia contenuti pubblicati sulla Piattaforma che ritengono illeciti.",
   "terms_dsa_procedure": "Le segnalazioni vanno inviate a dsa@portasicilia.com e devono contenere: (i) una descrizione sufficientemente motivata del motivo per cui il contenuto è ritenuto illecito; (ii) l'URL o l'identificatore preciso del contenuto; (iii) nome e indirizzo email del segnalante; (iv) una dichiarazione di buona fede sull'accuratezza delle informazioni fornite. Le segnalazioni saranno trattate con diligenza e senza ritardo, comunicando all'Utente segnalante l'esito.",
   "terms_dsa_appeal": "Avverso la decisione di Porta Sicilia di rimuovere o mantenere un contenuto, di sospendere o limitare un account, è ammesso reclamo interno entro 6 mesi all'indirizzo dsa@portasicilia.com. Resta impregiudicata la facoltà di rivolgersi al Coordinatore dei servizi digitali competente (AGCOM per l'Italia) e agli organismi di risoluzione extragiudiziale designati ai sensi dell'art. 21 DSA.",
   "terms_dsa_authority": "Le richieste delle autorità competenti possono essere indirizzate al medesimo indirizzo dsa@portasicilia.com, che costituisce il punto di contatto unico ai sensi degli artt. 11 e 12 del Regolamento (UE) 2022/2065.",
-
   "terms_cookies_title": "17. Cookie e analytics",
   "terms_cookies_text": "La Piattaforma utilizza cookie tecnici necessari al funzionamento del Sito e, previo consenso dell'Utente, cookie analitici e di profilazione di terze parti, inclusi Google Analytics 4 e Google Tag Manager (Google Ireland Ltd / Google LLC). Il consenso è raccolto tramite la piattaforma di gestione del consenso (CMP) fornita da Usercentrics GmbH ed è revocabile in ogni momento dal pannello \"Impostazioni cookie\" accessibile in ogni pagina della Piattaforma. Per maggiori informazioni si rinvia alla Cookie Policy.",
-
   "terms_translation_title": "18. Lingue del servizio e traduzioni automatiche",
   "terms_translation_prevailing": "I presenti Termini e Condizioni sono redatti in lingua italiana. Le traduzioni in inglese, francese, tedesco e spagnolo sono fornite a titolo di cortesia: in caso di discrepanza, prevale la versione italiana.",
   "terms_translation_auto": "I contenuti dei listing (descrizioni di esperienze, alloggi e Prodotti) caricati dagli Host possono essere tradotti automaticamente mediante il servizio Google Cloud Translation. Le traduzioni automatiche possono contenere imprecisioni e non sono giuridicamente vincolanti: in caso di dubbio, l'Utente è invitato a fare riferimento al testo nella lingua originale fornita dall'Host o a contattare Porta Sicilia.",
-
   "terms_privacy_title": "19. Privacy",
   "terms_privacy_text": "Il trattamento dei dati personali dell'Utente è disciplinato dall'Informativa Privacy, parte integrante dei presenti Termini, disponibile alla pagina /privacy-policy. L'Utente garantisce che i dati personali forniti sono veritieri, accurati e aggiornati, e si impegna a comunicarne tempestivamente ogni variazione.",
-
   "terms_host_title": "20. Condizioni per Host e Partner",
   "terms_host_text_1": "I soggetti che pubblicano esperienze, tour, alloggi o Prodotti sulla Piattaforma in qualità di Host o Partner sono soggetti a specifiche Condizioni Partner, accettate al momento dell'onboarding nell'apposita dashboard.",
   "terms_host_text_2": "Tali condizioni disciplinano in particolare: l'identificazione e verifica del Partner, la struttura delle commissioni e le modalità di payout, gli obblighi sui contenuti caricati, la conformità fiscale e di settore, le politiche di sospensione o rimozione. Ai sensi dell'art. 6 del Regolamento (UE) 2022/2065 e degli artt. 14–17 D.Lgs. 70/2003, Porta Sicilia opera quale prestatore di servizi di hosting con riferimento ai contenuti caricati dagli Host.",
-
   "terms_termination_title": "21. Sospensione e cessazione",
   "terms_termination_text": "Porta Sicilia può sospendere o cessare, in tutto o in parte, temporaneamente o definitivamente, l'accesso alla Piattaforma o a singoli Servizi, in particolare in caso di violazione dei presenti Termini, di necessità di manutenzione, di obblighi di legge o di provvedimenti dell'autorità. La cessazione non comporta diritto a indennizzo, fatti salvi i diritti dell'Utente sulle Prenotazioni e sui Prodotti già acquistati. L'Utente può cancellare il proprio account in qualsiasi momento dalle impostazioni del profilo o scrivendo a info@portasicilia.com, fermi restando gli obblighi di conservazione dei dati previsti dalla legge.",
-
   "terms_changes_title": "22. Modifiche ai Termini",
   "terms_changes_text": "Porta Sicilia può aggiornare i presenti Termini per ragioni operative, tecniche, regolamentari o di sicurezza. Le modifiche saranno comunicate all'Utente con congruo preavviso tramite la Piattaforma o email; l'Utente che non intenda accettarle può recedere e cessare l'utilizzo. L'uso della Piattaforma successivo all'entrata in vigore delle modifiche ne costituisce accettazione. La data di ultima revisione è indicata in cima al presente documento.",
-
   "terms_law_title": "23. Legge applicabile e foro competente",
   "terms_law_text_1": "I presenti Termini sono regolati dalla legge italiana.",
   "terms_law_text_2": "Per le controversie con Utenti consumatori ai sensi dell'art. 3 D.Lgs. 206/2005 è competente in via esclusiva il foro del luogo di residenza o domicilio elettivo del consumatore, se ubicato nel territorio dello Stato (art. 66-bis D.Lgs. 206/2005). Per gli Utenti non qualificabili come consumatori è competente in via esclusiva il foro di Palermo.",
   "terms_law_severability": "L'eventuale nullità o inefficacia di una singola clausola non comporterà la nullità dell'intero contratto; la clausola sarà interpretata o sostituita nei limiti consentiti dalla legge per dare effetto all'intento delle parti.",
-
   "terms_odr_title": "24. Risoluzione alternativa delle controversie (ODR)",
   "terms_odr_text_1": "Ai sensi del Regolamento (UE) n. 524/2013 informiamo gli Utenti consumatori residenti nell'Unione Europea che è disponibile la piattaforma europea per la risoluzione online delle controversie all'indirizzo https://ec.europa.eu/consumers/odr. L'indirizzo email di Porta Sicilia da utilizzare per tale piattaforma è info@portasicilia.com.",
   "terms_odr_text_2": "Porta Sicilia non è attualmente vincolata ad alcun organismo ADR per la composizione extragiudiziale delle controversie; l'Utente è invitato a contattare preventivamente Porta Sicilia all'indirizzo sopra indicato per tentare una composizione bonaria.",
-
   "terms_misc_title": "25. Disposizioni varie",
   "terms_misc_entire": "I presenti Termini, unitamente all'Informativa Privacy, alla Cookie Policy e alle eventuali Condizioni Partner, costituiscono l'intero accordo tra Utente e Porta Sicilia in relazione all'uso della Piattaforma.",
   "terms_misc_waiver": "Il mancato esercizio di un diritto o l'inerzia nell'applicazione di una disposizione non costituiscono rinuncia al medesimo né impediscono l'esercizio successivo del diritto.",
   "terms_misc_assignment": "L'Utente non può cedere a terzi i propri diritti e obblighi derivanti dai presenti Termini senza il preventivo consenso scritto di Porta Sicilia. Porta Sicilia può cedere i Termini a un soggetto che le succeda, in tutto o in parte, nelle proprie attività.",
   "terms_misc_affiliate": "La Piattaforma può promuovere prodotti o servizi di terzi nell'ambito di programmi di affiliazione. Tali rapporti sono dichiarati ove rilevanti per consentire all'Utente una scelta informata.",
-
   "terms_contact_title": "26. Contatti",
   "terms_contact_text": "Per qualsiasi questione relativa ai presenti Termini e Condizioni l'Utente può contattare Porta Sicilia all'indirizzo info@portasicilia.com o tramite posta ordinaria a: Sicily Good di Salvatore Guarneri, Cortile Gonzales 7, 90025 Lercara Friddi (PA), Italia.",
-
   "partner_terms_title": "Condizioni Partner",
   "partner_terms_last_updated": "Ultima revisione: 21 maggio 2026",
-
   "partner_terms_intro_title": "1. Premessa e ambito",
   "partner_terms_intro_text_1": "Le presenti Condizioni Partner (di seguito \"Condizioni Partner\") disciplinano il rapporto tra Sicily Good di Salvatore Guarneri (di seguito \"Porta Sicilia\"), gestore della piattaforma www.portasicilia.com, e i soggetti, professionali o non professionali, che pubblicano sulla Piattaforma esperienze, tour o alloggi destinati a Utenti finali (di seguito \"Partner\" o \"Host\").",
   "partner_terms_intro_text_2": "Le presenti Condizioni Partner si applicano congiuntamente ai Termini e Condizioni generali della Piattaforma e all'Informativa Privacy, che ne costituiscono parte integrante. In caso di conflitto, prevarranno le previsioni specifiche delle presenti Condizioni Partner per quanto riguarda il rapporto tra Porta Sicilia e il Partner.",
   "partner_terms_intro_text_3": "Ove il Partner si qualifichi come utente commerciale ai sensi del Regolamento (UE) 2019/1150 (\"Reg. P2B\"), le presenti Condizioni gli si applicano integralmente nella misura prevista da tale regolamento.",
-
   "partner_terms_defs_title": "2. Definizioni",
   "partner_terms_defs_intro": "Oltre alle definizioni dei Termini e Condizioni generali, ai fini delle presenti Condizioni Partner si applicano i seguenti termini:",
   "partner_terms_defs_partner": "\"Partner\" o \"Host\": il soggetto persona fisica, ditta individuale, società o ente che, registrandosi sulla Piattaforma, pubblica e gestisce uno o più listing di Servizi destinati a Utenti.",
   "partner_terms_defs_listing": "\"Listing\": la scheda pubblicata sulla Piattaforma con cui il Partner descrive il proprio Servizio (esperienza, tour, alloggio), comprensiva di descrizione, foto, prezzi, disponibilità e condizioni applicabili.",
   "partner_terms_defs_dashboard": "\"Dashboard Partner\": l'area riservata del Sito attraverso cui il Partner gestisce listing, prenotazioni, comunicazioni con gli Utenti, payout e profilo.",
   "partner_terms_defs_commission": "\"Commissione di servizio\": l'importo trattenuto da Porta Sicilia in qualità di compenso per l'intermediazione, secondo la struttura indicata nella Sezione 6.",
-
   "partner_terms_identity_title": "3. Identificazione del Partner e KYC",
   "partner_terms_identity_text_1": "Il Partner si registra fornendo informazioni veritiere, accurate e aggiornate, tra cui: dati anagrafici o ragione sociale, codice fiscale e/o partita IVA ove applicabile, indirizzo, contatti, IBAN o credenziali Stripe Connect per i payout, copia di documento di identità.",
   "partner_terms_identity_text_2": "Il Partner dichiara di possedere tutti i requisiti soggettivi e oggettivi previsti dalla normativa italiana per offrire i Servizi proposti, tra cui — ove applicabile — la qualifica fiscale corretta (professionale, occasionale, ricettività non imprenditoriale, locazione turistica), il codice identificativo regionale o nazionale per le strutture ricettive (CIN/CIR/IUN), le licenze e autorizzazioni di settore.",
   "partner_terms_identity_text_3": "Porta Sicilia si riserva la facoltà di verificare in qualunque momento la veridicità delle informazioni fornite, anche tramite richiesta di documentazione integrativa, e di sospendere o disabilitare i listing del Partner in mancanza di adeguata cooperazione.",
-
   "partner_terms_onboarding_title": "4. Onboarding e accettazione",
   "partner_terms_onboarding_text": "L'attivazione del Partner sulla Piattaforma è subordinata all'accettazione integrale delle presenti Condizioni Partner tramite spunta digitale in fase di onboarding, alla compilazione delle informazioni obbligatorie e all'approvazione da parte di Porta Sicilia. Porta Sicilia può rifiutare la richiesta di onboarding senza obbligo di motivazione, fatti salvi gli obblighi imposti dalla normativa.",
-
   "partner_terms_listing_title": "5. Listing — contenuti e gestione",
   "partner_terms_listing_accuracy": "Il Partner garantisce che le informazioni pubblicate nei propri listing (descrizioni, foto, prezzi, disponibilità, condizioni) sono veritiere, accurate, aggiornate, complete e non ingannevoli. Il Partner si impegna a non pubblicare contenuti illeciti, lesivi di diritti di terzi, contraffatti o discriminatori.",
   "partner_terms_listing_photos": "Il Partner garantisce di possedere tutti i diritti necessari sulle foto e sui contenuti caricati, inclusi i diritti d'autore e i consensi delle persone eventualmente ritratte. Porta Sicilia si riserva la facoltà di rimuovere immagini o contenuti che violino la presente disposizione.",
   "partner_terms_listing_prices": "Il Partner imposta autonomamente i propri prezzi sulla Piattaforma. Il prezzo finale mostrato all'Utente è composto dal corrispettivo del Partner, dalla Commissione di servizio di Porta Sicilia e da eventuali tasse e spese accessorie. Il Partner resta libero di applicare prezzi diversi su canali di distribuzione diversi (no parity clause obbligatoria).",
   "partner_terms_listing_availability": "Il Partner mantiene aggiornata la disponibilità del proprio inventario, anche tramite sincronizzazione iCal con calendari esterni (Airbnb, Booking, sistemi propri). Eventuali overbooking imputabili a mancato aggiornamento sono di esclusiva responsabilità del Partner.",
   "partner_terms_listing_changes": "Modifiche sostanziali a listing già prenotati (es. variazione di prezzo, location, durata, capienza) richiedono il consenso espresso dell'Utente già prenotato; in mancanza, il Partner garantisce la fornitura del Servizio nei termini originariamente concordati o procede al rimborso integrale.",
-
   "partner_terms_commission_title": "6. Commissioni e remunerazione di Porta Sicilia",
   "partner_terms_commission_structure": "Per ciascuna Prenotazione confermata, Porta Sicilia trattiene una Commissione di servizio determinata in via percentuale o a importo fisso, secondo i parametri indicati nella scheda informativa pubblicata nella Dashboard Partner e aggiornata di volta in volta. La Commissione è dovuta a fronte dell'attività di intermediazione, marketing, gestione tecnologica della Piattaforma e supporto agli Utenti.",
   "partner_terms_commission_changes": "Le variazioni della struttura delle Commissioni saranno comunicate al Partner con un preavviso di almeno 15 giorni ai sensi dell'art. 3 del Reg. P2B, salvi i casi in cui la modifica sia imposta per legge, per ragioni di sicurezza o per contrastare frodi. Il Partner che non intenda accettare le nuove condizioni può recedere senza penalità entro il periodo di preavviso.",
   "partner_terms_commission_transparency": "La Commissione di servizio applicata e l'eventuale saldo dovuto al Partner sono indicati in modo trasparente nella Dashboard prima dell'accettazione di ciascuna Prenotazione.",
-
   "partner_terms_payouts_title": "7. Modalità di pagamento e payout",
   "partner_terms_payouts_text_1": "I pagamenti degli Utenti sono raccolti tramite Stripe Payments Europe Ltd, in conformità ai requisiti PSD2/SCA. La Commissione di servizio è trattenuta direttamente da Porta Sicilia; le restanti somme spettanti al Partner sono trasferite secondo le modalità di seguito indicate.",
   "partner_terms_payouts_text_2": "A seconda della configurazione del Partner sulla Piattaforma, il payout può avvenire: (i) tramite bonifico SEPA sull'IBAN comunicato dal Partner, secondo la frequenza indicata nella Dashboard (di norma settimanale o mensile); (ii) tramite account Stripe Connect intestato al Partner; (iii) tramite incasso diretto del saldo dall'Utente al check-in/all'arrivo, ove previsto dal modello operativo del Servizio.",
   "partner_terms_payouts_taxes": "Il Partner è esclusivo responsabile degli adempimenti fiscali derivanti dal proprio rapporto contrattuale con l'Utente (emissione di ricevute fiscali, fatture, dichiarazione redditi, IVA, imposta di soggiorno ove applicabile). Porta Sicilia, salvi gli obblighi inderogabili di legge, non agisce come sostituto d'imposta del Partner.",
   "partner_terms_payouts_holds": "Porta Sicilia può trattenere temporaneamente importi spettanti al Partner in caso di: (i) contestazione attiva da parte di un Utente; (ii) chargeback in corso; (iii) sospetto motivato di frode o violazione delle presenti Condizioni; (iv) richiesta motivata di un'autorità competente.",
-
   "partner_terms_obligations_title": "8. Obblighi operativi del Partner",
   "partner_terms_obligations_response_time": "Il Partner si impegna a rispondere alle richieste di Prenotazione e ai messaggi degli Utenti entro 24 ore dalla ricezione. Ritardi sistematici nella risposta possono comportare la riduzione del posizionamento del listing o la sospensione dell'account.",
   "partner_terms_obligations_execution": "Il Partner si impegna a eseguire il Servizio nei termini, nei modi e con le caratteristiche pubblicate nel listing, nel rispetto delle normative di sicurezza, igienico-sanitarie, urbanistiche e di settore applicabili.",
   "partner_terms_obligations_safety": "Per le esperienze e i tour, il Partner è tenuto a garantire condizioni di sicurezza adeguate, a fornire le attrezzature richieste in buono stato, a istruire l'Utente sulle modalità di partecipazione e sui rischi connessi, e a sospendere o annullare l'attività in presenza di condizioni che possano compromettere l'incolumità delle persone.",
   "partner_terms_obligations_insurance": "Il Partner è tenuto a stipulare e mantenere in vigore le coperture assicurative obbligatorie per legge e quelle ragionevolmente necessarie in relazione all'attività svolta (RC professionale, infortuni, eventuali coperture specifiche di settore).",
   "partner_terms_obligations_communication": "Il Partner comunica con l'Utente esclusivamente tramite i canali messi a disposizione dalla Piattaforma o, ove necessario, tramite i recapiti forniti dall'Utente in fase di conferma. Il Partner non può utilizzare i dati di contatto degli Utenti per finalità diverse dalla gestione della Prenotazione, salvo separato consenso dell'Utente.",
-
   "partner_terms_compliance_title": "9. Compliance regolatoria",
   "partner_terms_compliance_text_1": "Il Partner si impegna a rispettare tutte le normative applicabili alla propria attività, ivi incluse — a titolo esemplificativo e non esaustivo — le norme in materia di:",
   "partner_terms_compliance_item_1": "attività turistica, ricettiva o di intermediazione, comprese le disposizioni regionali e comunali (ad es. CIN nazionale o codice identificativo regionale per gli alloggi);",
@@ -1779,35 +1721,28 @@
   "partner_terms_compliance_item_4": "obblighi fiscali (emissione documenti fiscali, imposta di soggiorno, IVA, dichiarazione redditi);",
   "partner_terms_compliance_item_5": "comunicazioni obbligatorie alle autorità (es. comunicazione alloggiati alla Questura, statistiche ISTAT).",
   "partner_terms_compliance_text_2": "Porta Sicilia non assume alcuna responsabilità per inadempimenti del Partner agli obblighi sopra indicati. Il Partner manleva e tiene indenne Porta Sicilia da ogni pretesa di terzi o sanzione derivante da tali inadempimenti.",
-
   "partner_terms_cancellations_title": "10. Cancellazioni e rimborsi",
   "partner_terms_cancellations_text_1": "Le politiche di cancellazione applicabili alle Prenotazioni effettuate dagli Utenti sono quelle indicate nei Termini e Condizioni generali della Piattaforma. Il Partner accetta di applicare integralmente tali politiche.",
   "partner_terms_cancellations_text_2": "In caso di cancellazione imputabile al Partner (indisponibilità sopravvenuta, errori di calendario, sovrapprenotazione) o di gravi difformità del Servizio rispetto al listing, il Partner si impegna a coprire i costi di rimborso integrale dell'Utente, ivi compresa la Commissione di servizio già percepita da Porta Sicilia, che potrà essere recuperata mediante compensazione su payout futuri.",
   "partner_terms_cancellations_text_3": "In caso di no-show o ritardo non giustificato dell'Utente, si applicano le politiche di cancellazione standard senza obbligo di rimborso da parte del Partner.",
-
   "partner_terms_reviews_title": "11. Recensioni",
   "partner_terms_reviews_text_1": "Gli Utenti possono pubblicare recensioni del Servizio fornito dal Partner solo dopo averne effettivamente usufruito, ai sensi dell'art. 27-quater del Codice del Consumo. Le recensioni costituiscono opinioni personali e Porta Sicilia non è responsabile del loro contenuto, fatti salvi gli obblighi di moderazione dei contenuti palesemente illeciti.",
   "partner_terms_reviews_text_2": "Il Partner può rispondere pubblicamente alle recensioni nel rispetto della normativa sulla protezione dei dati personali e in modo rispettoso. È fatto divieto al Partner di sollecitare recensioni dietro corrispettivo, omaggi o sconti e di pubblicare recensioni false a proprio favore o a danno di concorrenti.",
   "partner_terms_reviews_text_3": "Il Partner può segnalare a Porta Sicilia recensioni che ritenga illecite o lesive secondo la procedura DSA descritta nei Termini e Condizioni generali.",
-
   "partner_terms_ip_title": "12. Proprietà intellettuale e licenza dei contenuti",
   "partner_terms_ip_text_1": "I contenuti caricati dal Partner sulla Piattaforma (testi, foto, descrizioni, video) restano di proprietà del Partner. Con il caricamento, il Partner concede a Porta Sicilia una licenza non esclusiva, gratuita, mondiale, sublicenziabile, valida per la durata di permanenza del contenuto sulla Piattaforma, per utilizzare, riprodurre, adattare, tradurre (anche tramite traduzione automatica), pubblicare e promuovere detti contenuti nel contesto della Piattaforma e dei suoi canali di marketing (sito, social, newsletter, partnership editoriali).",
   "partner_terms_ip_text_2": "Il Partner garantisce di possedere tutti i diritti, le autorizzazioni e i consensi necessari per concedere la presente licenza, manlevando Porta Sicilia da qualsiasi pretesa di terzi al riguardo.",
   "partner_terms_ip_text_3": "I marchi, i loghi e i segni distintivi di Porta Sicilia restano di proprietà esclusiva del titolare. Il Partner non può utilizzarli al di fuori del contesto della Piattaforma senza preventivo consenso scritto.",
-
   "partner_terms_privacy_title": "13. Trattamento dei dati personali",
   "partner_terms_privacy_text_1": "Il Partner e Porta Sicilia operano in qualità di titolari autonomi del trattamento dei dati personali degli Utenti, ciascuno per le proprie finalità: Porta Sicilia gestisce l'intermediazione tecnologica, il marketing della Piattaforma e gli adempimenti contrattuali; il Partner esegue il Servizio e gestisce i propri adempimenti fiscali e di settore.",
   "partner_terms_privacy_text_2": "Porta Sicilia trasmette al Partner esclusivamente i dati strettamente necessari all'esecuzione della Prenotazione (nome, contatti, eventuali esigenze comunicate dall'Utente). Il Partner si impegna a utilizzare tali dati esclusivamente per la gestione della Prenotazione e per gli obblighi di legge, in conformità al Reg. UE 2016/679 (GDPR) e al D.Lgs. 196/2003.",
   "partner_terms_privacy_text_3": "Il Partner è esclusivo responsabile dell'informativa privacy ai propri clienti, dell'eventuale registro dei trattamenti e degli ulteriori obblighi del GDPR. Trasferimenti di dati extra-SEE da parte del Partner devono essere conformi agli artt. 44–49 GDPR.",
-
   "partner_terms_partner_liability_title": "14. Responsabilità del Partner",
   "partner_terms_partner_liability_text_1": "Il Partner è esclusivo responsabile, in via contrattuale ed extracontrattuale, della corretta esecuzione del Servizio prenotato, della sicurezza dei luoghi e delle attività, della veridicità delle informazioni pubblicate, del rispetto delle normative applicabili e degli obblighi fiscali e previdenziali derivanti dalla propria attività.",
   "partner_terms_partner_liability_text_2": "Il Partner manleva e tiene indenne Porta Sicilia da ogni pretesa, azione, costo, perdita, sanzione, spesa legale o danno (diretto o indiretto) che derivino o siano connessi all'esecuzione dei Servizi o alla pubblicazione di contenuti sulla Piattaforma.",
-
   "partner_terms_platform_liability_title": "15. Limitazioni di responsabilità di Porta Sicilia",
   "partner_terms_platform_liability_text_1": "Porta Sicilia opera come intermediario tecnologico ai sensi dell'art. 6 del Regolamento (UE) 2022/2065 (DSA) e degli artt. 14–17 del D.Lgs. 70/2003; non risponde dei contenuti caricati dal Partner né dell'esecuzione dei Servizi.",
   "partner_terms_platform_liability_text_2": "Nei limiti consentiti dalla legge, la responsabilità complessiva di Porta Sicilia verso il Partner per qualsiasi causa connessa alle presenti Condizioni Partner è limitata all'importo delle Commissioni di servizio trattenute nei 12 mesi precedenti l'evento dannoso. Tale limitazione non si applica nei casi di dolo o colpa grave, di danni alla persona o alla salute, né nelle ulteriori ipotesi in cui la limitazione sia inderogabilmente esclusa dalla legge.",
-
   "partner_terms_suspension_title": "16. Restrizioni, sospensioni e cessazione del rapporto",
   "partner_terms_suspension_text_1": "Ai sensi dell'art. 17 del Regolamento (UE) 2022/2065 e dell'art. 4 del Reg. P2B, Porta Sicilia può applicare le seguenti misure nei confronti del Partner: rimozione o oscuramento di singoli listing, declassamento nel ranking, sospensione temporanea o cessazione definitiva dell'account.",
   "partner_terms_suspension_text_2": "Salvi i casi di forza maggiore, frode, gravi violazioni di legge o di pubblicazione di contenuti illeciti — per i quali la misura può essere immediata — Porta Sicilia comunica preventivamente al Partner la misura prevista, con un preavviso di almeno 30 giorni per la cessazione e di almeno 15 giorni per la sospensione, indicando in forma scritta:",
@@ -1815,35 +1750,27 @@
   "partner_terms_suspension_item_2": "il riferimento alle disposizioni delle presenti Condizioni o alla normativa violata;",
   "partner_terms_suspension_item_3": "la possibilità di presentare reclamo interno secondo la procedura di cui alla Sezione 17.",
   "partner_terms_suspension_text_3": "Il Partner può recedere dalle presenti Condizioni Partner in qualsiasi momento con preavviso di 30 giorni, fermo restando l'impegno a portare a termine le Prenotazioni già confermate.",
-
   "partner_terms_complaints_title": "17. Reclami interni",
   "partner_terms_complaints_text_1": "Ai sensi dell'art. 20 del Regolamento (UE) 2022/2065 e dell'art. 11 del Reg. P2B, Porta Sicilia mette a disposizione del Partner una procedura di reclamo interno gratuita, accessibile scrivendo a partners@portasicilia.com.",
   "partner_terms_complaints_text_2": "I reclami sono trattati con diligenza, in modo non discriminatorio e in tempi ragionevoli (di norma entro 30 giorni dalla ricezione). L'esito del reclamo, motivato in modo chiaro, è comunicato al Partner per iscritto. La procedura include la possibilità di richiedere il riesame della decisione iniziale e, in caso di restrizioni, la sospensione temporanea della misura in pendenza del riesame, ove ragionevolmente possibile.",
-
   "partner_terms_mediation_title": "18. Mediazione",
   "partner_terms_mediation_text": "Ai sensi dell'art. 12 del Reg. P2B, per le controversie con i Partner qualificabili come utenti commerciali che non sia stato possibile risolvere tramite il reclamo interno, Porta Sicilia individua quale organismo di mediazione [DA INSERIRE: indicare almeno due organismi di mediazione iscritti al registro del Ministero della Giustizia]. Il ricorso alla mediazione non pregiudica i diritti delle parti di adire l'autorità giudiziaria.",
-
   "partner_terms_ranking_title": "19. Posizionamento (ranking) e trattamento differenziato",
   "partner_terms_ranking_text_1": "Ai sensi dell'art. 5 del Reg. P2B, i listing sono posizionati nei risultati di ricerca e nelle pagine di categoria della Piattaforma in base ai seguenti parametri principali, considerati congiuntamente: rilevanza rispetto alla ricerca dell'Utente (località, date, filtri), qualità del listing (completezza delle informazioni, foto, recensioni positive, tasso di accettazione delle Prenotazioni, tempi di risposta), prossimità geografica, disponibilità in tempo reale, equità di esposizione tra Partner e diversificazione dell'offerta.",
   "partner_terms_ranking_text_2": "Porta Sicilia non applica corrispettivi diretti o indiretti per migliorare il posizionamento al di fuori dei criteri sopra indicati. Eventuali eccezioni (ad es. promozioni editoriali a tema, campagne stagionali) sono dichiarate in modo trasparente nelle pagine interessate.",
   "partner_terms_ranking_text_3": "Ai sensi dell'art. 7 del Reg. P2B, Porta Sicilia non offre attualmente Servizi propri concorrenti con quelli dei Partner in materia di esperienze, tour o alloggi. Il Partner sarà informato per iscritto qualora ciò dovesse mutare.",
-
   "partner_terms_changes_title": "20. Modifiche alle presenti Condizioni Partner",
   "partner_terms_changes_text": "Le modifiche alle presenti Condizioni Partner sono comunicate al Partner con un preavviso di almeno 15 giorni ai sensi dell'art. 3 del Reg. P2B, tramite email all'indirizzo registrato e/o tramite la Dashboard Partner. Modifiche minori, di natura tecnica o necessarie per adeguamento normativo immediato possono entrare in vigore senza preavviso, ferma la possibilità per il Partner di recedere senza penalità entro 15 giorni dalla comunicazione. L'uso continuato della Piattaforma successivo al periodo di preavviso costituisce accettazione delle nuove Condizioni Partner.",
-
   "partner_terms_law_title": "21. Legge applicabile e foro competente",
   "partner_terms_law_text_1": "Le presenti Condizioni Partner sono regolate dalla legge italiana.",
   "partner_terms_law_text_2": "Per le controversie con Partner che operino in qualità di consumatori ai sensi del D.Lgs. 206/2005 si applica il foro di residenza o domicilio elettivo del consumatore (art. 66-bis D.Lgs. 206/2005). Per i Partner che operino in qualità di professionisti o utenti commerciali, è competente in via esclusiva il foro di Palermo.",
-
   "partner_terms_misc_title": "22. Disposizioni varie",
   "partner_terms_misc_assignment": "Il Partner non può cedere a terzi le presenti Condizioni Partner né i diritti e obblighi che ne derivano senza il preventivo consenso scritto di Porta Sicilia. Porta Sicilia può cedere le presenti Condizioni Partner a un soggetto che le succeda, in tutto o in parte, nelle proprie attività, dandone comunicazione al Partner.",
   "partner_terms_misc_severability": "L'eventuale nullità o inefficacia di una singola clausola non comporterà la nullità dell'intero accordo. La clausola sarà interpretata o sostituita nei limiti consentiti dalla legge per dare effetto all'intento delle parti.",
   "partner_terms_misc_communications": "Tutte le comunicazioni tra Porta Sicilia e il Partner avvengono tramite la Dashboard Partner o all'indirizzo email registrato. Il Partner è tenuto a mantenere aggiornati i propri recapiti.",
   "partner_terms_misc_confidentiality": "Le informazioni di natura commerciale o riservata scambiate tra le Parti nell'ambito del rapporto sono trattate con riservatezza e utilizzate esclusivamente per le finalità connesse al rapporto stesso.",
-
   "partner_terms_contact_title": "23. Contatti",
   "partner_terms_contact_text": "Per qualsiasi questione relativa alle presenti Condizioni Partner, il Partner può contattare Porta Sicilia all'indirizzo partners@portasicilia.com o, per i reclami DSA/P2B, a dsa@portasicilia.com. Indirizzo postale: Sicily Good di Salvatore Guarneri, Cortile Gonzales 7, 90025 Lercara Friddi (PA), Italia.",
-
   "cookie_policy_title": "Cookie Policy",
   "cookie_policy_last_updated": "Ultima revisione: 21 maggio 2026",
   "cookie_policy_intro_title": "1. Cosa sono i cookie",
@@ -1873,7 +1800,6 @@
   "cookie_policy_changes_text": "La presente Cookie Policy può essere aggiornata in qualsiasi momento per riflettere modifiche tecniche, regolamentari o di pratiche del Sito. La data di ultima revisione è indicata in cima alla pagina.",
   "cookie_policy_contact_title": "6. Contatti",
   "cookie_policy_contact_text": "Per qualsiasi domanda relativa al trattamento dei dati personali e all'uso dei cookie, l'utente può contattare Porta Sicilia all'indirizzo info@portasicilia.com.",
-
   "cancellation_policy_title": "Politiche di cancellazione",
   "cancellation_policy_last_updated": "Ultima revisione: 21 maggio 2026",
   "cancellation_policy_intro_title": "Quadro generale",
@@ -1884,7 +1810,6 @@
   "cancellation_policy_procedure_text": "Per richiedere una cancellazione, l'Utente deve utilizzare le funzionalità disponibili nella propria area personale oppure contattare Porta Sicilia all'indirizzo info@portasicilia.com indicando il codice della Prenotazione/ordine. I rimborsi di competenza di Porta Sicilia sono effettuati entro 14 giorni lavorativi dalla conferma della cancellazione, sul medesimo metodo di pagamento utilizzato per l'acquisto. I tempi effettivi di riaccredito dipendono dal circuito di pagamento utilizzato e dalle policy di Stripe.",
   "cancellation_policy_contact_title": "Contatti",
   "cancellation_policy_contact_text": "Per dubbi sull'applicazione delle politiche di cancellazione, scrivere a info@portasicilia.com.",
-
   "seo_home_title": "Cosa Fare in Sicilia: Esperienze, Alloggi e Vacanze",
   "seo_home_description": "Scopri la Sicilia autentica con Porta Sicilia: prenota esperienze uniche, alloggi tipici, tour e attività. La tua guida completa per vacanze indimenticabili in Sicilia.",
   "seo_experiences_title": "Esperienze in Sicilia — Attività e Tour",
@@ -1916,19 +1841,16 @@
   "seo_breadcrumb_locations": "Località",
   "seo_breadcrumb_categories": "Categorie",
   "seo_breadcrumb_blog": "Blog",
-
   "footer_faq": "FAQ",
   "seo_faq_title": "Domande Frequenti su Esperienze e Alloggi in Sicilia — Porta Sicilia",
   "seo_faq_description": "Tutto quello che devi sapere per prenotare esperienze turistiche, tour enogastronomici, ville e alloggi in Sicilia su Porta Sicilia. Pagamenti, cancellazioni, come funziona.",
   "faq_title": "Domande Frequenti",
-
   "faq_category_how_it_works": "Come funziona Porta Sicilia?",
   "faq_category_experiences": "Esperienze",
   "faq_category_accommodations": "Alloggi",
   "faq_category_payments": "Pagamenti",
   "faq_category_cancellation": "Policy di cancellazione",
   "faq_category_partner": "Diventa partner",
-
   "faq_how_it_works_1_question": "Cos'è Porta Sicilia e come funziona per prenotare vacanze in Sicilia?",
   "faq_how_it_works_1_answer": "Porta Sicilia è la piattaforma online per prenotare esperienze turistiche autentiche e alloggi in Sicilia. Collega i viaggiatori direttamente con host locali siciliani — guide turistiche, proprietari di ville, masserie e B&B — per scoprire l'isola in modo autentico. Su portasicilia.com puoi cercare, confrontare e prenotare tour enogastronomici, escursioni, corsi di cucina siciliana, ville con piscina, appartamenti sul mare e molto altro, tutto con pagamento sicuro online.",
   "faq_how_it_works_2_question": "Come si prenota un'esperienza o un alloggio su Porta Sicilia?",
@@ -1939,7 +1861,6 @@
   "faq_how_it_works_4_answer": "Porta Sicilia è una piattaforma italiana registrata con sede in Sicilia. Ogni esperienza e alloggio viene verificato dal nostro team prima della pubblicazione. I pagamenti sono processati tramite gateway sicuri con crittografia SSL e i dati personali sono trattati nel rispetto del GDPR. Tutte le informazioni su host, itinerari e condizioni sono trasparenti e visibili prima della prenotazione.",
   "faq_how_it_works_5_question": "In quali lingue è disponibile Porta Sicilia?",
   "faq_how_it_works_5_answer": "Porta Sicilia è disponibile in italiano e inglese, per accogliere sia i viaggiatori italiani sia i turisti internazionali che vogliono visitare la Sicilia. Puoi cambiare lingua in qualsiasi momento tramite il selettore nella barra di navigazione del sito.",
-
   "faq_experiences_1_question": "Quali esperienze turistiche si possono prenotare in Sicilia su Porta Sicilia?",
   "faq_experiences_1_answer": "Su Porta Sicilia trovi un'ampia selezione di esperienze turistiche in tutta la Sicilia: tour enogastronomici con degustazione di vini dell'Etna e prodotti tipici, corsi di cucina siciliana, escursioni in barca alle Isole Eolie e alla Riserva dello Zingaro, trekking sull'Etna, tour culturali a Palermo, Siracusa, Agrigento e nella Val di Noto, visite a mercati storici come la Vucciria e Ballarò, e attività all'aria aperta come snorkeling e kayak. Ogni esperienza è curata da guide locali siciliane esperte.",
   "faq_experiences_2_question": "Le esperienze in Sicilia su Porta Sicilia sono adatte a famiglie con bambini?",
@@ -1950,7 +1871,6 @@
   "faq_experiences_4_answer": "Sì, molte esperienze su Porta Sicilia offrono l'opzione di prenotazione privata, ideale per coppie, famiglie o gruppi di amici che vogliono un tour esclusivo. Nella pagina di dettaglio dell'esperienza troverai se è disponibile la modalità privata e l'eventuale supplemento. Tra le esperienze private più richieste ci sono i tour in barca privati, le degustazioni in cantina riservate e i corsi di cucina a domicilio.",
   "faq_experiences_5_question": "Quanto tempo prima bisogna prenotare un'esperienza turistica in Sicilia?",
   "faq_experiences_5_answer": "Su Porta Sicilia consigliamo di prenotare con almeno 48 ore di anticipo per garantire la disponibilità. In alta stagione (giugno-settembre) e per le esperienze più popolari come le escursioni sull'Etna, i tour alle Eolie e le degustazioni vinicole, è consigliato prenotare con almeno una settimana di anticipo. Prenotando in anticipo su portasicilia.com hai la garanzia del miglior prezzo.",
-
   "faq_accommodations_1_question": "Che tipi di alloggi si possono affittare in Sicilia su Porta Sicilia?",
   "faq_accommodations_1_answer": "Su Porta Sicilia puoi prenotare ville con piscina, appartamenti vacanza sul mare, masserie siciliane ristrutturate, case rurali immerse nella natura, B&B nel centro storico delle città d'arte e dammusi a Pantelleria. Tutti gli alloggi sono selezionati dal nostro team per qualità, autenticità e posizione, e sono disponibili in tutta la Sicilia: dalla costa di Taormina e Cefalù all'entroterra, dalle Isole Eolie alla Val di Noto.",
   "faq_accommodations_2_question": "Come funziona il check-in negli alloggi prenotati su Porta Sicilia?",
@@ -1961,7 +1881,6 @@
   "faq_accommodations_4_answer": "Molti alloggi in Sicilia su Porta Sicilia offrono servizi aggiuntivi: colazione con prodotti tipici siciliani, transfer dall'aeroporto di Catania o Palermo, pulizie giornaliere, noleggio biciclette, chef a domicilio per cene private e concierge per prenotare escursioni. I servizi disponibili sono indicati nella scheda dell'alloggio con i relativi costi.",
   "faq_accommodations_5_question": "Qual è il soggiorno minimo per un alloggio vacanza in Sicilia?",
   "faq_accommodations_5_answer": "La durata minima del soggiorno varia in base all'alloggio e al periodo dell'anno. Generalmente le ville con piscina richiedono un minimo di 7 notti in alta stagione (luglio-agosto) e 3-4 notti nel resto dell'anno. Appartamenti e B&B hanno spesso un minimo di 2 notti. Ogni alloggio su Porta Sicilia indica chiaramente il soggiorno minimo nella pagina di prenotazione.",
-
   "faq_payments_1_question": "Quali metodi di pagamento accetta Porta Sicilia per prenotare in Sicilia?",
   "faq_payments_1_answer": "Su Porta Sicilia puoi pagare con carte di credito e debito Visa, Mastercard e American Express, oltre ad altri metodi di pagamento digitali sicuri. Tutti i prezzi sono in euro (EUR). Il pagamento avviene interamente online al momento della prenotazione, senza necessità di pagare in contanti all'arrivo.",
   "faq_payments_2_question": "I pagamenti su Porta Sicilia sono sicuri?",
@@ -1972,7 +1891,6 @@
   "faq_payments_4_answer": "Tutti i prezzi su Porta Sicilia sono indicati in euro (EUR), la valuta locale della Sicilia e dell'Italia. Se paghi con una carta in dollari americani, sterline britanniche o altra valuta, la tua banca applicherà automaticamente il tasso di cambio corrente al momento della transazione.",
   "faq_payments_5_question": "Riceverò una ricevuta o fattura dopo aver prenotato su Porta Sicilia?",
   "faq_payments_5_answer": "Sì, dopo ogni prenotazione su Porta Sicilia riceverai una conferma di pagamento via email con tutti i dettagli della transazione: importo, data, descrizione dell'esperienza o alloggio prenotato. Per richieste di fatturazione con codice fiscale o partita IVA, puoi contattare il nostro servizio clienti.",
-
   "faq_cancellation_1_question": "Qual è la politica di cancellazione per le prenotazioni su Porta Sicilia?",
   "faq_cancellation_1_answer": "La politica di cancellazione su Porta Sicilia varia in base all'esperienza o all'alloggio prenotato. Ogni scheda di prenotazione indica chiaramente i termini: cancellazione gratuita (entro un certo numero di giorni), cancellazione con penale parziale o non rimborsabile. Ti consigliamo di verificare sempre le condizioni specifiche prima di completare la prenotazione su portasicilia.com.",
   "faq_cancellation_2_question": "Come posso cancellare una prenotazione su Porta Sicilia?",
@@ -1983,7 +1901,6 @@
   "faq_cancellation_4_answer": "Le modifiche alla data sono soggette alla disponibilità dell'host. Su Porta Sicilia consigliamo di cancellare la prenotazione esistente (verificando prima le condizioni di rimborso) e crearne una nuova per la data desiderata. In questo modo avrai la certezza della disponibilità e del prezzo aggiornato.",
   "faq_cancellation_5_question": "Cosa succede se l'host cancella la mia esperienza o il mio alloggio in Sicilia?",
   "faq_cancellation_5_answer": "Se l'host cancella la tua prenotazione su Porta Sicilia, riceverai un rimborso completo del 100% dell'importo pagato. Il nostro team ti contatterà per aiutarti a trovare un'esperienza o un alloggio alternativo equivalente in Sicilia, senza costi aggiuntivi.",
-
   "faq_partner_1_question": "Come posso diventare host o partner su Porta Sicilia e offrire esperienze in Sicilia?",
   "faq_partner_1_answer": "Per diventare partner su Porta Sicilia e pubblicare le tue esperienze turistiche o i tuoi alloggi in Sicilia, registrati su portasicilia.com come Owner. Compila il profilo con le informazioni sulla tua attività e invia la candidatura. Il nostro team valuterà la proposta e ti contatterà entro pochi giorni per completare l'attivazione e pubblicare i tuoi annunci.",
   "faq_partner_2_question": "Quali sono i requisiti per diventare host su Porta Sicilia?",
@@ -1994,7 +1911,6 @@
   "faq_partner_4_answer": "Come host su Porta Sicilia hai accesso a una dashboard dedicata dove puoi: gestire il calendario delle disponibilità, visualizzare e confermare le prenotazioni ricevute, impostare prezzi e tariffe stagionali, aggiornare le descrizioni e le foto delle tue esperienze o alloggi, e monitorare le recensioni dei viaggiatori. La dashboard è accessibile da browser desktop e mobile.",
   "faq_partner_5_question": "Un host può offrire sia esperienze turistiche che alloggi su Porta Sicilia?",
   "faq_partner_5_answer": "Sì, come partner su Porta Sicilia puoi pubblicare sia esperienze turistiche (tour, degustazioni, escursioni, corsi) sia alloggi (ville, appartamenti, B&B, masserie). Ogni annuncio viene gestito separatamente dalla dashboard con il proprio calendario, le proprie tariffe e le proprie condizioni. Questo ti permette di diversificare l'offerta e raggiungere più viaggiatori in cerca di vacanze in Sicilia.",
-
   "admin_sidebar_section_shop": "Shop",
   "admin_sidebar_products": "Prodotti",
   "admin_sidebar_orders": "Ordini",
@@ -2097,7 +2013,6 @@
   "admin_product_tab_variants": "Varianti",
   "admin_product_tab_has_errors": "Questa scheda contiene errori",
   "admin_product_variants_required": "Aggiungi almeno una variante prima di salvare",
-
   "admin_shop_categories_title": "Categorie Shop",
   "admin_shop_categories_subtitle": "Gestisci le categorie dello shop",
   "admin_shop_cat_add": "Aggiungi categoria",
@@ -2116,7 +2031,6 @@
   "admin_shop_cat_delete_title": "Elimina categoria",
   "admin_shop_cat_delete_description": "Sei sicuro di voler eliminare {{name}}? Questa azione non può essere annullata.",
   "admin_shop_cat_no_results": "Nessuna categoria trovata. Inizia aggiungendo la prima categoria.",
-
   "shop_hero_title": "Porta la Sicilia a casa tua",
   "shop_hero_subtitle": "Tradizione, territorio, autenticità",
   "shop_hero_cta": "Scopri i prodotti",
@@ -2273,16 +2187,13 @@
   "admin_owners_delete_loading_preview": "Caricamento impatto...",
   "admin_owners_danger_zone_title": "Zona pericolo",
   "admin_owners_danger_zone_description": "L'eliminazione del proprietario è irreversibile e rimuoverà tutti i dati associati.",
-
   "partner_nav_label": "Diventa Partner",
   "partner_footer_label": "Diventa Partner",
   "partner_seo_title": "Diventa Partner — Porta Sicilia",
   "partner_seo_description": "Pubblica esperienze e alloggi su Porta Sicilia. Visibilità, prenotazioni, gestione semplice.",
-
   "partner_hero_title": "Porta la tua esperienza siciliana nel mondo",
   "partner_hero_subtitle": "Pubblica esperienze e alloggi su Porta Sicilia. Visibilità, prenotazioni, gestione semplice.",
   "partner_hero_cta": "Candidati ora",
-
   "partner_how_it_works_eyebrow": "Il percorso",
   "partner_how_it_works_title": "Come funziona",
   "partner_how_it_works_step_1_title": "Candidati",
@@ -2293,7 +2204,6 @@
   "partner_how_it_works_step_3_desc": "Ti inviamo un link sicuro per accedere alla tua area partner.",
   "partner_how_it_works_step_4_title": "Pubblica",
   "partner_how_it_works_step_4_desc": "Crea i tuoi annunci e inizia a ricevere prenotazioni.",
-
   "partner_who_we_look_for_title": "Chi cerchiamo",
   "partner_who_we_look_for_item_1": "Aziende vinicole",
   "partner_who_we_look_for_item_2": "Tour in barca",
@@ -2305,7 +2215,6 @@
   "partner_who_we_look_for_item_8": "Snorkeling e diving",
   "partner_who_we_look_for_item_9": "Agriturismi",
   "partner_who_we_look_for_item_10": "Tour archeologici",
-
   "partner_testimonials_eyebrow": "La parola ai partner",
   "partner_testimonials_title": "Cosa dicono i nostri partner",
   "partner_testimonials_prev_aria": "Testimonianza precedente",
@@ -2319,7 +2228,6 @@
   "partner_testimonials_3_name": "Salvatore Greco",
   "partner_testimonials_3_designation": "Guida · Etna Nature Tours, Catania",
   "partner_testimonials_3_quote": "Finalmente una piattaforma che valorizza chi crea esperienze autentiche. Il nostro calendario è pieno fino a settembre.",
-
   "partner_faq_title": "Domande frequenti",
   "partner_faq_q1": "Quanto costa diventare partner?",
   "partner_faq_a1": "L'iscrizione è gratuita. Applichiamo una commissione solo sulle prenotazioni effettive.",
@@ -2333,21 +2241,17 @@
   "partner_faq_a5": "Un team italiano è disponibile via email per assisterti in ogni fase, dalla creazione dell'annuncio alla gestione delle prenotazioni.",
   "partner_faq_q6": "Posso essere già su altre piattaforme?",
   "partner_faq_a6": "Sì, non chiediamo esclusiva. Puoi essere presente anche su altri canali.",
-
   "partner_final_cta_title": "Pronto a iniziare?",
   "partner_final_cta_subtitle": "Bastano pochi minuti per inviare la tua candidatura.",
   "partner_final_cta_button": "Candidati ora",
-
   "partner_form_title": "Candidati come partner",
   "partner_form_subtitle": "Compila i dati, ti rispondiamo entro 3 giorni lavorativi.",
   "partner_form_step_1": "Attività",
   "partner_form_step_2": "Referente",
   "partner_form_step_3": "Dettagli",
-
   "partner_form_listing_types_label": "Cosa vuoi pubblicare?",
   "partner_form_listing_type_experience": "Esperienze",
   "partner_form_listing_type_stay": "Alloggi",
-
   "partner_form_business_section": "La tua attività",
   "partner_form_business_name": "Nome attività",
   "partner_form_vat_number": "P.IVA / Codice fiscale (opzionale)",
@@ -2356,7 +2260,6 @@
   "partner_form_instagram_url": "Instagram",
   "partner_form_facebook_url": "Facebook",
   "partner_form_tiktok_url": "TikTok",
-
   "partner_form_contact_section": "Chi sei",
   "partner_form_first_name": "Nome",
   "partner_form_last_name": "Cognome",
@@ -2364,7 +2267,6 @@
   "partner_form_phone": "Telefono",
   "partner_form_role_label": "Ruolo (opzionale)",
   "partner_form_role_placeholder": "Es. titolare, manager",
-
   "partner_form_details_section": "Dove operate",
   "partner_form_locality": "Località principale",
   "partner_form_locality_hint": "Es. Catania, Palermo, Taormina",
@@ -2388,18 +2290,15 @@
   "partner_form_url_invalid": "Inserisci un URL valido",
   "partner_form_max_length": "Massimo {{max}} caratteri",
   "partner_form_min_length": "Minimo {{min}} caratteri",
-
   "partner_form_back": "Indietro",
   "partner_form_continue": "Continua",
   "partner_form_submit": "Invia candidatura",
   "partner_form_submitting": "Invio in corso…",
   "partner_form_error_generic": "Si è verificato un errore. Riprova.",
   "partner_form_error_rate_limit": "Troppe richieste, riprova tra un'ora.",
-
   "partner_success_title": "Candidatura ricevuta!",
   "partner_success_message": "Ti risponderemo entro 3 giorni lavorativi via email.",
   "partner_success_cta": "Torna alla home",
-
   "partner_admin_list_title": "Candidature partner",
   "partner_admin_filter_all": "Tutti",
   "partner_admin_search_placeholder": "Cerca per nome, email o località",
@@ -2423,5 +2322,26 @@
   "partner_admin_approve_confirm": "Confermi l'approvazione? Questa azione creerà un account owner e invierà un'email.",
   "partner_admin_cancel": "Annulla",
   "partner_admin_action_success": "Azione completata",
-  "partner_admin_action_error": "Si è verificato un errore"
+  "partner_admin_action_error": "Si è verificato un errore",
+  "checkout_feedback_prompt": "Quanto è stato facile prenotare",
+  "checkout_feedback_star_aria": "{{count}} stelle",
+  "checkout_feedback_dialog_title": "Lascia un feedback",
+  "checkout_feedback_dialog_subtitle": "Quanto sei soddisfatto del processo di pagamento?",
+  "checkout_feedback_comment_label": "Commento (facoltativo)",
+  "checkout_feedback_comment_placeholder": "Raccontaci com'è andata...",
+  "checkout_feedback_cancel": "Annulla",
+  "checkout_feedback_submit": "Invia feedback",
+  "checkout_feedback_success_toast": "Grazie per il tuo feedback!",
+  "checkout_feedback_success_title": "Grazie per il tuo feedback!",
+  "checkout_feedback_success_message": "Il tuo parere ci aiuta a migliorare l'esperienza di pagamento.",
+  "admin_sidebar_feedbacks": "Feedback prenotazione",
+  "admin_feedbacks_title": "Feedback pagamento",
+  "admin_feedbacks_subtitle": "Valutazioni e commenti degli utenti sul flusso di pagamento",
+  "admin_feedbacks_stat_total": "Totale feedback",
+  "admin_feedbacks_stat_average": "Valutazione media",
+  "admin_feedbacks_stat_distribution": "Distribuzione valutazioni",
+  "admin_feedbacks_filter_rating": "Valutazione",
+  "admin_feedbacks_filter_all": "Tutte",
+  "admin_feedbacks_empty": "Nessun feedback ricevuto",
+  "admin_feedbacks_anonymous": "Utente"
 }

@@ -8,6 +8,7 @@ import { buildParticipantSummary } from '@/lib/utils/checkout.utils'
 import { parseDate } from '@/lib/utils/date.utils'
 import { Button } from '@/components/ui/button'
 import { BookingCard } from './booking-card'
+import CheckoutFeedback from './checkout-feedback'
 
 import type { Experience } from '@/lib/schemas/entities/experience.entity.schema'
 import type { Stay } from '@/lib/schemas/entities/stay.entity.schema'
@@ -158,6 +159,9 @@ export default function BookingSuccess({
       {/* Title */}
       <h1 className="mt-6 text-center text-xl font-bold leading-snug">{title}</h1>
       <p className="mt-2 text-center text-sm text-muted-foreground">{t.booking_success_subtitle}</p>
+
+      {/* Checkout feedback */}
+      <CheckoutFeedback />
 
       {/* Booking recap card */}
       <BookingCard.Provider

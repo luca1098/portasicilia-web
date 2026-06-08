@@ -10,7 +10,14 @@ import {
   setStayIcsUrl,
   syncStayIcs,
 } from '@/lib/api/stays'
-import { createPriceModifier, updatePriceModifier, deletePriceModifier } from '@/lib/api/pricing'
+import {
+  createPriceModifier,
+  updatePriceModifier,
+  deletePriceModifier,
+  createPriceOverride,
+  updatePriceOverride,
+  deletePriceOverride,
+} from '@/lib/api/pricing'
 import type { Stay } from '@/lib/schemas/entities/stay.entity.schema'
 import { revalidatePath } from 'next/cache'
 import { type ActionResult, getAuthHeaders } from './action.types'
@@ -146,6 +153,55 @@ export async function deleteStayModifierAction(
   try {
     const headers = await getAuthHeaders()
     await deletePriceModifier(priceListId, modifierId, headers)
+    const stay = await getStayById(stayId)
+    revalidatePath('/[lang]/(dashboard)/dashboard/admin/stays/[id]', 'page')
+    return { success: true, data: stay }
+  } catch (e) {
+    return { success: false, error: (e as Error).message }
+  }
+}
+
+export async function createStayOverrideAction(
+  stayId: string,
+  priceTierId: string,
+  data: Record<string, unknown>
+): Promise<ActionResult<Stay>> {
+  try {
+    const headers = await getAuthHeaders()
+    await createPriceOverride(priceTierId, data, headers)
+    const stay = await getStayById(stayId)
+    revalidatePath('/[lang]/(dashboard)/dashboard/admin/stays/[id]', 'page')
+    return { success: true, data: stay }
+  } catch (e) {
+    return { success: false, error: (e as Error).message }
+  }
+}
+
+export async function updateStayOverrideAction(
+  stayId: string,
+  priceTierId: string,
+  overrideId: string,
+  data: Record<string, unknown>
+): Promise<ActionResult<Stay>> {
+  try {
+    const headers = await getAuthHeaders()
+    await updatePriceOverride(priceTierId, overrideId, data, headers)
+    const stay = await getStayById(stayId)
+    revalidatePath('/[lang]/(dashboard)/dashboard/admin/stays/[id]', 'page')
+    return { success: true, data: stay }
+  } catch (e) {
+    return { success: false, error: (e as Error).message }
+  }
+}
+
+export async function deleteStayOverrideAction(
+  stayId: string,
+  priceTierId: string,
+  overrideId: string
+): Promise<ActionResult<Stay>> {
+  try {
+    const headers = await getAuthHeaders()
+    await deletePriceOverride(priceTierId, overrideId, headers)
     const stay = await getStayById(stayId)
     revalidatePath('/[lang]/(dashboard)/dashboard/admin/stays/[id]', 'page')
     return { success: true, data: stay }

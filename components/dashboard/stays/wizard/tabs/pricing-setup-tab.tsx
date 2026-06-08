@@ -11,6 +11,7 @@ import { setStayPricingAction } from '@/lib/actions/stays.actions'
 import { LoaderIcon } from '@/lib/constants/icons'
 import type { Stay } from '@/lib/schemas/entities/stay.entity.schema'
 import SeasonalPricingSection from './seasonal-pricing-section'
+import RecurringPriceSection from './recurring-price-section'
 import type { PriceModifier } from '@/lib/schemas/entities/pricing.entity.schema'
 
 const StayPricingSchema = z.object({
@@ -33,6 +34,7 @@ export default function StayPricingSetupTab({ stayId, stay, onSaved }: StayPrici
 
   const existingPriceList = (stay.priceLists ?? [])[0]
   const existingTiers = existingPriceList?.tiers ?? []
+  const nightlyTier = existingTiers.find(t => t.tierType === 'NIGHTLY')
 
   const getNightlyRate = () => {
     const tier = existingTiers.find(t => t.tierType === 'NIGHTLY')
@@ -78,12 +80,29 @@ export default function StayPricingSetupTab({ stayId, stay, onSaved }: StayPrici
       data.baseOccupancy = Math.max(1, Math.min(data.baseOccupancy, maxPeople - 1))
     }
 
-    const tiers: { tierType: string; baseAmount: number; label: string; minQuantity?: number }[] = [
-      { tierType: 'NIGHTLY', baseAmount: data.nightlyRate, label: t.admin_stay_pricing_nightly },
+    // Preserve existing tier ids so the backend updates tiers in place rather
+    // than recreating them — recreation would cascade-delete the NIGHTLY tier's
+    // recurring price overrides.
+    const tierIdFor = (tierType: string) => existingTiers.find(t => t.tierType === tierType)?.id
+
+    const tiers: {
+      id?: string
+      tierType: string
+      baseAmount: number
+      label: string
+      minQuantity?: number
+    }[] = [
+      {
+        ...(tierIdFor('NIGHTLY') && { id: tierIdFor('NIGHTLY') }),
+        tierType: 'NIGHTLY',
+        baseAmount: data.nightlyRate,
+        label: t.admin_stay_pricing_nightly,
+      },
     ]
 
     if (data.cleaningFee > 0) {
       tiers.push({
+        ...(tierIdFor('CLEANING_FEE') && { id: tierIdFor('CLEANING_FEE') }),
         tierType: 'CLEANING_FEE',
         baseAmount: data.cleaningFee,
         label: t.admin_stay_pricing_cleaning,
@@ -92,6 +111,7 @@ export default function StayPricingSetupTab({ stayId, stay, onSaved }: StayPrici
 
     if (data.extraPersonFee > 0 && data.baseOccupancy) {
       tiers.push({
+        ...(tierIdFor('EXTRA_PERSON_FEE') && { id: tierIdFor('EXTRA_PERSON_FEE') }),
         tierType: 'EXTRA_PERSON_FEE',
         baseAmount: data.extraPersonFee,
         label: t.admin_stay_pricing_extra_person,
@@ -166,6 +186,15 @@ export default function StayPricingSetupTab({ stayId, stay, onSaved }: StayPrici
               m => m.type === 'SEASONAL'
             ) as PriceModifier[]
           }
+          onSaved={onSaved}
+        />
+      )}
+
+      {nightlyTier && (
+        <RecurringPriceSection
+          stayId={stayId}
+          priceTierId={nightlyTier.id}
+          overrides={(nightlyTier.overrides ?? []).filter(o => (o.dayOfWeek?.length ?? 0) > 0)}
           onSaved={onSaved}
         />
       )}

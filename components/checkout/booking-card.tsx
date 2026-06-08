@@ -200,8 +200,8 @@ function PriceDetails() {
   return (
     <div className="space-y-2 px-5 py-4">
       <p className="text-sm font-medium">{t.checkout_price_detail}</p>
-      {state.priceTiers.map(tier => (
-        <div key={tier.tierType} className="flex items-center justify-between">
+      {state.priceTiers.map((tier, index) => (
+        <div key={`${tier.tierType}-${index}`} className="flex items-center justify-between">
           <span className="text-sm text-muted-foreground">{getPriceTierLine(tier, t, state.assetLabel)}</span>
           <span className="text-sm text-muted-foreground">{`\u20AC ${Math.round(tier.subtotal)}`}</span>
         </div>

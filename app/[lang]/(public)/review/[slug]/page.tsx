@@ -24,7 +24,7 @@ export default async function ReviewPage({ params, searchParams }: ReviewPagePro
   }
 
   return (
-    <main className="mx-auto max-w-lg px-4 py-12">
+    <main className="mx-auto max-w-lg px-4 pb-12 pt-24">
       <div className="rounded-2xl border bg-card p-6 shadow-sm">
         <ReviewContent token={token} listingInfo={listingInfo} />
       </div>
